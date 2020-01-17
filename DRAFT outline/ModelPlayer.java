@@ -23,12 +23,16 @@ public class ModelPlayer {
 	
 	// used AFTER cards are dealt to check whether player is still in the game
 	// end of each round (winning condition of the game)
-	public boolean emptyHand() {
+	public boolean isHandEmpty() {
 		if(hand.isEmpty()) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+	
+	public String getInfo() {
+		return name + ":\t" + hand.size() + " cards in hand.";
 	}
 	
 }

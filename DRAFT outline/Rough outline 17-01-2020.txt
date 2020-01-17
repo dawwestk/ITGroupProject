@@ -1,0 +1,19 @@
+Regardless of whether the game is one the command line or online, we will need the following (this is essentially the Model)
+
+Initialise:
+	create Deck and populate from text file
+		shuffle the Deck
+		create CommunalPile object to hold cards in the event of a draw
+	create (human) player
+	ask for number of opponents and create AI players	
+	"deal" - split Deck object and pass cards to each player's hand
+		if there are 3 players (so 40 cards cannot be evenly divided between them) add the remaining cards to the CommunalPile (maybe need a boolean flag to determine whether CommunalPile has anything in it)
+
+Gameplay:
+	Decide on starting player
+	ArrayList of active players(?)
+	While loop - if there is more than one active player, continue
+		Pick an attribute (either human input or AI using Random number generation)
+		Compare to all other active cards
+		Decide winner
+		Redistribute cards to the winning player (including any from CommunalPile if applicable)
