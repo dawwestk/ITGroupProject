@@ -1,0 +1,34 @@
+import java.util.ArrayList;
+
+public class ModelPlayer {
+	
+	private String name;
+	private ArrayList<ModelCard> hand;
+	
+	public ModelPlayer(String name) {
+		this.name = name;
+		hand = new ArrayList<ModelCard>();
+	}
+	
+	// either pass one card at a time 
+	// or pass in ArrayList object containing all cards to be added
+	public void addToHand(ModelCard card) {
+		hand.add(card);
+	}
+	
+	public void removeFromHand(ModelCard card) {
+		hand.remove(card);
+	}
+	
+	
+	// used AFTER cards are dealt to check whether player is still in the game
+	// end of each round (winning condition of the game)
+	public boolean emptyHand() {
+		if(hand.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+}
