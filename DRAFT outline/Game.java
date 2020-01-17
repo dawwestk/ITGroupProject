@@ -12,7 +12,6 @@ public class Game {
 		String filename = "StarCitizenDeck.txt";
 		FileReader fr = null;
 		ModelDeck deck = new ModelDeck();
-		ModelCommunalPile cp = new ModelCommunalPile();
 		ModelPlayer human = new ModelPlayer("You");
 		ArrayList<ModelPlayer> players = new ArrayList<ModelPlayer>();
 		
@@ -35,9 +34,11 @@ public class Game {
 				}
 			}
 			
+			/*
 			System.out.println("\tTotal cards made = " + deck.getCreatedCards());
 			System.out.println("\tDeck is now populated.");
-			System.out.println("\tIs the communal pile empty? " + cp.isEmpty());
+			System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
+			*/
 			
 		} catch (IOException e) {
 			System.out.println("Could not open file.");
@@ -54,16 +55,21 @@ public class Game {
 			System.out.println("Sorry, you must face 1-4 opponents.");
 			opponents = chooseOpponents(keyboard);
 		}
-		
+			
 		for(int i = 0; i < opponents; i++) {
-			ModelAIPlayer opponent = new ModelAIPlayer("CPU-" + i);
+			ModelAIPlayer opponent = new ModelAIPlayer("CPU-" + (i + 1));
 			players.add(opponent);
 		}
 		
+		deck.deal(players);
+		
+		/*
 		for(int i = 0; i < players.size(); i++) {
 			System.out.println(players.get(i).getInfo());
 		}
-		
+
+		System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
+		*/
 		
 	}
 

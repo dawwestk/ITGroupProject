@@ -10,6 +10,10 @@ public class ModelPlayer {
 		hand = new ArrayList<ModelCard>();
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	// either pass one card at a time 
 	// or pass in ArrayList object containing all cards to be added
 	public void addToHand(ModelCard card) {

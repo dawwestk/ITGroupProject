@@ -13,7 +13,7 @@ public class ModelCommunalPile extends ArrayList<ModelCard>{
 	public void addCard(ModelCard card) {
 		this.add(card);
 		numberOfCards++;
-		empty = false;
+		this.empty = false;
 	}
 	
 	public void pickedUpByWinner(ModelPlayer player) {
