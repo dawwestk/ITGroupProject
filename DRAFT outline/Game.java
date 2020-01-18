@@ -80,6 +80,45 @@ public class Game {
 	}
 }
 
+	/*
+	public boolean playerCheck(ArrayList<ModelPlayer> players){
+
+	int activePlayers = 0;
+	for(int i=0; i<players.getLength; ++i){
+		if(!players[i].isHandEmpty){
+			activePlayers++;
+		}
+		if(activePlayers > 1){
+			return true;
+		}
+	}
+	return false;
+	}
+
+	while(playerCheck){
+
+	// game loop
+	// method to determine who's turn it is needed
+
+	public boolean playerTurn(ModelPlayer player){
+		if(player.userCheck == true){
+			Scanner scanner = new Scanner(System.in);
+			// switch statement with scanner to take user choice of attribute
+			switch(playerChoice){
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+				case 5:
+			}
+		} else if(player.userCheck == false){
+			player.selectHighest;
+		}
+	}
+
+	}
+	 */
+
 
 
 
