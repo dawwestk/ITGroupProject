@@ -26,9 +26,12 @@ public class TopTrumpsCLIApplication {
 
 		// Loop until the user wants to exit the game
 		while (!userWantsToQuit) {
+				game.gameInitialiser();
+				game.printInfo();
+				while(game.activePlayers()){
+					//game sequence
+				}
 
-			game.gameInitialiser();
-			game.printInfo();
 			// ----------------------------------------------------
 			// Add your game logic here based on the requirements
 			// ----------------------------------------------------
