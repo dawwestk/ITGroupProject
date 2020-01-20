@@ -12,6 +12,10 @@ public class ModelPlayer {
         hand = new ArrayList<ModelCard>();
     }
 
+    public ArrayList<ModelCard> getHand() {
+        return hand;
+    }
+
     public String getName() {
         return name;
     }
