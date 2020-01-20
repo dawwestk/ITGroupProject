@@ -103,10 +103,10 @@ public class Game {
     }
 
     public boolean activePlayers(){
-        int activeCount = 0;
+        int activeCount = this.players.size();
         for(int i = 0; i<this.players.size(); i++){
             if(!this.players.get(i).isHandEmpty()){
-                activeCount++;
+                activeCount--;
                 if(activeCount > 1){
                     return true;
                 }
