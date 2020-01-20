@@ -10,13 +10,13 @@ public class ModelDeck {
     private ModelCard[] initialArrayOfCards;
     private ArrayList<ModelCard> shuffled;
     private ArrayList<Integer> shuffledIndex;
-    private ModelCommunalPile cp;
+    private ModelCommunalPile communalPile;
 
     public ModelDeck() {
         totalCards = 40;		// hard coded for now as specified
         createdCards = 0;
         initialArrayOfCards = new ModelCard[totalCards];
-        cp = new ModelCommunalPile();
+        communalPile = new ModelCommunalPile();
     }
 
     private void shuffle() {
@@ -51,14 +51,14 @@ public class ModelDeck {
 
         if(remainingCards > 0) {
             for(int i = 0; i < remainingCards; i++) {
-                cp.addCard(shuffled.get(totalCards - i - 1));
+                communalPile.addCard(shuffled.get(totalCards - i - 1));
             }
         }
 
     }
 
     public ModelCommunalPile getCP() {
-        return cp;
+        return communalPile;
     }
 
     public ModelCard getCard(int index) {
@@ -76,5 +76,7 @@ public class ModelDeck {
     public int getCreatedCards() {
         return createdCards;
     }
+
+
 
 }
