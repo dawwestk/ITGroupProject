@@ -1,4 +1,6 @@
 *.class
 target/**/*.class
 *.classpath
-/target/
+/target/**/*.class
+/target/maven-status
+/target/maven-status/*
