@@ -1,0 +1,4 @@
+*.class
+MScIT_TeamProject_TemplateProject/target/*.class
+MScIT_TeamProject_TemplateProject/*.classpath
+MScIT_TeamProject_TemplateProject/target/classes/*.class
