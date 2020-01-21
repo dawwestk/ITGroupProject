@@ -124,11 +124,17 @@ public class Game {
     }
 
     public int statPicker(){
-
+        Scanner scanner = new Scanner(System.in);
+        if(players.get(turnTracker()).){
+            System.out.println("Which category do you want to select?: ");
+            return scanner.nextInt();
+        } else {
+           return players.get(turnTracker()).getHand().get(players.get(turnTracker()).getHand().size()).getHighestAttribute();
+        }
     }
 
     public void performRound(){
-        Round round = new Round(onTheTableGetter(), );
+        Round round = new Round(onTheTableGetter(), statPicker());
     }
 
         // the above is fine - only uses the model and some system output
