@@ -131,8 +131,11 @@ public class Game {
 	public int statPicker() {
 		Scanner scanner = new Scanner(System.in);
 		if (players.get(turnTracker()).getName().equals(playerName)) {
+			int choice;
 			System.out.println("Which category do you want to select?: ");
-			int choice = scanner.nextInt();
+			do {
+				 choice = scanner.nextInt();
+			} while (choice < 1 || choice > 5);
 			return choice;
 		} else {
 			return players.get(turnTracker()).getHand().get(players.get(turnTracker()).getHand().size() - 1)
