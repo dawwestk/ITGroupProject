@@ -21,7 +21,7 @@ public class Game {
 		this.players = new ArrayList<ModelPlayer>();
 		this.roundCount = 1;
 	}
-
+// Getters
 	public int getRoundCount() {
 		return roundCount++;
 	}
@@ -38,6 +38,14 @@ public class Game {
 		return players;
 	}
 
+// Setting up a new game	
+	public void gameInitialiser() {
+		buildDeck();
+		buildPlayers();
+		dealDeck();
+	}
+
+// Reading deck from text file
 	public void buildDeck() {
 		String filename = "StarCitizenDeck.txt";
 		FileReader fr = null;
@@ -67,6 +75,14 @@ public class Game {
 		}
 	}
 
+// Choosing amount of players
+	public static int chooseOpponents(Scanner keyboard) {
+		System.out.print("How many opponents would you like to face (max 4)? ");
+		int opponents = keyboard.nextInt();
+		return opponents;
+	}
+	
+// Creating players based on choice	
 	public void buildPlayers() {
 		players.add(user);
 		Scanner keyboard = new Scanner(System.in);
@@ -83,16 +99,19 @@ public class Game {
 		}
 	}
 
+// Distribute shuffled deck amongst players
 	public void dealDeck() {
 		deck.deal(players);
 	}
 
-	public void gameInitialiser() {
-		buildDeck();
-		buildPlayers();
-		dealDeck();
+// Choosing which player is to start on 1st round
+	public int whoFirst() {
+		Random random = new Random();
+		int max = players.size();
+		return random.nextInt(max - 1) + 1;
 	}
 
+// Print general game info    	
 	public void printInfo() {
 		for (int i = 0; i < players.size(); i++) {
 			System.out.println(players.get(i).getInfo());
@@ -100,12 +119,7 @@ public class Game {
 		System.out.println("Is CommunalPile empty? " + deck.getCP().isEmpty());
 	}
 
-	public int whoFirst() {
-		Random random = new Random();
-		int max = players.size();
-		return random.nextInt(max - 1) + 1;
-	}
-
+// Making an array of active cards (Cards at top of each players deck)
 	public ModelCard[] onTheTableGetter() {
 		ModelCard[] onTheTable = new ModelCard[players.size()];
 		for (int i = 0; i < players.size(); i++) {
@@ -114,6 +128,7 @@ public class Game {
 		return onTheTable;
 	}
 
+// Checking who the stat-picking player will be this round
 	public int turnTracker() {
 		if (roundCount == 1) {
 			return whoFirst();
@@ -128,6 +143,7 @@ public class Game {
 		}
 	}
 
+// Choosing which card stat will be compared	
 	public int statPicker() {
 		Scanner scanner = new Scanner(System.in);
 		if (players.get(turnTracker()).getName().equals(playerName)) {
@@ -143,22 +159,21 @@ public class Game {
 		}
 	}
 
+// Compare stats, find a winner/winners	
 	public void performRound() {
 		System.out.println("Round " + getRoundCount());
 		System.out.println("You drew " + user.getActiveCard().printCardInfo());
 		Round round = new Round(players, players.get(turnTracker()), statPicker());
-
+		
+		if (!round.equals(null)) {
+			// 1 winner, roundCount++, cards go to winner, new round
+		}else {
+			// draw, drawCount++, cards go in middle, new round
+		}			
+		
 	}
 
-	// the above is fine - only uses the model and some system output
-	// the following is CLI specific
-
-	public static int chooseOpponents(Scanner keyboard) {
-		System.out.print("How many opponents would you like to face (max 4)? ");
-		int opponents = keyboard.nextInt();
-		return opponents;
-	}
-
+// Counts the amount of players still in the game
 	public boolean activePlayers() {
 		int activeCount = this.players.size();
 		for (int i = 0; i < this.players.size(); i++) {
