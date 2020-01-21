@@ -95,14 +95,14 @@ public class Game {
         System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
     }
 
-    public boolean Round(){
-        if(roundCount == 0){
-            takeTurn(players.get(whoFirst()));
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    public boolean Round(){
+//        if(roundCount == 0){
+//            takeTurn(players.get(whoFirst()));
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     public int whoFirst(){
         Random random = new Random();
@@ -110,14 +110,9 @@ public class Game {
         return random.nextInt(max -1) + 1;
     }
 
-    public int takeTurn(ModelPlayer player){
-        Round round = new Round();
-        return 1;
-    }
-
-
         // the above is fine - only uses the model and some system output
         // the following is CLI specific
+
 
     public static int chooseOpponents(Scanner keyboard) {
         System.out.print("How many opponents would you like to face (max 4)? ");
