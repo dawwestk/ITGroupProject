@@ -1,3 +1,4 @@
 *.class
 target/**/*.class
 *.classpath
+/target/
