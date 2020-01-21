@@ -6,6 +6,7 @@ public class ModelPlayer {
 
     private String name;
     private ArrayList<ModelCard> hand;
+    private boolean winner;
 
     public ModelPlayer(String name) {
         this.name = name;

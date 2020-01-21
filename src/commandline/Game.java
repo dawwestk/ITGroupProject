@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -11,11 +12,13 @@ public class Game {
     private ModelPlayer user;
     private ModelDeck deck;
     ArrayList<ModelPlayer> players;
+    int roundCount;
 
     public Game() {
         this.user = new ModelPlayer("Player One");
         this.deck = new ModelDeck();
         this.players = new ArrayList<ModelPlayer>();
+        this.roundCount = 0;
     }
 
     public ModelPlayer getUser() {
@@ -90,6 +93,26 @@ public class Game {
             System.out.println(players.get(i).getInfo());
         }
         System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
+    }
+
+    public boolean Round(){
+        if(roundCount == 0){
+            takeTurn(players.get(whoFirst()));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int whoFirst(){
+        Random random = new Random();
+        int max = players.size();
+        return random.nextInt(max -1) + 1;
+    }
+
+    public int takeTurn(ModelPlayer player){
+        Round round = new Round();
+        return 1;
     }
 
 
