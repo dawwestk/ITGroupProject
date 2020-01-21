@@ -95,19 +95,40 @@ public class Game {
         System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
     }
 
-//    public boolean Round(){
-//        if(roundCount == 0){
-//            takeTurn(players.get(whoFirst()));
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-
     public int whoFirst(){
         Random random = new Random();
         int max = players.size();
         return random.nextInt(max -1) + 1;
+    }
+
+    public ModelCard[] onTheTableGetter(){
+        ModelCard[] onTheTable = new ModelCard[players.size()];
+        for(int i = 0; i<players.size(); i++){
+            onTheTable[i] = players.get(i).getHand().get(players.get(i).getHand().size());
+        }
+        return onTheTable;
+    }
+
+    public int turnTracker(){
+        if(roundCount == 0){
+            return whoFirst();
+        } else {
+            int count = 0;
+            for(int i = 0; i<players.size(); i++){
+                if(players.get(i).isWinner()){
+                    count = i;
+                }
+            }
+            return count;
+        }
+    }
+
+    public int statPicker(){
+
+    }
+
+    public void performRound(){
+        Round round = new Round(onTheTableGetter(), );
     }
 
         // the above is fine - only uses the model and some system output

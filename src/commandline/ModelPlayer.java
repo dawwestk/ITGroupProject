@@ -6,11 +6,12 @@ public class ModelPlayer {
 
     private String name;
     private ArrayList<ModelCard> hand;
-    private boolean winner;
+    private boolean isWinner;
 
     public ModelPlayer(String name) {
         this.name = name;
         hand = new ArrayList<ModelCard>();
+        isWinner = false;
     }
 
     public ArrayList<ModelCard> getHand() {
@@ -19,6 +20,10 @@ public class ModelPlayer {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isWinner(){
+        return isWinner;
     }
 
     // either pass one card at a time
