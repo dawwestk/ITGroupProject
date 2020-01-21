@@ -16,6 +16,13 @@ public class ModelCard {
     public ModelCard(String[] info) {
         // info comes from cards.txt
         // arrays.split etc
+    	
+    	/*
+    	 * 
+    	 * NOTE: DW wants to re-do this whole set up with a hashmap rather than single attributes
+    	 * 	21/01/2020
+    	 * 
+    	 */
 
         name = info[0];
         shipSize = Integer.parseInt(info[1]);
@@ -24,7 +31,6 @@ public class ModelCard {
         shipFirepower = Integer.parseInt(info[4]);
         shipCargo = Integer.parseInt(info[5]);
 
-
         attributes = new int[5];		// currently only 5 attributes - specs say do not validate
         attributes[0] = shipSize;
         attributes[1] = shipSpeed;
@@ -32,6 +38,19 @@ public class ModelCard {
         attributes[3] = shipFirepower;
         attributes[4] = shipCargo;
 
+    }
+    
+    public String printCardInfo() {
+    	
+    	// re-do with HashMap
+    	String output = name + "\n";
+    	output += "\t1. Size: " + shipSize + "\n";
+    	output += "\t2. Speed: " + shipSpeed + "\n";
+    	output += "\t3. Range: " + shipRange + "\n";
+    	output += "\t4. Firepower: " + shipFirepower + "\n";
+    	output += "\t5. Cargo: " + shipCargo + "\n";
+    	
+    	return output;
     }
 
     public String getName() {

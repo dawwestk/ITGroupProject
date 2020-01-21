@@ -13,6 +13,11 @@ public class ModelPlayer {
         hand = new ArrayList<ModelCard>();
         isWinner = false;
     }
+    
+    public ModelCard getActiveCard() {
+    	// links the last card in the player's hand for use in Round object
+    	return hand.get(hand.size()-1);
+    }
 
     public ArrayList<ModelCard> getHand() {
         return hand;

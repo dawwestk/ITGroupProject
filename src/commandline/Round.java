@@ -4,31 +4,37 @@ import java.util.ArrayList;
 //import java.util.List;
 
 public class Round {
-    private ModelCard[] onTheTable;
+	private ArrayList<ModelPlayer> activePlayers;
+    //private ModelCard[] onTheTable;
     private int stat;
     private int highestValue;
+    private ModelPlayer activePlayer;
 
-    public Round(ModelCard[] c, int s) {
-        this.onTheTable = c;
+    public Round(ArrayList<ModelPlayer> players, ModelPlayer active, int s) {
+    	activePlayers = players;
+    	activePlayer = active;
         this.stat = s;
-        this.highestValue = findHighestValue(c);
-
+        this.highestValue = 1; //findHighestValue(players);
+        System.out.println(activePlayer.getName() + " picked attribute number " + this.stat);	// note this is array index, not numbered attribute
+        System.out.println("\t" + activePlayer.getActiveCard().printCardInfo());
     }
 
-    public int findHighestValue(ModelCard[] compare) {
+    public int findHighestValue(ArrayList<ModelPlayer> compare) {
         int highestValue = -1;
-        for (int i = 0; i < compare.length; i++) {
-            if(compare[i].getAttributes()[stat] >= highestValue)
-                highestValue = compare[i].getAttributes()[stat];
+        for (int i = 0; i < compare.size(); i++) {
+            if(compare.get(i).getActiveCard().getAttributes()[stat] > highestValue) {
+                highestValue = compare.get(i).getActiveCard().getAttributes()[stat];
+            }
         }
         return highestValue;
     }
 
+    /*
     public int compareStat() {
         int winner = 0;
         int drawCount = 0;
 
-        for(int i = 0; i<onTheTable.length; i++) {
+        for(int i = 0; i < onTheTable.length; i++) {
             if (onTheTable[i].getAttributes()[stat]>onTheTable[winner].getAttributes()[stat]) {
                 winner = i;
                 drawCount = 0;
@@ -59,4 +65,5 @@ public class Round {
 
         return winnersArray;
     }
+    */
 }

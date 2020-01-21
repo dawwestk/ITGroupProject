@@ -1,6 +1,7 @@
 package commandline;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  * Top Trumps command line application
@@ -30,6 +31,15 @@ public class TopTrumpsCLIApplication {
 				game.printInfo();
 				while(game.activePlayers()){
 					//game sequence
+					game.performRound();
+					/*
+					ArrayList<ModelPlayer> players = game.getPlayers();
+					ModelCard[] activeCards = new ModelCard[players.size()];
+					for(int i = 0; i < players.size(); i++) {
+						activeCards[i] = players.get(i).getActiveCard();
+					}
+					Round r = new Round(activeCards, 0);
+					*/
 				}
 
 			// ----------------------------------------------------
