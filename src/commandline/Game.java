@@ -4,18 +4,38 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
 
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
+    private ModelPlayer user;
+    private ModelDeck deck;
+    ArrayList<ModelPlayer> players;
+    int roundCount;
 
+    public Game() {
+        this.user = new ModelPlayer("Player One");
+        this.deck = new ModelDeck();
+        this.players = new ArrayList<ModelPlayer>();
+        this.roundCount = 0;
+    }
+
+    public ModelPlayer getUser() {
+        return user;
+    }
+
+    public ModelDeck getDeck() {
+        return deck;
+    }
+
+    public ArrayList<ModelPlayer> getPlayers() {
+        return players;
+    }
+
+    public void buildDeck(){
         String filename = "StarCitizenDeck.txt";
         FileReader fr = null;
-        ModelDeck deck = new ModelDeck();
-        ModelPlayer human = new ModelPlayer("You");
-        ArrayList<ModelPlayer> players = new ArrayList<ModelPlayer>();
 
         try {
             File file = new File(filename);
@@ -32,24 +52,18 @@ public class Game {
                 } else {
                     ModelCard card = new ModelCard(stats);
                     deck.addCard(card);
-                    //System.out.println("Making card: " + stats[0] + ", added to deck");
+                    System.out.println("Making card: " + stats[0] + ", added to deck");
                 }
             }
-
-			/*
-			System.out.println("\tTotal cards made = " + deck.getCreatedCards());
-			System.out.println("\tDeck is now populated.");
-			System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
-			*/
 
         } catch (IOException e) {
             System.out.println("Could not open file.");
             System.exit(0);
         }
+    }
 
-        // the above is fine - only uses the model and some system output
-        // the following is CLI specific
-        players.add(human);
+    public void buildPlayers(){
+        players.add(user);
         Scanner keyboard = new Scanner(System.in);
         int opponents = chooseOpponents(keyboard);
 
@@ -62,21 +76,88 @@ public class Game {
             ModelAIPlayer opponent = new ModelAIPlayer("CPU-" + (i + 1));
             players.add(opponent);
         }
-
-        deck.deal(players);
-
-		/*
-		for(int i = 0; i < players.size(); i++) {
-			System.out.println(players.get(i).getInfo());
-		}
-		System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
-		*/
-
     }
+
+    public void dealDeck(){
+        deck.deal(players);
+    }
+
+    public void gameInitialiser(){
+        buildDeck();
+        buildPlayers();
+        dealDeck();
+    }
+
+    public void printInfo(){
+        for(int i = 0; i < players.size(); i++) {
+            System.out.println(players.get(i).getInfo());
+        }
+        System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
+    }
+
+    public int whoFirst(){
+        Random random = new Random();
+        int max = players.size();
+        return random.nextInt(max -1) + 1;
+    }
+
+    public ModelCard[] onTheTableGetter(){
+        ModelCard[] onTheTable = new ModelCard[players.size()];
+        for(int i = 0; i<players.size(); i++){
+            onTheTable[i] = players.get(i).getHand().get(players.get(i).getHand().size());
+        }
+        return onTheTable;
+    }
+
+    public int turnTracker(){
+        if(roundCount == 0){
+            return whoFirst();
+        } else {
+            int count = 0;
+            for(int i = 0; i<players.size(); i++){
+                if(players.get(i).isWinner()){
+                    count = i;
+                }
+            }
+            return count;
+        }
+    }
+
+    public int statPicker(){
+        Scanner scanner = new Scanner(System.in);
+        if(players.get(turnTracker()).){
+            System.out.println("Which category do you want to select?: ");
+            return scanner.nextInt();
+        } else {
+           return players.get(turnTracker()).getHand().get(players.get(turnTracker()).getHand().size()).getHighestAttribute();
+        }
+    }
+
+    public void performRound(){
+        Round round = new Round(onTheTableGetter(), statPicker());
+    }
+
+        // the above is fine - only uses the model and some system output
+        // the following is CLI specific
+
 
     public static int chooseOpponents(Scanner keyboard) {
         System.out.print("How many opponents would you like to face (max 4)? ");
         int opponents = keyboard.nextInt();
         return opponents;
     }
+
+    public boolean activePlayers(){
+        int activeCount = this.players.size();
+        for(int i = 0; i<this.players.size(); i++){
+            if(!this.players.get(i).isHandEmpty()){
+                activeCount--;
+                if(activeCount > 1){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
