@@ -48,11 +48,11 @@ public class Game {
                 String[] stats = shipInfo.split(" ");
 
                 if(stats[0].toLowerCase().equals("description")) {
-                    System.out.println("Here are the stats: " + shipInfo);
+                    //System.out.println("Here are the stats: " + shipInfo);
                 } else {
                     ModelCard card = new ModelCard(stats);
                     deck.addCard(card);
-                    System.out.println("Making card: " + stats[0] + ", added to deck");
+                    //System.out.println("Making card: " + stats[0] + ", added to deck");
                 }
             }
 
@@ -92,7 +92,7 @@ public class Game {
         for(int i = 0; i < players.size(); i++) {
             System.out.println(players.get(i).getInfo());
         }
-        System.out.println("\tIs CommunalPile empty? " + deck.getCP().isEmpty());
+        System.out.println("Is CommunalPile empty? " + deck.getCP().isEmpty());
     }
 
     public int whoFirst(){
@@ -125,7 +125,7 @@ public class Game {
 
     public int statPicker(){
         Scanner scanner = new Scanner(System.in);
-        if(players.get(turnTracker()).){
+        if(players.get(turnTracker()).isWinner()){
             System.out.println("Which category do you want to select?: ");
             return scanner.nextInt();
         } else {
