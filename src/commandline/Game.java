@@ -143,7 +143,7 @@ public class Game {
 		} else {
     		for(int i=0; i<players.size(); ++i){
     			if(players.get(i).isWinner()){
-					System.out.println("It is " + players.get(i) + "'s turn.");
+					System.out.println("It is " + players.get(i).getName() + "'s turn.");
     				count = i;
 				}
 			}
