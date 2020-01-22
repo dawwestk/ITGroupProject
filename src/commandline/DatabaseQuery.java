@@ -1,3 +1,5 @@
+package commandline;
+
 import commandline.Game;
 
 import java.sql.Connection;
