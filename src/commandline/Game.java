@@ -193,8 +193,8 @@ public class Game {
                 players.get(i).removeFromHand(players.get(i).getActiveCard());
             }
             printInfo();
-            roundCount++;
         }
+        roundCount++;
     }
 
     public void redistributeCards(ModelPlayer winner) {
