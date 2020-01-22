@@ -176,9 +176,7 @@ public class Game {
 					players.get(i).setWinner(false);
 			}
 			redistributeCards(round.getRoundWinner());
-			}		
-			activePlayers();
-		}else {
+			} else {
 			// draw: drawCount++, all cards go in communal pile, previous winner picks category
 			printInfo();
 		}					
