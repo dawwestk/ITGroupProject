@@ -39,7 +39,7 @@ public class ModelPlayer {
     // either pass one card at a time
     // or pass in ArrayList object containing all cards to be added
     public void addToHand(ModelCard card) {
-        hand.add(card);
+        hand.add(0, card);
     }
 
     public void removeFromHand(ModelCard card) {
