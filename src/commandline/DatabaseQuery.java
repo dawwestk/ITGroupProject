@@ -1,8 +1,13 @@
+package commandline;
+
+import commandline.Game;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 
 /*
  * 
@@ -18,6 +23,8 @@ import java.sql.Statement;
  *  	This will be changed to link to a yacata server.
  * 
  
+
+/*
 
 public class DatabaseQuery {
 
@@ -95,13 +102,13 @@ public class DatabaseQuery {
 		}
 		int rounds = g.getRoundsPlayed();
 		int draws = g.getDraws();
-		
+
 		String insertQuery = String.format("INSERT INTO toptrumps.stats(gameid, winhuman, winai, rounds, draws) VALUES(%d, %d, %d, %d, %d)", gameID, winHuman, winAI, rounds, draws);
-		
+
 		try {
 			Statement stmt = c.createStatement();
 			int status = stmt.executeUpdate(insertQuery);
-			
+
 			if(status == 1) {
 				System.out.println("Game added successfully.");
 			} else {
@@ -111,6 +118,7 @@ public class DatabaseQuery {
 			e.printStackTrace();
 		}
 	}
+
 	
 	public String printDB() {
 		try {
@@ -162,4 +170,4 @@ public class DatabaseQuery {
 
 }
 
-*/
+

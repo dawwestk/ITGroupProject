@@ -146,7 +146,7 @@ public class Game {
 // Choosing which card stat will be compared	
 	public int statPicker() {
 		Scanner scanner = new Scanner(System.in);
-		if (players.get(turnTracker()).getName().equals(playerName)) {
+		if (players.get(turnTracker()).equals(user)) {
 			int choice;
 			System.out.println("Which category do you want to select?: ");
 			do {
@@ -167,6 +167,7 @@ public class Game {
 		
 		if (round.compareStat()) {
 			// 1 winner: all cards go to winner, winner picks category
+			System.out.println(round.getRoundWinner().getName() + " wins!");			
 			printInfo();
 			for (int i = 0; i<players.size(); i++) {
 				if(players.get(i).equals(round.compareStat())){
@@ -175,6 +176,7 @@ public class Game {
 					players.get(i).setWinner(false);
 			}
 			redistributeCards(round.getRoundWinner());
+			}		
 			activePlayers();
 		}else {
 			// draw: drawCount++, all cards go in communal pile, previous winner picks category
@@ -199,7 +201,7 @@ public class Game {
 		for (int i = 0; i < this.players.size(); i++) {
 			if (!this.players.get(i).isHandEmpty()) {
 				activeCount--;
-				if (activeCount >= 1) {
+				if (activeCount > 1||!user.isHandEmpty()) {
 					return true;
 				}
 			}

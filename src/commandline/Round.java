@@ -63,9 +63,9 @@ public class Round {
 //	  ModelPlayer CPU1 = new ModelPlayer("Player2");testPlayers.add(CPU1);
 //	  ModelPlayer CPU2 = new ModelPlayer("Player3");testPlayers.add(CPU2);
 //	  ModelCard Active1 = new ModelCard(new String[] {"Card1", "1", "2", "12", "4", "20"});testActive.addToHand(Active1);
-//	  ModelCard Active2 = new ModelCard(new String[] {"Card2", "0", "6", "8", "3", "12"});CPU1.addToHand(Active2);
-//	  ModelCard Active3 = new ModelCard(new String[] {"Card3", "1", "2", "3", "2", "14"});CPU2.addToHand(Active3);
-//	  Round round = new Round(testPlayers, testActive, 5);
+//	  ModelCard Active2 = new ModelCard(new String[] {"Card2", "0", "60", "8", "3", "12"});CPU1.addToHand(Active2);
+//	  ModelCard Active3 = new ModelCard(new String[] {"Card3", "20", "2", "3", "2", "14"});CPU2.addToHand(Active3);
+//	  Round round = new Round(testPlayers, testActive, 2);
 //	  round.compareStat();
 //  }
 //  public boolean returnWinner(ModelPlayer winner) {
