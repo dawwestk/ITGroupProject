@@ -11,8 +11,8 @@ public class Round {
   private ModelPlayer activePlayer;
 
   public Round(ArrayList<ModelPlayer> players, ModelPlayer active, int s) {
-  	activePlayers = players;
-  	activePlayer = active;
+	  activePlayers = players;
+	  activePlayer = active;
       this.stat = s;
       //this.highestValue = 1; //findHighestValue(players);
       System.out.println(activePlayer.getName() + " picked attribute number " + this.stat);	// note this is array index, not numbered attribute
@@ -44,13 +44,18 @@ public class Round {
               drawCount++;
           }
       }
-      if (drawCount == 0)
+      if (drawCount == 0) {
+    	  System.out.print(activePlayers.get(winner).getName());
           return activePlayers.get(winner);
+      }
       else {
-          return null;
+          return new ModelPlayer("Draw");
       }
   }
 
+//  public boolean returnWinner(ModelPlayer winner) {
+//	  
+//  }
 // In the event of multiple winners, an array of indexes will be returned
 //  public int[] Draw() {
 //      ArrayList<Integer> winnersList = new ArrayList<Integer>();

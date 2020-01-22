@@ -120,13 +120,13 @@ public class Game {
 	}
 
 // Making an array of active cards (Cards at top of each players deck)
-	public ModelCard[] onTheTableGetter() {
-		ModelCard[] onTheTable = new ModelCard[players.size()];
-		for (int i = 0; i < players.size(); i++) {
-			onTheTable[i] = players.get(i).getHand().get(players.get(i).getHand().size() - 1);
-		}
-		return onTheTable;
-	}
+//	public ModelCard[] onTheTableGetter() {
+//		ModelCard[] onTheTable = new ModelCard[players.size()];
+//		for (int i = 0; i < players.size(); i++) {
+//			onTheTable[i] = players.get(i).getHand().get(players.get(i).getHand().size() - 1);
+//		}
+//		return onTheTable;
+//	}
 
 // Checking who the stat-picking player will be this round
 	public int turnTracker() {
@@ -165,14 +165,34 @@ public class Game {
 		System.out.println("You drew " + user.getActiveCard().printCardInfo());
 		Round round = new Round(players, players.get(turnTracker()), statPicker());
 		
-		if (!round.equals(null)) {
-			// 1 winner, roundCount++, cards go to winner, new round
+		if (round.compareStat().getName().equals("Draw")) {
+			printInfo();
+			// draw: drawCount++, all cards go in communal pile, previous winner picks category
 		}else {
-			// draw, drawCount++, cards go in middle, new round
-		}			
-		
+			// 1 winner: all cards go to winner, winner picks category
+			System.out.println(round.compareStat().getName()+" wins!");
+			printInfo();
+			for (int i = 0; i<players.size(); i++) {
+				if(players.get(i).equals(round.compareStat())){
+					players.get(i).setWinner(true);
+				}else
+					players.get(i).setWinner(false);
+			}
+			redistributeCards(round.compareStat());
+			activePlayers();
+		}					
 	}
 
+	public void redistributeCards(ModelPlayer winner) {
+		for(int i = 0; i < players.size(); i++) {
+			if(!players.get(i).equals(winner)) {
+				winner.addToHand(players.get(i).getActiveCard());
+				players.get(i).removeFromHand(players.get(i).getActiveCard());
+			}
+				
+		}
+	}
+	
 // Counts the amount of players still in the game
 	public boolean activePlayers() {
 		int activeCount = this.players.size();

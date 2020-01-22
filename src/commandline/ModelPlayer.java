@@ -1,6 +1,7 @@
 package commandline;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ModelPlayer {
 
@@ -30,7 +31,11 @@ public class ModelPlayer {
     public boolean isWinner(){
         return isWinner;
     }
-
+    
+    public void setWinner(boolean setWinner) {
+    	this.isWinner = setWinner;
+    }
+    
     // either pass one card at a time
     // or pass in ArrayList object containing all cards to be added
     public void addToHand(ModelCard card) {
