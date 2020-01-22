@@ -173,7 +173,6 @@ public class Game {
         for(int i =1; i < players.size(); i++){
 			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName());
 		}
-		System.out.println(turnTracker());
         Round round = new Round(players, players.get(turnTracker()), statPicker());
 
         if (round.compareStat()) {
