@@ -137,7 +137,6 @@ public class Game {
     // Checking who the stat-picking player will be this round
     public int turnTracker() {
     	int count = 0;
-		System.out.println("The round is: " + roundCount);
     	if(roundCount == 1){
     		return whoFirst();
 		} else {
