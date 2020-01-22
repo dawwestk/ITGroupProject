@@ -24,7 +24,6 @@ import java.sql.Statement;
  * 
  
 
-/*
 
 public class DatabaseQuery {
 
@@ -169,5 +168,7 @@ public class DatabaseQuery {
 	}
 
 }
+
+*/
 
 
