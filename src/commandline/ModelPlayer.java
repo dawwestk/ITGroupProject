@@ -9,6 +9,10 @@ public class ModelPlayer {
     private ArrayList<ModelCard> hand;
     private boolean isWinner;
 
+    public boolean isWinner() {
+        return isWinner;
+    }
+
     public ModelPlayer(String name) {
         this.name = name;
         hand = new ArrayList<ModelCard>();
@@ -26,10 +30,6 @@ public class ModelPlayer {
 
     public String getName() {
         return name;
-    }
-
-    public boolean isWinner(){
-        return isWinner;
     }
     
     public void setWinner(boolean setWinner) {
