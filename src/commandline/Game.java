@@ -12,7 +12,7 @@ public class Game {
 	private ModelPlayer user;
 	private ModelDeck deck;
 	private ArrayList<ModelPlayer> players;
-	private static int roundCount = 1;
+	private int roundCount = 1;
 	private String playerName = "Player One";
 
 	public Game() {
@@ -165,10 +165,7 @@ public class Game {
 		System.out.println("You drew " + user.getActiveCard().printCardInfo());
 		Round round = new Round(players, players.get(turnTracker()), statPicker());
 		
-		if (round.compareStat().getName().equals("Draw")) {
-			printInfo();
-			// draw: drawCount++, all cards go in communal pile, previous winner picks category
-		}else {
+		if (players.contains(round.compareStat())) {
 			// 1 winner: all cards go to winner, winner picks category
 			System.out.println(round.compareStat().getName()+" wins!");
 			printInfo();
@@ -180,6 +177,9 @@ public class Game {
 			}
 			redistributeCards(round.compareStat());
 			activePlayers();
+		}else {
+			// draw: drawCount++, all cards go in communal pile, previous winner picks category
+			printInfo();
 		}					
 	}
 
@@ -188,7 +188,8 @@ public class Game {
 			if(!players.get(i).equals(winner)) {
 				winner.addToHand(players.get(i).getActiveCard());
 				players.get(i).removeFromHand(players.get(i).getActiveCard());
-			}
+			}else
+				continue;
 				
 		}
 	}

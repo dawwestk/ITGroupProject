@@ -1,7 +1,6 @@
 package commandline;
 
 import java.util.ArrayList;
-//import java.util.List;
 
 public class Round {
 	private ArrayList<ModelPlayer> activePlayers;
@@ -35,24 +34,37 @@ public class Round {
       int winner = 0;
       int drawCount = 0;
 
-      for(int i = 0; i < activePlayers.size(); i++) {
-          if (activePlayers.get(i).getActiveCard().getAttributes()[stat]>activePlayers.get(winner).getActiveCard().getAttributes()[stat]) {
+      for(int i = 1; i < activePlayers.size(); i++) {
+          if (activePlayers.get(i).getActiveCard().getAttributes()[stat-1]>activePlayers.get(winner).getActiveCard().getAttributes()[stat-1]) {
               winner = i;
               drawCount = 0;
-          }if (activePlayers.get(i).getActiveCard().getAttributes()[stat]==activePlayers.get(winner).getActiveCard().getAttributes()[stat]) {
+          }else if (activePlayers.get(i).getActiveCard().getAttributes()[stat-1]==activePlayers.get(winner).getActiveCard().getAttributes()[stat-1]) {
               winner = i;
               drawCount++;
           }
       }
       if (drawCount == 0) {
-    	  System.out.print(activePlayers.get(winner).getName());
+    	  System.out.println(activePlayers.get(winner).getName());
           return activePlayers.get(winner);
       }
       else {
+    	  System.out.println("draw");
           return new ModelPlayer("Draw");
       }
   }
 
+// Testing Round. Currently if 1st Player wins result is always draw[Fixed]
+//  public static void main(String[] args) {
+//	  ArrayList<ModelPlayer> testPlayers = new ArrayList<ModelPlayer>();
+//	  ModelPlayer testActive = new ModelPlayer("Player1"); testPlayers.add(testActive);
+//	  ModelPlayer CPU1 = new ModelPlayer("Player2");testPlayers.add(CPU1);
+//	  ModelPlayer CPU2 = new ModelPlayer("Player3");testPlayers.add(CPU2);
+//	  ModelCard Active1 = new ModelCard(new String[] {"Card1", "1", "2", "12", "4", "20"});testActive.addToHand(Active1);
+//	  ModelCard Active2 = new ModelCard(new String[] {"Card2", "0", "6", "8", "3", "12"});CPU1.addToHand(Active2);
+//	  ModelCard Active3 = new ModelCard(new String[] {"Card3", "1", "2", "3", "2", "14"});CPU2.addToHand(Active3);
+//	  Round round = new Round(testPlayers, testActive, 5);
+//	  round.compareStat();
+//  }
 //  public boolean returnWinner(ModelPlayer winner) {
 //	  
 //  }
