@@ -165,9 +165,8 @@ public class Game {
 		System.out.println("You drew " + user.getActiveCard().printCardInfo());
 		Round round = new Round(players, players.get(turnTracker()), statPicker());
 		
-		if (players.contains(round.compareStat())) {
+		if (round.compareStat()) {
 			// 1 winner: all cards go to winner, winner picks category
-			System.out.println(round.compareStat().getName()+" wins!");
 			printInfo();
 			for (int i = 0; i<players.size(); i++) {
 				if(players.get(i).equals(round.compareStat())){
@@ -175,7 +174,7 @@ public class Game {
 				}else
 					players.get(i).setWinner(false);
 			}
-			redistributeCards(round.compareStat());
+			redistributeCards(round.getRoundWinner());
 			activePlayers();
 		}else {
 			// draw: drawCount++, all cards go in communal pile, previous winner picks category

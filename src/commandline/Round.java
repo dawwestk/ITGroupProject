@@ -4,16 +4,15 @@ import java.util.ArrayList;
 
 public class Round {
 	private ArrayList<ModelPlayer> activePlayers;
-  //private ModelCard[] onTheTable;
   private int stat;
-  //private int highestValue;
   private ModelPlayer activePlayer;
+  private ModelPlayer winningPlayer;
 
   public Round(ArrayList<ModelPlayer> players, ModelPlayer active, int s) {
 	  activePlayers = players;
 	  activePlayer = active;
       this.stat = s;
-      //this.highestValue = 1; //findHighestValue(players);
+      winningPlayer = null;
       System.out.println(activePlayer.getName() + " picked attribute number " + this.stat);	// note this is array index, not numbered attribute
       System.out.println("\t" + activePlayer.getActiveCard().printCardInfo());
   }
@@ -30,27 +29,31 @@ public class Round {
 //  }
 
 // Compares the chosen stat and detects whether there is a single winner or a draw. Returns the player who won or null for a draw. 
-  public ModelPlayer compareStat() {
-      int winner = 0;
-      int drawCount = 0;
+  public boolean compareStat() {
+      boolean winner = false;
 
       for(int i = 1; i < activePlayers.size(); i++) {
-          if (activePlayers.get(i).getActiveCard().getAttributes()[stat-1]>activePlayers.get(winner).getActiveCard().getAttributes()[stat-1]) {
-              winner = i;
-              drawCount = 0;
-          }else if (activePlayers.get(i).getActiveCard().getAttributes()[stat-1]==activePlayers.get(winner).getActiveCard().getAttributes()[stat-1]) {
-              winner = i;
-              drawCount++;
+          if (activePlayers.get(i).getActiveCard().getAttributes()[stat-1] > activePlayer.getActiveCard().getAttributes()[stat-1]) {
+              winner = true;
+              winningPlayer = activePlayers.get(i);
+              activePlayers.get(i).setWinner(true);
+          }else if (activePlayers.get(i).getActiveCard().getAttributes()[stat-1] == activePlayer.getActiveCard().getAttributes()[stat-1]) {
+              winner = false;
+              activePlayers.get(i).setWinner(false);
           }
       }
-      if (drawCount == 0) {
-    	  System.out.println(activePlayers.get(winner).getName());
-          return activePlayers.get(winner);
+      if (winner) {
+    	  System.out.println(winningPlayer.getName() + " has won!");
+          return true;
       }
       else {
     	  System.out.println("draw");
-          return new ModelPlayer("Draw");
+          return false;
       }
+  }
+  
+  public ModelPlayer getRoundWinner() {
+	  return winningPlayer;
   }
 
 // Testing Round. Currently if 1st Player wins result is always draw[Fixed]
