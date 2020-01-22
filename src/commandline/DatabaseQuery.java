@@ -22,7 +22,7 @@ import java.sql.Statement;
  *  	Currently the code is set up for the localhost server 
  *  	This will be changed to link to a yacata server.
  * 
- */
+ 
 
 /*
 
@@ -170,4 +170,4 @@ public class DatabaseQuery {
 
 }
 
-*/
+

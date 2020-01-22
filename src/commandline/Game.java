@@ -165,16 +165,17 @@ public class Game {
 		System.out.println("You drew " + user.getActiveCard().printCardInfo());
 		Round round = new Round(players, players.get(turnTracker()), statPicker());
 		
-		if (players.contains(round.compareStat())) {
+		if (round.compareStat()) {
 			// 1 winner: all cards go to winner, winner picks category
-			System.out.println(round.compareStat().getName()+" wins!");			
-			redistributeCards(round.compareStat());
+			System.out.println(round.getRoundWinner().getName() + " wins!");			
 			printInfo();
 			for (int i = 0; i<players.size(); i++) {
 				if(players.get(i).equals(round.compareStat())){
 					players.get(i).setWinner(true);
 				}else
 					players.get(i).setWinner(false);
+			}
+			redistributeCards(round.getRoundWinner());
 			}		
 			activePlayers();
 		}else {
