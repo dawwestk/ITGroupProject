@@ -13,8 +13,8 @@ public class Round {
         activePlayer = active;
         this.stat = s;
         winningPlayer = activePlayers.get(0);
-        System.out.println(activePlayer.getName() + " picked attribute number " + this.stat+"\n");    // note this is array index, not numbered attribute
-        System.out.println("Score to beat is: " + activePlayer.getActiveCard().getAttributes()[stat-1]+"\n");
+        System.out.println(activePlayer.getName() + " picked attribute number " + (this.stat + 1) +"\n");    // note this is array index, not numbered attribute
+        System.out.println("Score to beat is: " + activePlayer.getActiveCard().getAttributes()[stat]+"\n");
         System.out.println("\t" + activePlayer.getActiveCard().printCardInfo());
     }
 
@@ -34,25 +34,26 @@ public class Round {
         int drawCount = 0;
 
         for (int i = 1; i < activePlayers.size(); i++) {
-            if (activePlayers.get(i).getActiveCard().getAttributes()[stat - 1] > winningPlayer.getActiveCard().getAttributes()[stat - 1]) {
+            if (activePlayers.get(i).getActiveCard().getAttributes()[stat] > winningPlayer.getActiveCard().getAttributes()[stat]) {
                 winningPlayer = activePlayers.get(i);
                 winningPlayer.setWinner(true);
                 drawCount = 0;
-            }else if (activePlayers.get(i).getActiveCard().getAttributes()[stat - 1] == winningPlayer.getActiveCard().getAttributes()[stat - 1]) {
+            }else if (activePlayers.get(i).getActiveCard().getAttributes()[stat] == winningPlayer.getActiveCard().getAttributes()[stat]) {
             	drawCount++;
                 winningPlayer.setWinner(false);
                 activePlayers.get(i).setWinner(false);
-            }else if(activePlayers.get(i).getActiveCard().getAttributes()[stat - 1] < winningPlayer.getActiveCard().getAttributes()[stat - 1]) {
+            }else if(activePlayers.get(i).getActiveCard().getAttributes()[stat] < winningPlayer.getActiveCard().getAttributes()[stat]) {
             	activePlayers.get(i).setWinner(false);
             }
             
         }
         if (drawCount<1) {
         	activePlayer = winningPlayer;
-            System.out.println(winningPlayer.getName() + " has won!  His card was: " + winningPlayer.getActiveCard().getName() + " and it's attribute was " + winningPlayer.getActiveCard().getAttributes()[stat - 1]+"\n");
+            System.out.println(winningPlayer.getName() + " has won!  His card was: " + winningPlayer.getActiveCard().getName() + " and it's attribute was " + winningPlayer.getActiveCard().getAttributes()[stat]+"\n");
             return true;
         } else {
             System.out.println("There has been a draw.\n");
+            winningPlayer = activePlayer;
             return false;
         }
     }
