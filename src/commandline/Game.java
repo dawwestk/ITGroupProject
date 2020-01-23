@@ -173,12 +173,14 @@ public class Game {
 
     // Compare stats, find a winner/winners
     public void performRound() {
-        System.out.println("Round " + roundCount + ": " + players.get(turnTracker()).getName() + "'s turn to choose!\n");
-        System.out.println("You drew " + user.getActiveCard().printCardInfo());
+
+
         for(int i =1; i < players.size(); i++){
+            System.out.println("You drew " + user.getActiveCard().printCardInfo());
 			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName()+"\n");
 		}
         Round round = new Round(players, players.get(turnTracker()), statPicker());
+
 
         if (!round.compareStat()) {
         	for (int i = 0; i < players.size(); i++) {
