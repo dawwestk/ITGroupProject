@@ -13,6 +13,7 @@ public class Game {
 
 	private ModelPlayer user;
 	private ModelDeck deck;
+	private String[] attributeList;
 	private ModelCommunalPile cp;
 	private ArrayList<ModelPlayer> players;
 	private int roundCount;
@@ -21,6 +22,7 @@ public class Game {
 	public Game() {
 		this.user = new ModelPlayer(playerName);
 		this.deck = new ModelDeck();
+		
 		this.cp = deck.getCP();
 		this.players = new ArrayList<ModelPlayer>();
 		this.roundCount = 1;
@@ -64,11 +66,13 @@ public class Game {
 				// System.out.println(text.nextLine());
 				String shipInfo = text.nextLine();
 				String[] stats = shipInfo.split(" ");
+				attributeList = new String[stats.length];
 
 				if (stats[0].toLowerCase().equals("description")) {
 					// System.out.println("Here are the stats: " + shipInfo);
+					attributeList = stats;
 				} else {
-					ModelCard card = new ModelCard(stats);
+					ModelCard card = new ModelCard(stats, attributeList);
 					deck.addCard(card);
 					// System.out.println("Making card: " + stats[0] + ", added to deck");
 				}
@@ -190,7 +194,7 @@ public class Game {
 		ModelPlayer activePlayer = players.get(turnTracker());
 		int chosenAttribute = statPicker(activePlayer);
 		
-		Round round = new Round(players, players.get(turnTracker()), chosenAttribute);
+		Round round = new Round(players, players.get(turnTracker()), chosenAttribute, attributeList);
 
 		// round.compareStat returns true if a winner was found, false if there is a
 		// draw
