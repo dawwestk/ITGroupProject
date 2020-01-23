@@ -19,8 +19,7 @@ public class TopTrumpsCLIApplication {
      */
 
     public static void main(String[] args) {
-
-        Game game = new Game();
+    	
         boolean writeGameLogsToFile = false; // Should we write game logs to file?
         if (args[0].equalsIgnoreCase("true")) writeGameLogsToFile = true; // Command line selection
 
@@ -34,6 +33,7 @@ public class TopTrumpsCLIApplication {
             int userChoice = scanner.nextInt();
             switch (userChoice) {
                 case 1:
+                    Game game = new Game();
                     game.gameInitialiser();
                     game.printInfo();
                     while (game.activePlayers()) {

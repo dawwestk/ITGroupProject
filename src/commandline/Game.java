@@ -176,7 +176,7 @@ public class Game {
 
 	// Compare stats, find a winner/winners
 	public void performRound() {
-		System.out.println("Round " + roundCount + ": " + players.get(turnTracker()).getName() + "'s turn to choose!\n");
+		System.out.println("Round " + roundCount);
 		
 		if(players.contains(user)) {
 			System.out.println("You drew " + user.getActiveCard().printCardInfo());
@@ -184,8 +184,7 @@ public class Game {
 		
 		// display all player's card names
 		for (int i = 1; i < players.size(); i++) {
-			System.out.println(
-					players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName() + "\n");
+			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName() + "\n");
 		}
 
 		Round round = new Round(players, players.get(turnTracker()), statPicker());
@@ -197,6 +196,9 @@ public class Game {
 			for (int i = 0; i < players.size(); i++) {
 				cp.addCard(players.get(i).getActiveCard());
 				players.get(i).removeFromHand(players.get(i).getActiveCard());
+				if(players.get(i).getHand().size() <= 0) {
+					players.remove(players.get(i));
+				}
 				round.getRoundWinner().setWinner(true);
 			}
 			printInfo();
@@ -222,7 +224,7 @@ public class Game {
 			if (!players.get(i).equals(winner)) {
 				winner.addToHand(players.get(i).getActiveCard());
 				players.get(i).removeFromHand(players.get(i).getActiveCard());
-				if(players.get(i).getHand().size() == 0) {
+				if(players.get(i).getHand().size() <= 0) {
 					players.remove(players.get(i));
 				}
 			}
