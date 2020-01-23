@@ -217,4 +217,8 @@ public class Game {
         return false;
     }
 
+    public int deckSize(){
+        return deck.getCreatedCards();
+    }
+
 }

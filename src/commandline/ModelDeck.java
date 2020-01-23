@@ -77,6 +77,4 @@ public class ModelDeck {
         return createdCards;
     }
 
-
-
 }
