@@ -4,26 +4,39 @@ import java.util.HashMap;
 
 public class ModelCard {
 
-	/*
-	 * 
-	 * ModelCard class with a HashMap (dictionary) rather than an integer array
-	 * 
-	 */
-	
     private String name;
-    private HashMap<String, Integer> attributeMap;
-    private String[] attributeDefinitions;
+    private int shipSize;
+    private int shipSpeed;
+    private int shipRange;
+    private int shipFirepower;
+    private int shipCargo;
+    private int[] attributes;
+    // etc
 
-    public ModelCard(String[] info, String[] attributeList) {
-        // info  and attributeList come from cards.txt
+    public ModelCard(String[] info) {
+        // info comes from cards.txt
+        // arrays.split etc
+    	
+    	/*
+    	 * 
+    	 * NOTE: DW wants to re-do this whole set up with a hashmap rather than single attributes
+    	 * 	21/01/2020
+    	 * 
+    	 */
+
         name = info[0];
-        attributeDefinitions = attributeList.clone();
-        attributeMap = new HashMap<String, Integer>();
+        shipSize = Integer.parseInt(info[1]);
+        shipSpeed = Integer.parseInt(info[2]);
+        shipRange = Integer.parseInt(info[3]);
+        shipFirepower = Integer.parseInt(info[4]);
+        shipCargo = Integer.parseInt(info[5]);
 
-        for(int i = 1; i < info.length; i++) {
-        	//System.out.println("Adding " + attributeDefinitions[i] + " -> " + info[i]);
-        	attributeMap.put(attributeDefinitions[i], Integer.parseInt(info[i]));
-        }
+        attributes = new int[5];		// currently only 5 attributes - specs say do not validate
+        attributes[0] = shipSize;
+        attributes[1] = shipSpeed;
+        attributes[2] = shipRange;
+        attributes[3] = shipFirepower;
+        attributes[4] = shipCargo;
 
     }
     
@@ -31,15 +44,11 @@ public class ModelCard {
     	
     	// re-do with HashMap
     	String output = name + "\n";
-    	int menuOption = 1;
-    	
-    	for(String x : attributeDefinitions) {
-    		if(x.toLowerCase().equals("description")) {
-    			continue;
-    		} else {
-    			output += String.format("\t%d. %s: %d\n", menuOption++, x, attributeMap.get(x));
-    		}
-    	}
+    	output += "\t1. Size: " + shipSize + "\n";
+    	output += "\t2. Speed: " + shipSpeed + "\n";
+    	output += "\t3. Range: " + shipRange + "\n";
+    	output += "\t4. Firepower: " + shipFirepower + "\n";
+    	output += "\t5. Cargo: " + shipCargo + "\n";
     	
     	return output;
     }
@@ -47,21 +56,37 @@ public class ModelCard {
     public String getName() {
         return name;
     }
-    
-    public Integer getValue(String s) {
-    	if(attributeMap.containsKey(s)) {	
-    		return attributeMap.get(s);
-    	} else {
-    		return null;
-    	}
+
+    public int getShipSpeed() {
+        return shipSpeed;
     }
 
-    public String getHighestAttribute() {
+    public int getShipSize() {
+        return shipSize;
+    }
+
+    public int getShipFirepower() {
+        return shipFirepower;
+    }
+
+    public int getShipRange() {
+        return shipRange;
+    }
+
+    public int getShipCargo() {
+        return shipCargo;
+    }
+
+    public int[] getAttributes() {
+        return attributes;
+    }
+
+    public int getHighestAttribute() {
         // look through objects
-        String highest = attributeDefinitions[1];
-        for(String x : attributeMap.keySet()) {
-            if(attributeMap.get(x).compareTo(attributeMap.get(highest)) >= 0) {
-                highest = x;
+        int highest = 0;
+        for(int i = 0; i < attributes.length; i++) {
+            if(attributes[i] >= attributes[highest]) {
+                highest = i;
             }
         }
         return highest;

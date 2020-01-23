@@ -5,19 +5,17 @@ import java.util.ArrayList;
 public class Round {
     private ArrayList<ModelPlayer> activePlayers;
     private int stat;
-    private String attr;
     private ModelPlayer activePlayer;
     private ModelPlayer winningPlayer;
 
-    public Round(ArrayList<ModelPlayer> players, ModelPlayer active, String s) {
+    public Round(ArrayList<ModelPlayer> players, ModelPlayer active, int s) {
         activePlayers = players;
         activePlayer = active;
+        this.stat = s;
         winningPlayer = activePlayers.get(0);
-        attr = s;
-        
         System.out.println("It is " + active.getName() + "'s turn.");
-        System.out.println(activePlayer.getName() + " picked attribute " + attr +"\n");    // note this is array index, not numbered attribute
-        System.out.println("Score to beat is: " + activePlayer.getActiveCard().getValue(attr) + "\n");
+        System.out.println(activePlayer.getName() + " picked attribute number " + (this.stat + 1) +"\n");    // note this is array index, not numbered attribute
+        System.out.println("Score to beat is: " + activePlayer.getActiveCard().getAttributes()[stat]+"\n");
         System.out.println("\t" + activePlayer.getActiveCard().printCardInfo());
     }
 
@@ -25,8 +23,8 @@ public class Round {
 //  public int findHighestValue(ArrayList<ModelPlayer> compare) {
 //      int highestValue = -1;
 //      for (int i = 0; i < compare.size(); i++) {
-//          if(compare.get(i).getActiveCard().getValue(attr) > highestValue) {
-//              highestValue = compare.get(i).getActiveCard().getValue(attr);
+//          if(compare.get(i).getActiveCard().getAttributes()[stat] > highestValue) {
+//              highestValue = compare.get(i).getActiveCard().getAttributes()[stat];
 //          }
 //      }
 //      return highestValue;
@@ -37,22 +35,22 @@ public class Round {
         int drawCount = 0;
 
         for (int i = 1; i < activePlayers.size(); i++) {
-            if (activePlayers.get(i).getActiveCard().getValue(attr) > winningPlayer.getActiveCard().getValue(attr)) {
+            if (activePlayers.get(i).getActiveCard().getAttributes()[stat] > winningPlayer.getActiveCard().getAttributes()[stat]) {
                 winningPlayer = activePlayers.get(i);
                 winningPlayer.setWinner(true);
                 drawCount = 0;
-            }else if (activePlayers.get(i).getActiveCard().getValue(attr) == winningPlayer.getActiveCard().getValue(attr)) {
+            }else if (activePlayers.get(i).getActiveCard().getAttributes()[stat] == winningPlayer.getActiveCard().getAttributes()[stat]) {
             	drawCount++;
                 winningPlayer.setWinner(false);
                 activePlayers.get(i).setWinner(false);
-            }else if(activePlayers.get(i).getActiveCard().getValue(attr) < winningPlayer.getActiveCard().getValue(attr)) {
+            }else if(activePlayers.get(i).getActiveCard().getAttributes()[stat] < winningPlayer.getActiveCard().getAttributes()[stat]) {
             	activePlayers.get(i).setWinner(false);
             }
             
         }
         if (drawCount<1) {
         	activePlayer = winningPlayer;
-            System.out.println(winningPlayer.getName() + " has won!  His card was: " + winningPlayer.getActiveCard().getName() + " and it's " + attr + " attribute was " + winningPlayer.getActiveCard().getValue(attr)+"\n");
+            System.out.println(winningPlayer.getName() + " has won!  His card was: " + winningPlayer.getActiveCard().getName() + " and it's attribute was " + winningPlayer.getActiveCard().getAttributes()[stat]+"\n");
             return true;
         } else {
             System.out.println("There has been a draw.\n");
@@ -85,7 +83,7 @@ public class Round {
 //      ArrayList<Integer> winnersList = new ArrayList<Integer>();
 //      int[] winnersArray;
 //      for(int i = 0; i < onTheTable.length; i++){
-//          if (onTheTable[i].getValue(attr) == highestValue) {
+//          if (onTheTable[i].getAttributes()[stat] == highestValue) {
 //              winnersList.add(i);
 //          }
 //      }
