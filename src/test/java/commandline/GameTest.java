@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-class GameTests {
+public class GameTest {
 	
 	public void GameReadsDeck() {
 		Game game = new Game();

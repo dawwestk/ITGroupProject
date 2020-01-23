@@ -6,14 +6,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class CommandLineTests {
+public class CommandLineTests {
 
 	@BeforeEach
-	void setUp() throws Exception {
+	public void setUp() throws Exception {
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
+	public void tearDown() throws Exception {
 	}
 	
 	@Test
@@ -22,42 +22,42 @@ class CommandLineTests {
 	}
 		
 	@Test
-	void playerChoosesCommandLine() {
+	public void playerChoosesCommandLine() {
 		assert(false); // probably unnnecessary
 	}
 	
 	@Test
-	void playerChoosesStatOnTopCard() {
+	public void playerChoosesStatOnTopCard() {
 		assert(false);
 	}
 	
 	@Test
-	void playerChoosesNewGame() {
+	public void playerChoosesNewGame() {
 		assert(false);
 	}
 	
 	@Test
-	void playerChoosesToQuit() {
+	public void playerChoosesToQuit() {
 		assert(false);
 	}
 	
 	@Test
-	void playerSeesTopCard() {
+	public void playerSeesTopCard() {
 		assert(false);
 	}
 	
 	@Test
-	void playerViewsAggregateStatistics() {
+	public void playerViewsAggregateStatistics() {
 		assert(false);
 	}
 	
 	@Test
-	void roundWinnerDisplayed() {
+	public void roundWinnerDisplayed() {
 		assert(false);
 	}
 	
 	@Test
-	void CLIApplicationTest() {
+	public void CLIApplicationTest() {
 		// Entire game flow here for integration test
 	}
 
