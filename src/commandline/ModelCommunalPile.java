@@ -21,8 +21,8 @@ public class ModelCommunalPile extends ArrayList<ModelCard>{
     public void pickedUpByWinner(ModelPlayer player) {
         for(ModelCard card : this) {
             player.addToHand(card);
-            this.remove(card);
         }
+        this.clear();
         this.numberOfCards = 0;
         empty = true;
     }

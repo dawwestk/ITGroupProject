@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class Game {
 
     private ModelPlayer user;
     private ModelDeck deck;
+    private ModelCommunalPile cp;
     private ArrayList<ModelPlayer> players;
     private int roundCount;
     private String playerName = "Player One";
@@ -18,6 +21,7 @@ public class Game {
     public Game() {
         this.user = new ModelPlayer(playerName);
         this.deck = new ModelDeck();
+        this.cp = deck.getCP();
         this.players = new ArrayList<ModelPlayer>();
         this.roundCount = 1;
     }
@@ -117,11 +121,10 @@ public class Game {
         for (int i = 0; i < players.size(); i++) {
             System.out.println(players.get(i).getInfo());
         }
-        if (deck.getCP().isEmpty()) {
+        if (cp.isEmpty()) {
             System.out.println("\nCommunalPile is empty.\n");
-        }
-        if (!deck.getCP().isEmpty()) {
-            System.out.println("\nCommunalPile has: " + deck.getCP().size() + " cards in it.\n");
+        } else {
+            System.out.println("\nCommunalPile has: " + cp.size() + " cards in it.\n");
         }
     }
 
@@ -179,7 +182,7 @@ public class Game {
 
         if (!round.compareStat()) {
         	for (int i = 0; i < players.size(); i++) {
-                deck.getCP().add(players.get(i).getActiveCard());
+                cp.addCard(players.get(i).getActiveCard());
                 players.get(i).removeFromHand(players.get(i).getActiveCard());
                 round.getRoundWinner().setWinner(true);
             }
@@ -193,13 +196,24 @@ public class Game {
     }
 
     public void redistributeCards(ModelPlayer winner) {
+    	boolean communalPileEmpty;
+    	if(cp.isEmpty()) {
+    		communalPileEmpty = true;
+    	} else {
+    		communalPileEmpty = false;
+    	}
+    	
+    	// Loop through all players and move card to winner's hand
         for (int i = 0; i < players.size(); i++) {
+        	// find the winning player
             if (!players.get(i).equals(winner)) {
                 winner.addToHand(players.get(i).getActiveCard());
-                players.get(i).removeFromHand(players.get(i).getActiveCard());
-            } else
-            continue;
-
+                players.get(i).removeFromHand(players.get(i).getActiveCard());                
+            }
+        }
+        
+        if(!communalPileEmpty) {
+        	cp.pickedUpByWinner(winner);
         }
     }
 
