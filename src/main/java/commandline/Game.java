@@ -66,10 +66,10 @@ public class Game {
 				// System.out.println(text.nextLine());
 				String shipInfo = text.nextLine();
 				String[] stats = shipInfo.split(" ");
-				attributeList = new String[stats.length];
 
 				if (stats[0].toLowerCase().equals("description")) {
 					// System.out.println("Here are the stats: " + shipInfo);
+					attributeList = new String[stats.length];
 					attributeList = stats;
 				} else {
 					ModelCard card = new ModelCard(stats, attributeList);

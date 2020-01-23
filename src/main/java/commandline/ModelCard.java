@@ -17,10 +17,11 @@ public class ModelCard {
     public ModelCard(String[] info, String[] attributeList) {
         // info  and attributeList come from cards.txt
         name = info[0];
-        attributeDefinitions = attributeList;
+        attributeDefinitions = attributeList.clone();
         attributeMap = new HashMap<String, Integer>();
-        
+
         for(int i = 1; i < info.length; i++) {
+        	//System.out.println("Adding " + attributeDefinitions[i] + " -> " + info[i]);
         	attributeMap.put(attributeDefinitions[i], Integer.parseInt(info[i]));
         }
 
@@ -31,6 +32,7 @@ public class ModelCard {
     	// re-do with HashMap
     	String output = name + "\n";
     	int menuOption = 1;
+    	
     	for(String x : attributeDefinitions) {
     		if(x.toLowerCase().equals("description")) {
     			continue;
@@ -56,9 +58,9 @@ public class ModelCard {
 
     public String getHighestAttribute() {
         // look through objects
-        String highest = "";
+        String highest = attributeDefinitions[1];
         for(String x : attributeMap.keySet()) {
-            if(attributeMap.get(x) >= attributeMap.get(highest)) {
+            if(attributeMap.get(x).compareTo(attributeMap.get(highest)) >= 0) {
                 highest = x;
             }
         }
