@@ -38,6 +38,14 @@ public class TopTrumpsCLIApplication {
                     game.printInfo();
                     while (game.activePlayers()) {
                         game.performRound();
+                        System.out.println("1: Continue  2: Quit");
+                        int continueChoice = scanner.nextInt();
+                        switch (continueChoice){
+                            case 1:
+                                continue;
+                            case 2:
+                                userWantsToQuit = true;
+                        }
                     }
                     break;
 
