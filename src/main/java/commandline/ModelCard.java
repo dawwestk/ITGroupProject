@@ -85,7 +85,7 @@ public class ModelCard {
         // look through objects
         int highest = 0;
         for(int i = 0; i < attributes.length; i++) {
-            if(attributes[i] >= highest) {
+            if(attributes[i] >= attributes[highest]) {
                 highest = i;
             }
         }
