@@ -28,7 +28,7 @@ public class TopTrumpsCLIApplication {
         boolean userWantsToQuit = false; // flag to check whether the user wants to quit the application
 
         // Loop until the user wants to exit the game
-        while (!userWantsToQuit) {
+        superLoop:while (!userWantsToQuit) {
             Scanner scanner = new Scanner(System.in);
             System.out.print("1. Play Game." + "\n2. Statistics." + "\n3. Quit." + "\nUser Choice: ");
             int userChoice = scanner.nextInt();
@@ -37,7 +37,20 @@ public class TopTrumpsCLIApplication {
                     game.gameInitialiser();
                     game.printInfo();
                     while (game.activePlayers()) {
+                        game.emptyHandClean();
+                        if(game.getPlayers().size() == 1){
+                            System.out.println(game.getPlayers().get(0).getName() + " has won the game!");
+                        }
                         game.performRound();
+                        System.out.println("1: Continue  2: Quit");
+                        int continueChoice = scanner.nextInt();
+                        switch (continueChoice){
+                            case 1:
+                                continue;
+                            case 2:
+                                System.out.println("Thanks for playing.");
+                                break superLoop;
+                        }
                     }
                     break;
 
