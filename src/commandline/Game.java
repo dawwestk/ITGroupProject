@@ -241,16 +241,11 @@ public class Game {
 
 	// Counts the amount of players still in the game
 	public boolean activePlayers() {
-		int activeCount = this.players.size();
-		for (int i = 0; i < this.players.size(); i++) {
-			if (!this.players.get(i).isHandEmpty()) {
-				activeCount--;
-				if (activeCount > 1 || !user.isHandEmpty()) {
-					return true;
-				}
-			}
+		if(players.size() > 1){
+			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	public int deckSize() {
