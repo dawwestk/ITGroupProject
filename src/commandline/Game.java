@@ -245,5 +245,13 @@ public class Game {
 	public int deckSize(){
 		return deck.getCreatedCards();
 	}
+	
+	public void emptyHandClean(){
+		for(int i=0; i<players.size(); i++){
+		    if(players.get(i).isHandEmpty()){
+			players.remove(i);
+		}
+	}
+    }
 
 }
