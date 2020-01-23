@@ -37,9 +37,9 @@ public class TopTrumpsCLIApplication {
                     game.gameInitialiser();
                     game.printInfo();
                     while (game.activePlayers()) {
-                        game.emptyHandClean();
                         if(game.getPlayers().size() == 1){
                             System.out.println(game.getPlayers().get(0).getName() + " has won the game!");
+                            break;
                         }
                         game.performRound();
                         System.out.println("1: Continue  2: Quit");

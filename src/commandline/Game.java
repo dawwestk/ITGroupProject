@@ -129,25 +129,26 @@ public class Game {
 	}
 
 	// Making an array of active cards (Cards at top of each players deck)
-	//	public ModelCard[] onTheTableGetter() {
-	//		ModelCard[] onTheTable = new ModelCard[players.size()];
-	//		for (int i = 0; i < players.size(); i++) {
-	//			onTheTable[i] = players.get(i).getHand().get(players.get(i).getHand().size() - 1);
-	//		}
-	//		return onTheTable;
-	//	}
+	// public ModelCard[] onTheTableGetter() {
+	// ModelCard[] onTheTable = new ModelCard[players.size()];
+	// for (int i = 0; i < players.size(); i++) {
+	// onTheTable[i] = players.get(i).getHand().get(players.get(i).getHand().size()
+	// - 1);
+	// }
+	// return onTheTable;
+	// }
 
 	// Checking who the stat-picking player will be this round
 	public int turnTracker() {
 		int theirTurn = 0;
 		int count = 0;
-		if(roundCount == 1){
+		if (roundCount == 1) {
 			int firstTurn = whoFirst();
 			System.out.println("It is " + players.get(firstTurn).getName() + "'s turn.");
 			return firstTurn;
 		} else {
-			for(int i=0; i<players.size(); ++i){
-				if(players.get(i).isWinner()){	
+			for (int i = 0; i < players.size(); ++i) {
+				if (players.get(i).isWinner()) {
 					theirTurn = i;
 				}
 			}
@@ -176,16 +177,21 @@ public class Game {
 	// Compare stats, find a winner/winners
 	public void performRound() {
 		System.out.println("Round " + roundCount + ": " + players.get(turnTracker()).getName() + "'s turn to choose!\n");
-		System.out.println("You drew " + user.getActiveCard().printCardInfo());
 		
-		// display all player's card names
-		for(int i =1; i < players.size(); i++){
-			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName()+"\n");
+		if(players.contains(user)) {
+			System.out.println("You drew " + user.getActiveCard().printCardInfo());
 		}
 		
+		// display all player's card names
+		for (int i = 1; i < players.size(); i++) {
+			System.out.println(
+					players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName() + "\n");
+		}
+
 		Round round = new Round(players, players.get(turnTracker()), statPicker());
-		
-		// round.compareStat returns true if a winner was found, false if there is a draw
+
+		// round.compareStat returns true if a winner was found, false if there is a
+		// draw
 		if (!round.compareStat()) {
 			// on a draw, all cards go to the communal pile
 			for (int i = 0; i < players.size(); i++) {
@@ -197,14 +203,14 @@ public class Game {
 		} else {
 			// 1 winner: all cards go to winner, winner picks category
 			redistributeCards(round.getRoundWinner());
-			printInfo();  
+			printInfo();
 		}
 		roundCount++;
 	}
 
 	public void redistributeCards(ModelPlayer winner) {
 		boolean communalPileEmpty;
-		if(cp.isEmpty()) {
+		if (cp.isEmpty()) {
 			communalPileEmpty = true;
 		} else {
 			communalPileEmpty = false;
@@ -215,15 +221,18 @@ public class Game {
 			// find the winning player
 			if (!players.get(i).equals(winner)) {
 				winner.addToHand(players.get(i).getActiveCard());
-				players.get(i).removeFromHand(players.get(i).getActiveCard());                
+				players.get(i).removeFromHand(players.get(i).getActiveCard());
+				if(players.get(i).getHand().size() == 0) {
+					players.remove(players.get(i));
+				}
 			}
 		}
-		
+
 		ModelCard winningCard = winner.getActiveCard();
 		winner.getHand().remove(winner.getHand().size() - 1);
 		winner.getHand().add(0, winningCard);
 
-		if(!communalPileEmpty) {
+		if (!communalPileEmpty) {
 			cp.pickedUpByWinner(winner);
 		}
 	}
@@ -242,16 +251,8 @@ public class Game {
 		return false;
 	}
 
-	public int deckSize(){
+	public int deckSize() {
 		return deck.getCreatedCards();
 	}
-	
-	public void emptyHandClean(){
-		for(int i=0; i<players.size(); i++){
-		    if(players.get(i).isHandEmpty()){
-			players.remove(i);
-		}
-	}
-    }
 
 }
