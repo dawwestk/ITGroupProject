@@ -13,6 +13,7 @@ public class Round {
         activePlayer = active;
         this.stat = s;
         winningPlayer = activePlayers.get(0);
+        System.out.println("It is " + active.getName() + "'s turn.");
         System.out.println(activePlayer.getName() + " picked attribute number " + (this.stat + 1) +"\n");    // note this is array index, not numbered attribute
         System.out.println("Score to beat is: " + activePlayer.getActiveCard().getAttributes()[stat]+"\n");
         System.out.println("\t" + activePlayer.getActiveCard().printCardInfo());

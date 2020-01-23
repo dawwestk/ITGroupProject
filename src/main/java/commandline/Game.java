@@ -109,13 +109,6 @@ public class Game {
 		deck.deal(players);
 	}
 
-	// Choosing which player is to start on 1st round
-	public int whoFirst() {
-		Random random = new Random();
-		int max = players.size();
-		return random.nextInt(max - 1) + 1;
-	}
-
 	// Print general game info
 	public void printInfo() {
 		for (int i = 0; i < players.size(); i++) {
@@ -137,14 +130,21 @@ public class Game {
 	// }
 	// return onTheTable;
 	// }
+	
+
+	// Choosing which player is to start on 1st round
+	public int whoFirst() {
+		Random random = new Random();
+		int max = players.size();
+		return random.nextInt(max - 1) + 1;
+	}
 
 	// Checking who the stat-picking player will be this round
 	public int turnTracker() {
 		int theirTurn = 0;
-		int count = 0;
 		if (roundCount == 1) {
 			int firstTurn = whoFirst();
-			System.out.println("It is " + players.get(firstTurn).getName() + "'s turn.");
+			//System.out.println("It is " + players.get(firstTurn).getName() + "'s turn.");
 			return firstTurn;
 		} else {
 			for (int i = 0; i < players.size(); ++i) {
@@ -152,15 +152,15 @@ public class Game {
 					theirTurn = i;
 				}
 			}
-			System.out.println("It is " + players.get(theirTurn).getName() + "'s turn.");
+			//System.out.println("It is " + players.get(theirTurn).getName() + "'s turn.");
 			return theirTurn;
 		}
 	}
 
 	// Choosing which card stat will be compared
-	public int statPicker() {
+	public int statPicker(ModelPlayer activePlayer) {
 		Scanner scanner = new Scanner(System.in);
-		if (players.get(turnTracker()).equals(user)) {
+		if (activePlayer.equals(user)) {
 			int choice;
 			System.out.println("Which category do you want to select?: ");
 			do {
@@ -168,7 +168,7 @@ public class Game {
 			} while (choice < 1 || choice > 5);
 			return choice - 1;
 		} else {
-			ModelAIPlayer AI = (ModelAIPlayer) players.get(turnTracker());
+			ModelAIPlayer AI = (ModelAIPlayer) activePlayer;
 			ModelCard AIActiveCard = AI.getActiveCard();
 			return AI.selectHighest(AIActiveCard);
 		}
@@ -184,10 +184,13 @@ public class Game {
 		
 		// display all player's card names
 		for (int i = 1; i < players.size(); i++) {
-			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName() + "\n");
+			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName());
 		}
 
-		Round round = new Round(players, players.get(turnTracker()), statPicker());
+		ModelPlayer activePlayer = players.get(turnTracker());
+		int chosenAttribute = statPicker(activePlayer);
+		
+		Round round = new Round(players, players.get(turnTracker()), chosenAttribute);
 
 		// round.compareStat returns true if a winner was found, false if there is a
 		// draw
