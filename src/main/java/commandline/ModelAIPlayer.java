@@ -6,7 +6,7 @@ public class ModelAIPlayer extends ModelPlayer{
         super(name);
     }
 
-    public int selectHighest(ModelCard card) {
+    public String selectHighest(ModelCard card) {
         return card.getHighestAttribute();
     }
 }
