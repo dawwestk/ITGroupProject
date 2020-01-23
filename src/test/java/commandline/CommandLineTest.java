@@ -6,7 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CommandLineTests {
+public class CommandLineTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -18,47 +18,48 @@ public class CommandLineTests {
 	
 	@Test
 	void playerChoosesAIOpponents() {
-		assert(false);
+		assertTrue(false);
 	}
 		
 	@Test
 	public void playerChoosesCommandLine() {
-		assert(false); // probably unnnecessary
+		assertTrue(false); // probably unnnecessary
 	}
 	
 	@Test
 	public void playerChoosesStatOnTopCard() {
-		assert(false);
+		assertTrue(false);
 	}
 	
 	@Test
 	public void playerChoosesNewGame() {
-		assert(false);
+		assertTrue(false);
 	}
 	
 	@Test
 	public void playerChoosesToQuit() {
-		assert(false);
+		assertTrue(false);
 	}
 	
 	@Test
 	public void playerSeesTopCard() {
-		assert(false);
+		assertTrue(false);
 	}
 	
 	@Test
 	public void playerViewsAggregateStatistics() {
-		assert(false);
+		assertTrue(false);
 	}
 	
 	@Test
 	public void roundWinnerDisplayed() {
-		assert(false);
+		assertTrue(false);
 	}
 	
 	@Test
 	public void CLIApplicationTest() {
 		// Entire game flow here for integration test
+		assertTrue(false);
 	}
 
 }
