@@ -19,8 +19,7 @@ public class TopTrumpsCLIApplication {
      */
 
     public static void main(String[] args) {
-
-        Game game = new Game();
+    	
         boolean writeGameLogsToFile = false; // Should we write game logs to file?
         if (args[0].equalsIgnoreCase("true")) writeGameLogsToFile = true; // Command line selection
 
@@ -34,24 +33,21 @@ public class TopTrumpsCLIApplication {
             int userChoice = scanner.nextInt();
             switch (userChoice) {
                 case 1:
+                    Game game = new Game();
                     game.gameInitialiser();
-                    game.printInfo();
                     while (game.activePlayers()) {
-                        game.emptyHandClean();
-                        if(game.getPlayers().size() == 1){
-                            System.out.println(game.getPlayers().get(0).getName() + " has won the game!");
-                        }
                         game.performRound();
-                        System.out.println("1: Continue  2: Quit");
-                        int continueChoice = scanner.nextInt();
-                        switch (continueChoice){
-                            case 1:
-                                continue;
-                            case 2:
-                                System.out.println("Thanks for playing.");
-                                break superLoop;
-                        }
+//                        System.out.println("1: Continue  2: Quit");
+//                        int continueChoice = scanner.nextInt();
+//                        switch (continueChoice){
+//                            case 1:
+//                                continue;
+//                            case 2:
+//                                System.out.println("Thanks for playing.");
+//                                break superLoop;
+//                        }
                     }
+                    System.out.println(game.getPlayers().get(0).getName() + " is the winner!");
                     break;
 
                 case 2:
