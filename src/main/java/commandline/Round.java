@@ -50,7 +50,7 @@ public class Round {
         }
         if (drawCount<1) {
         	activePlayer = winningPlayer;
-            System.out.println(winningPlayer.getName() + " has won!  His card was: " + winningPlayer.getActiveCard().getName() + " and it's attribute was " + winningPlayer.getActiveCard().getAttributes()[stat]+"\n");
+            System.out.println(winningPlayer.getName() + " has won!  Winning card was: " + winningPlayer.getActiveCard().getName() + " and it's attribute was " + winningPlayer.getActiveCard().getAttributes()[stat]+"\n");
             return true;
         } else {
             System.out.println("There has been a draw.\n");
