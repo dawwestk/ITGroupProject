@@ -47,6 +47,7 @@ public class TopTrumpsCLIApplication {
 //                                break superLoop;
 //                        }
                     }
+                    System.out.println(game.getPlayers().get(0).getName() + " is the winner!");
                     break;
 
                 case 2:
