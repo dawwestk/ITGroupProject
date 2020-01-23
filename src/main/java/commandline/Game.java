@@ -162,15 +162,17 @@ public class Game {
 	}
 
 	// Choosing which card stat will be compared
-	public int statPicker(ModelPlayer activePlayer) {
+	public String statPicker(ModelPlayer activePlayer) {
 		Scanner scanner = new Scanner(System.in);
+		String output;
 		if (activePlayer.equals(user)) {
 			int choice;
 			System.out.println("Which category do you want to select?: ");
 			do {
 				choice = scanner.nextInt();
 			} while (choice < 1 || choice > 5);
-			return choice - 1;
+			output = attributeList[choice - 1];
+			return output;
 		} else {
 			ModelAIPlayer AI = (ModelAIPlayer) activePlayer;
 			ModelCard AIActiveCard = AI.getActiveCard();
@@ -192,9 +194,9 @@ public class Game {
 		}
 
 		ModelPlayer activePlayer = players.get(turnTracker());
-		int chosenAttribute = statPicker(activePlayer);
+		String chosenAttribute = statPicker(activePlayer);
 		
-		Round round = new Round(players, players.get(turnTracker()), chosenAttribute, attributeList);
+		Round round = new Round(players, players.get(turnTracker()), chosenAttribute);
 
 		// round.compareStat returns true if a winner was found, false if there is a
 		// draw

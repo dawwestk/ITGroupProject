@@ -5,18 +5,15 @@ import java.util.ArrayList;
 public class Round {
     private ArrayList<ModelPlayer> activePlayers;
     private int stat;
-    private String[] attributeDefinitions;
     private String attr;
     private ModelPlayer activePlayer;
     private ModelPlayer winningPlayer;
 
-    public Round(ArrayList<ModelPlayer> players, ModelPlayer active, int s, String[] attributeList) {
+    public Round(ArrayList<ModelPlayer> players, ModelPlayer active, String s) {
         activePlayers = players;
         activePlayer = active;
-        this.stat = s;
         winningPlayer = activePlayers.get(0);
-        attributeDefinitions = attributeList;
-        attr = attributeList[s];
+        attr = s;
         
         System.out.println("It is " + active.getName() + "'s turn.");
         System.out.println(activePlayer.getName() + " picked attribute " + attr +"\n");    // note this is array index, not numbered attribute
