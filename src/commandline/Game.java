@@ -118,10 +118,10 @@ public class Game {
             System.out.println(players.get(i).getInfo());
         }
         if (deck.getCP().isEmpty()) {
-            System.out.println("CommunalPile is empty.");
+            System.out.println("\nCommunalPile is empty.\n");
         }
         if (!deck.getCP().isEmpty()) {
-            System.out.println("CommunalPile has: " + deck.getCP().size() + " cards in it.");
+            System.out.println("\nCommunalPile has: " + deck.getCP().size() + " cards in it.\n");
         }
     }
 
@@ -136,16 +136,18 @@ public class Game {
 
     // Checking who the stat-picking player will be this round
     public int turnTracker() {
+    	int theirTurn = 0;
     	int count = 0;
     	if(roundCount == 1){
     		return whoFirst();
 		} else {
     		for(int i=0; i<players.size(); ++i){
-    			if(players.get(i).isWinner()){
-					System.out.println("It is " + players.get(i).getName() + "'s turn.");
+    			if(players.get(i).isWinner()){	
+    				theirTurn = i;
     				count = i;
 				}
 			}
+    		System.out.println("It is " + players.get(theirTurn).getName() + "'s turn.");
     		return count;
 		}
 	}
@@ -168,30 +170,24 @@ public class Game {
 
     // Compare stats, find a winner/winners
     public void performRound() {
-        System.out.println("Round " + roundCount + ": " + players.get(turnTracker()).getName() + "'s turn to choose!");
+        System.out.println("Round " + roundCount + ": " + players.get(turnTracker()).getName() + "'s turn to choose!\n");
         System.out.println("You drew " + user.getActiveCard().printCardInfo());
         for(int i =1; i < players.size(); i++){
-			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName());
+			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName()+"\n");
 		}
         Round round = new Round(players, players.get(turnTracker()), statPicker());
 
-        if (round.compareStat()) {
-            // 1 winner: all cards go to winner, winner picks category
-            for (int i = 0; i < players.size(); i++) {
-                if (players.get(i).equals(round.compareStat())) {
-                    players.get(i).setWinner(true);
-                } else
-                    players.get(i).setWinner(false);
-            }
-
-            redistributeCards(round.getRoundWinner());
-
-        } else {
-            for (int i = 0; i < players.size(); i++) {
+        if (!round.compareStat()) {
+        	for (int i = 0; i < players.size(); i++) {
                 deck.getCP().add(players.get(i).getActiveCard());
                 players.get(i).removeFromHand(players.get(i).getActiveCard());
+                round.getRoundWinner().setWinner(true);
             }
             printInfo();
+        } else {
+        	// 1 winner: all cards go to winner, winner picks category
+            redistributeCards(round.getRoundWinner());
+            printInfo();  
         }
         roundCount++;
     }

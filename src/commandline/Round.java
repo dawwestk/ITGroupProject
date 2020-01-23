@@ -12,9 +12,9 @@ public class Round {
         activePlayers = players;
         activePlayer = active;
         this.stat = s;
-        winningPlayer = null;
-        System.out.println(activePlayer.getName() + " picked attribute number " + this.stat);    // note this is array index, not numbered attribute
-        System.out.println("Score to beat is: " + activePlayer.getActiveCard().getAttributes()[stat-1]);
+        winningPlayer = activePlayers.get(0);
+        System.out.println(activePlayer.getName() + " picked attribute number " + this.stat+"\n");    // note this is array index, not numbered attribute
+        System.out.println("Score to beat is: " + activePlayer.getActiveCard().getAttributes()[stat-1]+"\n");
         System.out.println("\t" + activePlayer.getActiveCard().printCardInfo());
     }
 
@@ -31,23 +31,28 @@ public class Round {
 
     // Compares the chosen stat and detects whether there is a single winner or a draw. Returns the player who won or null for a draw.
     public boolean compareStat() {
-        boolean winner = false;
+        int drawCount = 0;
 
         for (int i = 1; i < activePlayers.size(); i++) {
-            if (activePlayers.get(i).getActiveCard().getAttributes()[stat - 1] > activePlayer.getActiveCard().getAttributes()[stat - 1]) {
-                winner = true;
+            if (activePlayers.get(i).getActiveCard().getAttributes()[stat - 1] > winningPlayer.getActiveCard().getAttributes()[stat - 1]) {
                 winningPlayer = activePlayers.get(i);
-                activePlayers.get(i).setWinner(true);
-            } else if (activePlayers.get(i).getActiveCard().getAttributes()[stat - 1] == activePlayer.getActiveCard().getAttributes()[stat - 1]) {
-                winner = false;
+                winningPlayer.setWinner(true);
+                drawCount = 0;
+            }else if (activePlayers.get(i).getActiveCard().getAttributes()[stat - 1] == winningPlayer.getActiveCard().getAttributes()[stat - 1]) {
+            	drawCount++;
+                winningPlayer.setWinner(false);
                 activePlayers.get(i).setWinner(false);
+            }else if(activePlayers.get(i).getActiveCard().getAttributes()[stat - 1] < winningPlayer.getActiveCard().getAttributes()[stat - 1]) {
+            	activePlayers.get(i).setWinner(false);
             }
+            
         }
-        if (winner) {
-            System.out.println(winningPlayer.getName() + " has won!  His card was: " + winningPlayer.getActiveCard().getName() + " and it's attribute was " + winningPlayer.getActiveCard().getAttributes()[stat - 1]);
+        if (drawCount<1) {
+        	activePlayer = winningPlayer;
+            System.out.println(winningPlayer.getName() + " has won!  His card was: " + winningPlayer.getActiveCard().getName() + " and it's attribute was " + winningPlayer.getActiveCard().getAttributes()[stat - 1]+"\n");
             return true;
         } else {
-            System.out.println("There has been a draw.");
+            System.out.println("There has been a draw.\n");
             return false;
         }
     }
@@ -62,9 +67,9 @@ public class Round {
 //	  ModelPlayer testActive = new ModelPlayer("Player1"); testPlayers.add(testActive);
 //	  ModelPlayer CPU1 = new ModelPlayer("Player2");testPlayers.add(CPU1);
 //	  ModelPlayer CPU2 = new ModelPlayer("Player3");testPlayers.add(CPU2);
-//	  ModelCard Active1 = new ModelCard(new String[] {"Card1", "1", "2", "12", "4", "20"});testActive.addToHand(Active1);
-//	  ModelCard Active2 = new ModelCard(new String[] {"Card2", "0", "60", "8", "3", "12"});CPU1.addToHand(Active2);
-//	  ModelCard Active3 = new ModelCard(new String[] {"Card3", "20", "2", "3", "2", "14"});CPU2.addToHand(Active3);
+//	  ModelCard Active1 = new ModelCard(new String[] {"Card1", "1", "12", "12", "4", "20"});testActive.addToHand(Active1);
+//	  ModelCard Active2 = new ModelCard(new String[] {"Card2", "0", "1", "8", "3", "12"});CPU1.addToHand(Active2);
+//	  ModelCard Active3 = new ModelCard(new String[] {"Card3", "20", "112", "3", "2", "14"});CPU2.addToHand(Active3);
 //	  Round round = new Round(testPlayers, testActive, 2);
 //	  round.compareStat();
 //  }
