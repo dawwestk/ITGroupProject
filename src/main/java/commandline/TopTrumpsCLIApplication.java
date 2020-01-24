@@ -5,6 +5,8 @@ import org.yaml.snakeyaml.nodes.ScalarNode;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+import game.Game;
+
 /**
  * Top Trumps command line application
  */

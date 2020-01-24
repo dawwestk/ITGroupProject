@@ -1,10 +1,10 @@
-package commandline;
+package game;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class RoundTest {
+public class ModelPlayerTest {
 
 	@Test
 	public void test() {

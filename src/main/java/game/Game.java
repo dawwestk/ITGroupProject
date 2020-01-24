@@ -1,4 +1,4 @@
-package commandline;
+package game;
 
 import java.io.File;
 import java.io.FileReader;

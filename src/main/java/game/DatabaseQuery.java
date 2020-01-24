@@ -1,6 +1,4 @@
-package commandline;
-
-import commandline.Game;
+package game;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

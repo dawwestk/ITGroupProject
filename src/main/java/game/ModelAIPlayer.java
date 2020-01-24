@@ -1,4 +1,4 @@
-package commandline;
+package game;
 
 public class ModelAIPlayer extends ModelPlayer{
 
