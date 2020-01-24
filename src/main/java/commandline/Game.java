@@ -13,6 +13,7 @@ public class Game {
 
 	private ModelPlayer user;
 	private ModelDeck deck;
+	private String[] attributeList;
 	private ModelCommunalPile cp;
 	private ArrayList<ModelPlayer> players;
 	private int roundCount;
@@ -21,6 +22,7 @@ public class Game {
 	public Game() {
 		this.user = new ModelPlayer(playerName);
 		this.deck = new ModelDeck();
+		
 		this.cp = deck.getCP();
 		this.players = new ArrayList<ModelPlayer>();
 		this.roundCount = 1;
@@ -67,8 +69,10 @@ public class Game {
 
 				if (stats[0].toLowerCase().equals("description")) {
 					// System.out.println("Here are the stats: " + shipInfo);
+					attributeList = new String[stats.length];
+					attributeList = stats;
 				} else {
-					ModelCard card = new ModelCard(stats);
+					ModelCard card = new ModelCard(stats, attributeList);
 					deck.addCard(card);
 					// System.out.println("Making card: " + stats[0] + ", added to deck");
 				}
@@ -158,19 +162,20 @@ public class Game {
 	}
 
 	// Choosing which card stat will be compared
-	public int statPicker(ModelPlayer activePlayer) {
+	public String statPicker(ModelPlayer activePlayer) {
 		Scanner scanner = new Scanner(System.in);
+		String output;
 		if (activePlayer.equals(user)) {
 			int choice;
 			System.out.println("Which category do you want to select?: ");
 			do {
 				choice = scanner.nextInt();
 			} while (choice < 1 || choice > 5);
-			return choice - 1;
+			output = attributeList[choice - 1];
+			return output;
 		} else {
 			ModelAIPlayer AI = (ModelAIPlayer) activePlayer;
 			ModelCard AIActiveCard = AI.getActiveCard();
-			System.out.println(AI.getName()+"\n"+AIActiveCard.getName());
 			return AI.selectHighest(AIActiveCard);
 		}
 	}
@@ -189,7 +194,7 @@ public class Game {
 		}
 
 		ModelPlayer activePlayer = players.get(turnTracker());
-		int chosenAttribute = statPicker(activePlayer);
+		String chosenAttribute = statPicker(activePlayer);
 		
 		Round round = new Round(players, activePlayer, chosenAttribute);
 
