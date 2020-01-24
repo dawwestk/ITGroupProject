@@ -13,6 +13,7 @@ public class Game {
 
 	private ModelPlayer user;
 	private ModelDeck deck;
+	private String[] attributeList;
 	private ModelCommunalPile cp;
 	private ArrayList<ModelPlayer> players;
 	private int roundCount;
@@ -21,6 +22,7 @@ public class Game {
 	public Game() {
 		this.user = new ModelPlayer(playerName);
 		this.deck = new ModelDeck();
+		
 		this.cp = deck.getCP();
 		this.players = new ArrayList<ModelPlayer>();
 		this.roundCount = 1;
@@ -61,16 +63,15 @@ public class Game {
 			Scanner text = new Scanner(fr);
 
 			while (text.hasNext()) {
-				// System.out.println(text.nextLine());
 				String shipInfo = text.nextLine();
 				String[] stats = shipInfo.split(" ");
 
 				if (stats[0].toLowerCase().equals("description")) {
-					// System.out.println("Here are the stats: " + shipInfo);
+					attributeList = new String[stats.length];
+					attributeList = stats;
 				} else {
-					ModelCard card = new ModelCard(stats);
+					ModelCard card = new ModelCard(stats, attributeList);
 					deck.addCard(card);
-					// System.out.println("Making card: " + stats[0] + ", added to deck");
 				}
 			}
 
@@ -109,13 +110,6 @@ public class Game {
 		deck.deal(players);
 	}
 
-	// Choosing which player is to start on 1st round
-	public int whoFirst() {
-		Random random = new Random();
-		int max = players.size();
-		return random.nextInt(max - 1) + 1;
-	}
-
 	// Print general game info
 	public void printInfo() {
 		for (int i = 0; i < players.size(); i++) {
@@ -128,23 +122,18 @@ public class Game {
 		}
 	}
 
-	// Making an array of active cards (Cards at top of each players deck)
-	// public ModelCard[] onTheTableGetter() {
-	// ModelCard[] onTheTable = new ModelCard[players.size()];
-	// for (int i = 0; i < players.size(); i++) {
-	// onTheTable[i] = players.get(i).getHand().get(players.get(i).getHand().size()
-	// - 1);
-	// }
-	// return onTheTable;
-	// }
+	// Choosing which player is to start on 1st round
+	public int whoFirst() {
+		Random random = new Random();
+		int max = players.size();
+		return random.nextInt(max - 1) + 1;
+	}
 
 	// Checking who the stat-picking player will be this round
 	public int turnTracker() {
 		int theirTurn = 0;
-		int count = 0;
 		if (roundCount == 1) {
 			int firstTurn = whoFirst();
-			System.out.println("It is " + players.get(firstTurn).getName() + "'s turn.");
 			return firstTurn;
 		} else {
 			for (int i = 0; i < players.size(); ++i) {
@@ -152,23 +141,24 @@ public class Game {
 					theirTurn = i;
 				}
 			}
-			System.out.println("It is " + players.get(theirTurn).getName() + "'s turn.");
 			return theirTurn;
 		}
 	}
 
 	// Choosing which card stat will be compared
-	public int statPicker() {
+	public String statPicker(ModelPlayer activePlayer) {
 		Scanner scanner = new Scanner(System.in);
-		if (players.get(turnTracker()).equals(user)) {
+		String output;
+		if (activePlayer.equals(user)) {
 			int choice;
 			System.out.println("Which category do you want to select?: ");
 			do {
 				choice = scanner.nextInt();
 			} while (choice < 1 || choice > 5);
-			return choice - 1;
+			output = attributeList[choice - 1];
+			return output;
 		} else {
-			ModelAIPlayer AI = (ModelAIPlayer) players.get(turnTracker());
+			ModelAIPlayer AI = (ModelAIPlayer) activePlayer;
 			ModelCard AIActiveCard = AI.getActiveCard();
 			return AI.selectHighest(AIActiveCard);
 		}
@@ -184,10 +174,13 @@ public class Game {
 		
 		// display all player's card names
 		for (int i = 1; i < players.size(); i++) {
-			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName() + "\n");
+			System.out.println(players.get(i).getName() + " has drawn " + players.get(i).getActiveCard().getName());
 		}
 
-		Round round = new Round(players, players.get(turnTracker()), statPicker());
+		ModelPlayer activePlayer = players.get(turnTracker());
+		String chosenAttribute = statPicker(activePlayer);
+		
+		Round round = new Round(players, activePlayer, chosenAttribute);
 
 		// round.compareStat returns true if a winner was found, false if there is a
 		// draw
