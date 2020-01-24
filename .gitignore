@@ -1,8 +1,0 @@
-**/*.class
-*.class
-*.classpath
-/target/maven-status
-/target/maven-status/*
-.gitignore
-target/*
-/target/
