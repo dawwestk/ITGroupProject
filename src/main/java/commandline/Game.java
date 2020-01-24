@@ -170,6 +170,7 @@ public class Game {
 		} else {
 			ModelAIPlayer AI = (ModelAIPlayer) activePlayer;
 			ModelCard AIActiveCard = AI.getActiveCard();
+			System.out.println(AI.getName()+"\n"+AIActiveCard.getName());
 			return AI.selectHighest(AIActiveCard);
 		}
 	}
@@ -190,7 +191,7 @@ public class Game {
 		ModelPlayer activePlayer = players.get(turnTracker());
 		int chosenAttribute = statPicker(activePlayer);
 		
-		Round round = new Round(players, players.get(turnTracker()), chosenAttribute);
+		Round round = new Round(players, activePlayer, chosenAttribute);
 
 		// round.compareStat returns true if a winner was found, false if there is a
 		// draw
