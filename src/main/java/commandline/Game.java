@@ -63,18 +63,15 @@ public class Game {
 			Scanner text = new Scanner(fr);
 
 			while (text.hasNext()) {
-				// System.out.println(text.nextLine());
 				String shipInfo = text.nextLine();
 				String[] stats = shipInfo.split(" ");
 
 				if (stats[0].toLowerCase().equals("description")) {
-					// System.out.println("Here are the stats: " + shipInfo);
 					attributeList = new String[stats.length];
 					attributeList = stats;
 				} else {
 					ModelCard card = new ModelCard(stats, attributeList);
 					deck.addCard(card);
-					// System.out.println("Making card: " + stats[0] + ", added to deck");
 				}
 			}
 
@@ -125,17 +122,6 @@ public class Game {
 		}
 	}
 
-	// Making an array of active cards (Cards at top of each players deck)
-	// public ModelCard[] onTheTableGetter() {
-	// ModelCard[] onTheTable = new ModelCard[players.size()];
-	// for (int i = 0; i < players.size(); i++) {
-	// onTheTable[i] = players.get(i).getHand().get(players.get(i).getHand().size()
-	// - 1);
-	// }
-	// return onTheTable;
-	// }
-	
-
 	// Choosing which player is to start on 1st round
 	public int whoFirst() {
 		Random random = new Random();
@@ -148,7 +134,6 @@ public class Game {
 		int theirTurn = 0;
 		if (roundCount == 1) {
 			int firstTurn = whoFirst();
-			//System.out.println("It is " + players.get(firstTurn).getName() + "'s turn.");
 			return firstTurn;
 		} else {
 			for (int i = 0; i < players.size(); ++i) {
@@ -156,7 +141,6 @@ public class Game {
 					theirTurn = i;
 				}
 			}
-			//System.out.println("It is " + players.get(theirTurn).getName() + "'s turn.");
 			return theirTurn;
 		}
 	}
