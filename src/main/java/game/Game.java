@@ -151,11 +151,11 @@ public class Game {
 		String output;
 		if (activePlayer.equals(user)) {
 			int choice;
-			System.out.println("Which category do you want to select?: ");
 			do {
+				System.out.println("Which category do you want to select?: ");
 				choice = scanner.nextInt();
 			} while (choice < 1 || choice > 5);
-			output = attributeList[choice - 1];
+			output = attributeList[choice];
 			return output;
 		} else {
 			ModelAIPlayer AI = (ModelAIPlayer) activePlayer;
