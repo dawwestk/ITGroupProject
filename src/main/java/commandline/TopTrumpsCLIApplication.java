@@ -48,8 +48,7 @@ public class TopTrumpsCLIApplication {
             			// display all player's card names
             			for (int i = 1; i < game.getNumPlayers(); i++) {
             				System.out.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCardName());
-            			}
-            			
+            			}            			
                         game.newRound();
                     }
                     System.out.println(game.getPlayers().get(0).getName() + " is the winner!");

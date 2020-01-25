@@ -206,7 +206,7 @@ public class Game {
 		String chosenAttribute = this.statPicker(activePlayer);
 		
 		Round round = new Round(this.players, activePlayer, chosenAttribute);
-		if (!round.gameHasWinner()) {
+		if (!round.hasWinner()) {
 			this.roundWasDraw(round);
 		} else {
 			// 1 winner: all cards go to winner, winner picks category

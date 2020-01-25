@@ -10,15 +10,18 @@ public class Round {
     private ModelPlayer winningPlayer;
 
     public Round(ArrayList<ModelPlayer> players, ModelPlayer active, String s) {
-        activePlayers = players;
-        activePlayer = active;
-        winningPlayer = activePlayers.get(0);
-        attr = s;
-        
-        System.out.println("It is " + active.getName() + "'s turn.");
-        System.out.println(activePlayer.getName() + " picked attribute " + attr +"\n");    // note this is array index, not numbered attribute
-        System.out.println("Score to beat is: " + activePlayer.getActiveCard().getValue(attr) + "\n");
-        System.out.println("\t" + activePlayer.getActiveCard().printCardInfo());
+    	this.activePlayers = players;
+    	this.activePlayer = active;
+    	this.winningPlayer = activePlayers.get(0);
+    	this.attr = s;
+        displayRoundInfo();
+    }
+    
+    public void displayRoundInfo() {
+        System.out.println("It is " + this.activePlayer.getName() + "'s turn.");
+        System.out.println(this.activePlayer.getName() + " picked attribute " + this.attr +"\n");    // note this is array index, not numbered attribute
+        System.out.println("Score to beat is: " + this.activePlayer.getActiveCard().getValue(this.attr) + "\n");
+        System.out.println("\t" + this.activePlayer.getActiveCard().printCardInfo());
     }
 
 // Finds the highest value present among the chosen stat 
@@ -33,30 +36,35 @@ public class Round {
 //  }
 
     // Compares the chosen stat and detects whether there is a single winner or a draw. Returns true for a win or null for a draw.
-    public boolean gameHasWinner() {
+    public boolean hasWinner() {
         int drawCount = 0;
-
+        ModelPlayer currentWinningPlayer = this.winningPlayer;
         for (int i = 1; i < activePlayers.size(); i++) {
-            if (activePlayers.get(i).getActiveCard().getValue(attr) > winningPlayer.getActiveCard().getValue(attr)) {
-                winningPlayer = activePlayers.get(i);
-                winningPlayer.setWinner(true);
+        	// compare attributes
+        	// if activePlayer attribute > current winningPlayer attribute
+            if (activePlayers.get(i).getActiveCard().getValue(attr) > currentWinningPlayer.getActiveCard().getValue(attr)) {
+            	currentWinningPlayer = activePlayers.get(i);
+            	currentWinningPlayer.setWinner(true);
                 drawCount = 0;
-            }else if (activePlayers.get(i).getActiveCard().getValue(attr) == winningPlayer.getActiveCard().getValue(attr)) {
+            }else if (activePlayers.get(i).getActiveCard().getValue(attr) == currentWinningPlayer.getActiveCard().getValue(attr)) {
             	drawCount++;
-                winningPlayer.setWinner(false);
+            	currentWinningPlayer.setWinner(false);
                 activePlayers.get(i).setWinner(false);
-            }else if(activePlayers.get(i).getActiveCard().getValue(attr) < winningPlayer.getActiveCard().getValue(attr)) {
+            }else if(activePlayers.get(i).getActiveCard().getValue(attr) < currentWinningPlayer.getActiveCard().getValue(attr)) {
             	activePlayers.get(i).setWinner(false);
             }
             
         }
+        
+        this.winningPlayer = currentWinningPlayer;
+        
         if (drawCount<1) {
-        	activePlayer = winningPlayer;
-            System.out.println(winningPlayer.getName() + " has won!  His card was: " + winningPlayer.getActiveCard().getName() + " and it's " + attr + " attribute was " + winningPlayer.getActiveCard().getValue(attr)+"\n");
+        	this.activePlayer = this.winningPlayer;
+            System.out.println(this.winningPlayer.getName() + " has won!  His card was: " + this.winningPlayer.getActiveCard().getName() + " and it's " + this.attr + " attribute was " + this.winningPlayer.getActiveCard().getValue(attr)+"\n");
             return true;
         } else {
             System.out.println("There has been a draw.\n");
-            winningPlayer = activePlayer;
+            this.winningPlayer = this.activePlayer;
             return false;
         }
     }
