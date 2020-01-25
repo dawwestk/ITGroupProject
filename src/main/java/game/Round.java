@@ -34,6 +34,13 @@ public class Round {
 //      }
 //      return highestValue;
 //  }
+    
+    // p1 attribute higher return 1, equal return 0, otherwise return -1
+    private int compareHighestAttribute(ModelPlayer p1, ModelPlayer p2) {
+    	if(p1.getActiveCard().getValue(attr) > p2.getActiveCard().getValue(attr)) return 1;
+    	if(p1.getActiveCard().getValue(attr) == p2.getActiveCard().getValue(attr)) return 0;
+    	return -1;
+    }
 
     // Compares the chosen stat and detects whether there is a single winner or a draw. Returns true for a win or null for a draw.
     public boolean hasWinner() {
@@ -42,16 +49,18 @@ public class Round {
         for (int i = 1; i < activePlayers.size(); i++) {
         	// compare attributes
         	// if activePlayer attribute > current winningPlayer attribute
-            if (activePlayers.get(i).getActiveCard().getValue(attr) > currentWinningPlayer.getActiveCard().getValue(attr)) {
-            	currentWinningPlayer = activePlayers.get(i);
+        	ModelPlayer otherPlayer = activePlayers.get(i);
+        	int otherAttributeHigher = compareHighestAttribute(otherPlayer, currentWinningPlayer);
+            if (otherAttributeHigher == 1) {
+            	currentWinningPlayer = otherPlayer;
             	currentWinningPlayer.setWinner(true);
                 drawCount = 0;
-            }else if (activePlayers.get(i).getActiveCard().getValue(attr) == currentWinningPlayer.getActiveCard().getValue(attr)) {
+            }else if (otherAttributeHigher == 0) {
             	drawCount++;
             	currentWinningPlayer.setWinner(false);
-                activePlayers.get(i).setWinner(false);
-            }else if(activePlayers.get(i).getActiveCard().getValue(attr) < currentWinningPlayer.getActiveCard().getValue(attr)) {
-            	activePlayers.get(i).setWinner(false);
+                otherPlayer.setWinner(false);
+            }else {
+            	otherPlayer.setWinner(false);
             }
             
         }
