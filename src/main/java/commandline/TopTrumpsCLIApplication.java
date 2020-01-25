@@ -37,7 +37,8 @@ public class TopTrumpsCLIApplication {
                 case 1:
                     Game game = new Game();
                     game.gameInitialiser();
-                    while (game.activePlayers()) {
+                    while (game.activePlayers()) {		
+                    	System.out.println("Round " + game.getRoundCount());
                         game.performRound();
 //                        System.out.println("1: Continue  2: Quit");
 //                        int continueChoice = scanner.nextInt();

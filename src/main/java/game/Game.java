@@ -164,10 +164,23 @@ public class Game {
 		}
 	}
 
+	// on a draw, all cards go to the communal pile
+	private void roundWasDraw(Round round) {
+		for (int i = 0; i < this.players.size(); i++) {
+			this.cp.addCard(this.players.get(i).getActiveCard());
+			this.players.get(i).removeFromHand(this.players.get(i).getActiveCard());
+			if(this.players.get(i).getHand().size() <= 0) {
+				this.players.remove(this.players.get(i));
+			}
+			round.getRoundWinner().setWinner(true);
+		}
+		this.printInfo();
+	}
+	
 	// Compare stats, find a winner/winners
-	public void performRound() {
-		System.out.println("Round " + this.getRoundCount());
+	public void performRound() {			
 		
+		// Get and display player information
 		if(this.players.contains(this.user)) {
 			System.out.println("You drew " + this.user.getActiveCard().printCardInfo());
 		}
@@ -177,24 +190,14 @@ public class Game {
 			System.out.println(this.players.get(i).getName() + " has drawn " + this.players.get(i).getActiveCard().getName());
 		}
 
+		// Get current player
 		ModelPlayer activePlayer = this.players.get(this.turnTracker());
 		String chosenAttribute = this.statPicker(activePlayer);
 		
+		// round.gameHasWinner() returns true if a winner was found, false if there is a draw
 		Round round = new Round(this.players, activePlayer, chosenAttribute);
-
-		// round.compareStat returns true if a winner was found, false if there is a
-		// draw
-		if (!round.compareStat()) {
-			// on a draw, all cards go to the communal pile
-			for (int i = 0; i < this.players.size(); i++) {
-				this.cp.addCard(this.players.get(i).getActiveCard());
-				this.players.get(i).removeFromHand(this.players.get(i).getActiveCard());
-				if(this.players.get(i).getHand().size() <= 0) {
-					this.players.remove(this.players.get(i));
-				}
-				round.getRoundWinner().setWinner(true);
-			}
-			this.printInfo();
+		if (!round.gameHasWinner()) {
+			this.roundWasDraw(round);
 		} else {
 			// 1 winner: all cards go to winner, winner picks category
 			this.redistributeCards(round.getRoundWinner());

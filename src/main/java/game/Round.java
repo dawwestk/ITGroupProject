@@ -33,7 +33,7 @@ public class Round {
 //  }
 
     // Compares the chosen stat and detects whether there is a single winner or a draw. Returns the player who won or null for a draw.
-    public boolean compareStat() {
+    public boolean gameHasWinner() {
         int drawCount = 0;
 
         for (int i = 1; i < activePlayers.size(); i++) {
