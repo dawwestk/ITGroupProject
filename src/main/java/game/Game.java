@@ -7,139 +7,108 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
-
 public class Game {
 
 	private ModelPlayer user;
 	private ModelDeck deck;
-	private String[] attributeList;
 	private ModelCommunalPile cp;
 	private ArrayList<ModelPlayer> players;
 	private int roundCount;
 	private String playerName = "Player One";
+	private ModelPlayer winningPlayer;
 
-	public Game() {
+	public Game(ModelDeck deck, int numPlayers) {
 		this.user = new ModelPlayer(this.playerName);
-		this.deck = new ModelDeck();
-		
-		this.cp = this.deck.getCP();
-		this.players = new ArrayList<ModelPlayer>();
-		this.roundCount = 1;
-	}
-
-	private void removePlayer(int i) {
-		this.players.remove(getPlayer(i));
-	}
-	
-	// Getters
-	public int getRoundCount() {
-		return this.roundCount;
-	}
-
-	public ModelPlayer getUser() {
-		return this.user;
-	}
-	
-	public ModelPlayer getPlayer(int i) {
-		return players.get(i);
-	}
-	
-	public String getPlayerName(int i) {
-		return players.get(i).getName();
-	}
-
-	public ModelDeck getDeck() {
-		return this.deck;
-	}
-
-	public ArrayList<ModelPlayer> getPlayers() {
-		return this.players;
-	}
-
-	public int getNumPlayers() {
-		return this.players.size();
-	}
-	
-	// Setting up a new game
-	public void gameInitialiser() {
-		buildDeck();
-		buildPlayers();
-		dealDeck();
-	}
-
-	// Reading deck from text file
-	public void buildDeck() {
-		String filename = "StarCitizenDeck.txt";
-		FileReader fr = null;
-
-		try {
-			File file = new File(filename);
-			fr = new FileReader(file);
-			Scanner text = new Scanner(fr);
-
-			while (text.hasNext()) {
-				String shipInfo = text.nextLine();
-				String[] stats = shipInfo.split(" ");
-
-				if (stats[0].toLowerCase().equals("description")) {
-					this.attributeList = new String[stats.length];
-					this.attributeList = stats;
-				} else {
-					ModelCard card = new ModelCard(stats, this.attributeList);
-					this.deck.addCard(card);
-				}
-			}
-
-		} catch (IOException e) {
-			System.out.println("Could not open file.");
-			System.exit(0);
-		}
-	}
-
-	// Choosing amount of players
-	public static int chooseOpponents(Scanner keyboard) {
-		System.out.print("How many opponents would you like to face (max 4)? ");
-		int opponents = keyboard.nextInt();
-		return opponents;
-	}
-
-	// Creating players based on choice
-	public void buildPlayers() {
+		this.players = new ArrayList<ModelPlayer>(numPlayers);
 		this.players.add(this.user);
-		Scanner keyboard = new Scanner(System.in);
-		int opponents = chooseOpponents(keyboard);
-
-		while (opponents <= 0 || opponents >= 5) {
-			System.out.println("Sorry, you must face 1-4 opponents.");
-			opponents = chooseOpponents(keyboard);
+		this.deck = deck;
+		this.winningPlayer = this.user;
+		this.cp = this.deck.getCP();
+		for (int i = 0; i < numPlayers; i++) {
+			String playerName = "CPU-" + (i + 1);
+			this.addPlayer(playerName);
 		}
-
-		for (int i = 0; i < opponents; i++) {
-			ModelAIPlayer opponent = new ModelAIPlayer("CPU-" + (i + 1));
-			this.players.add(opponent);
-		}
+		this.roundCount = 1;
+		this.dealDeck();
 	}
 
-	// Distribute shuffled deck amongst players
-	public void dealDeck() {
-		this.deck.deal(this.players);
-	}
-
-	// Print general game info
-	public void printInfo() {
-		for (int i = 0; i < this.players.size(); i++) {
-			System.out.println(this.players.get(i).getInfo());
-		}
-		if (this.cp.isEmpty()) {
-			System.out.println("\nCommunalPile is empty.\n");
+	public boolean checkIfWinner(String stat) {	
+		boolean hasWinner = this.hasWinner(stat);
+		if (!hasWinner) {
+			this.roundWasDraw();
 		} else {
-			System.out.println("\nCommunalPile has: " + this.cp.size() + " cards in it.\n");
+			this.giveWinnerCards(this.getRoundWinner());
 		}
+		return hasWinner;
+	}
+
+	public void advanceRound() {
+		this.roundCount++;
+	}
+
+	// If active player is user, return their choice of Stat. Otherwise have AIPlayer choose their highest card.
+	public String getStat(int choice) {
+		String output = "";
+		if (getActivePlayer().equals(this.user)) {
+			output = this.user.getActiveCard().getAttribute(choice);
+		} else {
+			ModelAIPlayer AI = (ModelAIPlayer) getActivePlayer();
+			ModelCard AIActiveCard = AI.getActiveCard();
+			output = AI.selectHighest(AIActiveCard);
+		}
+		return output;
+	}
+
+	// Compares the chosen stat and detects whether there is a single winner or a draw. Returns true for a win or null for a draw.
+	public boolean hasWinner(String stat) {
+		int drawCount = 0;
+		ModelPlayer currentWinningPlayer = this.winningPlayer;
+		for (int i = 1; i < getNumPlayers(); i++) {
+			// compare attributes
+			// if activePlayer attribute > current winningPlayer attribute
+			ModelPlayer otherPlayer = getPlayer(i);
+			int otherAttributeHigher = compareHighestAttribute(otherPlayer, currentWinningPlayer, stat);
+			if (otherAttributeHigher == 1) {
+				currentWinningPlayer = otherPlayer;
+
+				currentWinningPlayer.setWinner(true);
+				this.winningPlayer = currentWinningPlayer;
+
+				drawCount = 0;
+			}else if (otherAttributeHigher == 0) {
+				drawCount++;
+				currentWinningPlayer.setWinner(false);            	
+				otherPlayer.setWinner(false);
+			}else {
+				otherPlayer.setWinner(false);
+			}
+		}
+
+		// if no draws
+		if (drawCount<1) {
+			this.winningPlayer = currentWinningPlayer;
+			return true;
+		}
+
+		return false;
+	}
+
+
+	// p1 attribute higher return 1, equal return 0, otherwise return -1
+	private int compareHighestAttribute(ModelPlayer p1, ModelPlayer p2, String attr) {
+		if(p1.getActiveCard().getValue(attr) > p2.getActiveCard().getValue(attr)) return 1;
+		if(p1.getActiveCard().getValue(attr) == p2.getActiveCard().getValue(attr)) return 0;
+		return -1;
+	}
+
+	// It's either the user's turn or it isn't
+	public boolean usersTurn() {
+		if(getActivePlayer() == getUser()) return true;
+		return false;
 	}
 
 	// Choosing which player is to start on 1st round
-	public int whoFirst() {
+	private int whoFirst() {
 		Random random = new Random();
 		int max = this.players.size();
 		return random.nextInt(max - 1) + 1;
@@ -148,10 +117,12 @@ public class Game {
 	// Checking who the stat-picking player will be this round
 	public int turnTracker() {
 		int theirTurn = 0;
+
+		// if round 1 choose random player to go first
 		if (this.getRoundCount() == 1) {
 			int firstTurn = whoFirst();
 			return firstTurn;
-		} else {
+		} else { // choose winning player from last round
 			for (int i = 0; i < this.players.size(); ++i) {
 				if (this.players.get(i).isWinner()) {
 					theirTurn = i;
@@ -161,59 +132,25 @@ public class Game {
 		}
 	}
 
-	// Choosing which card stat will be compared
-	public String statPicker(ModelPlayer activePlayer) {
-		Scanner scanner = new Scanner(System.in);
-		String output;
-		if (activePlayer.equals(this.user)) {
-			int choice;
-			do {
-				System.out.println("Which category do you want to select?: ");
-				choice = scanner.nextInt();
-			} while (choice < 1 || choice > 5);
-			output = this.attributeList[choice];
-			return output;
-		} else {
-			ModelAIPlayer AI = (ModelAIPlayer) activePlayer;
-			ModelCard AIActiveCard = AI.getActiveCard();
-			return AI.selectHighest(AIActiveCard);
-		}
-	}
-
 	// on a draw, all cards go to the communal pile
-	private void roundWasDraw(Round round) {
+	private void roundWasDraw() {
 		for (int i = 0; i < this.players.size(); i++) {
 			this.cp.addCard(this.players.get(i).getActiveCard());
 			this.players.get(i).removeFromHand(this.players.get(i).getActiveCard());
 			if(this.players.get(i).getHand().size() <= 0) {
 				this.players.remove(this.players.get(i));
 			}
-			round.getRoundWinner().setWinner(true);
+			this.getRoundWinner().setWinner(true);
 		}
-		this.printInfo();
 	}
-	
+
 	public boolean userActive() {
 		if(this.players.contains(this.user)) return true;
 		return false;
 	}
 
-	// Compare stats, find a winner/winners
-	public void newRound() {		
-
-		// Get current player
-		ModelPlayer activePlayer = this.players.get(this.turnTracker());
-		String chosenAttribute = this.statPicker(activePlayer);
-		
-		Round round = new Round(this.players, activePlayer, chosenAttribute);
-		if (!round.hasWinner()) {
-			this.roundWasDraw(round);
-		} else {
-			// 1 winner: all cards go to winner, winner picks category
-			this.giveWinnerCards(round.getRoundWinner());
-			this.printInfo();
-		}
-		this.roundCount++;
+	public ModelPlayer getRoundWinner() {
+		return winningPlayer;
 	}
 
 	public void giveWinnerCards(ModelPlayer winner) {
@@ -256,6 +193,61 @@ public class Game {
 
 	public int deckSize() {
 		return this.deck.getCreatedCards();
+	}
+	
+	public int communalDeckSize() {
+		return this.cp.size();
+	}
+
+	private void addPlayer(String playerName) {
+		this.players.add(new ModelAIPlayer(playerName));
+	}
+
+	private void removePlayer(int i) {
+		this.players.remove(getPlayer(i));
+	}
+
+	// Getters
+	public int getRoundCount() {
+		return this.roundCount;
+	}
+
+	public ModelPlayer getUser() {
+		return this.user;
+	}
+
+	public ModelPlayer getPlayer(int i) {
+		return players.get(i);
+	}
+
+	public ModelPlayer getActivePlayer() {
+		ModelPlayer activePlayer = this.players.get(this.turnTracker());
+		return activePlayer;
+	}
+
+	public String getPlayerName(int i) {
+		return players.get(i).getName();
+	}
+
+	public ModelDeck getDeck() {
+		return this.deck;
+	}
+
+	public ArrayList<ModelPlayer> getPlayers() {
+		return this.players;
+	}
+
+	public int getNumPlayers() {
+		return this.players.size();
+	}
+
+	// Distribute shuffled deck amongst players
+	public void dealDeck() {
+		this.deck.deal(this.players);
+	}
+
+	// Print general game info
+	public void printInfo() {
 	}
 
 }

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import game.Game;
+
 public class CommandLineTest {
 
 	@BeforeEach
@@ -59,7 +61,12 @@ public class CommandLineTest {
 	@Test
 	public void CLIApplicationTest() {
 		// Entire game flow here for integration test
-		assertTrue(false);
+//		Game game = new Game();
+//		game.gameInitialiser();
+//		while(game.activePlayers()) {
+//			game.newRound();
+			assertTrue(false);
+//		}
 	}
 
 }

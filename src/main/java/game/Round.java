@@ -14,15 +14,9 @@ public class Round {
     	this.activePlayer = active;
     	this.winningPlayer = activePlayers.get(0);
     	this.attr = s;
-        displayRoundInfo();
+//        displayRoundInfo();
     }
-    
-    public void displayRoundInfo() {
-        System.out.println("It is " + this.activePlayer.getName() + "'s turn.");
-        System.out.println(this.activePlayer.getName() + " picked attribute " + this.attr +"\n");    // note this is array index, not numbered attribute
-        System.out.println("Score to beat is: " + this.activePlayer.getActiveCard().getValue(this.attr) + "\n");
-        System.out.println("\t" + this.activePlayer.getActiveCard().printCardInfo());
-    }
+   
 
 // Finds the highest value present among the chosen stat 
 //  public int findHighestValue(ArrayList<ModelPlayer> compare) {
@@ -34,53 +28,7 @@ public class Round {
 //      }
 //      return highestValue;
 //  }
-    
-    // p1 attribute higher return 1, equal return 0, otherwise return -1
-    private int compareHighestAttribute(ModelPlayer p1, ModelPlayer p2) {
-    	if(p1.getActiveCard().getValue(attr) > p2.getActiveCard().getValue(attr)) return 1;
-    	if(p1.getActiveCard().getValue(attr) == p2.getActiveCard().getValue(attr)) return 0;
-    	return -1;
-    }
 
-    // Compares the chosen stat and detects whether there is a single winner or a draw. Returns true for a win or null for a draw.
-    public boolean hasWinner() {
-        int drawCount = 0;
-        ModelPlayer currentWinningPlayer = this.winningPlayer;
-        for (int i = 1; i < activePlayers.size(); i++) {
-        	// compare attributes
-        	// if activePlayer attribute > current winningPlayer attribute
-        	ModelPlayer otherPlayer = activePlayers.get(i);
-        	int otherAttributeHigher = compareHighestAttribute(otherPlayer, currentWinningPlayer);
-            if (otherAttributeHigher == 1) {
-            	currentWinningPlayer = otherPlayer;
-            	currentWinningPlayer.setWinner(true);
-                drawCount = 0;
-            }else if (otherAttributeHigher == 0) {
-            	drawCount++;
-            	currentWinningPlayer.setWinner(false);
-                otherPlayer.setWinner(false);
-            }else {
-            	otherPlayer.setWinner(false);
-            }
-            
-        }
-        
-        this.winningPlayer = currentWinningPlayer;
-        
-        if (drawCount<1) {
-        	this.activePlayer = this.winningPlayer;
-            System.out.println(this.winningPlayer.getName() + " has won!  His card was: " + this.winningPlayer.getActiveCard().getName() + " and it's " + this.attr + " attribute was " + this.winningPlayer.getActiveCard().getValue(attr)+"\n");
-            return true;
-        } else {
-            System.out.println("There has been a draw.\n");
-            this.winningPlayer = this.activePlayer;
-            return false;
-        }
-    }
-
-    public ModelPlayer getRoundWinner() {
-        return winningPlayer;
-    }
 
 // Testing Round. Currently if 1st Player wins result is always draw[Fixed]
 //  public static void main(String[] args) {

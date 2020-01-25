@@ -18,6 +18,7 @@ public class ModelCard {
     private HashMap<String, Integer> attributeMap;
     private String[] attributeDefinitions;
 
+    // info is list of integer stats, attributeList is the list of stat descriptions
     public ModelCard(String[] info, String[] attributeList) {
         // info  and attributeList come from StarCitizenDeck.txt in Game method
     	
@@ -57,6 +58,11 @@ public class ModelCard {
     // Returns the name of the ship on the card
     public String getName() {
         return name;
+    }
+    
+    // Consider reworking getHighestAttribute to use this method
+    public String getAttribute(int index) {
+    	return attributeDefinitions[index];
     }
     
     public Integer getValue(String s) {
