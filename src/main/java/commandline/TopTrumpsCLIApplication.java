@@ -39,16 +39,18 @@ public class TopTrumpsCLIApplication {
                     game.gameInitialiser();
                     while (game.activePlayers()) {		
                     	System.out.println("Round " + game.getRoundCount());
-                        game.performRound();
-//                        System.out.println("1: Continue  2: Quit");
-//                        int continueChoice = scanner.nextInt();
-//                        switch (continueChoice){
-//                            case 1:
-//                                continue;
-//                            case 2:
-//                                System.out.println("Thanks for playing.");
-//                                break superLoop;
-//                        }
+                    	
+                		// Get and display player information
+                		if(game.userActive()) {
+                			System.out.println("You drew " + game.getUser().getActiveCard().printCardInfo());
+                		}
+                		
+            			// display all player's card names
+            			for (int i = 1; i < game.getNumPlayers(); i++) {
+            				System.out.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCardName());
+            			}
+            			
+                        game.newRound();
                     }
                     System.out.println(game.getPlayers().get(0).getName() + " is the winner!");
                     break;

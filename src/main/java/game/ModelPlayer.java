@@ -23,6 +23,10 @@ public class ModelPlayer {
     	// links the last card in the player's hand for use in Round object
     	return hand.get(hand.size()-1);
     }
+    
+    public String getActiveCardName() {
+    	return getActiveCard().getName();
+    }
 
     public ArrayList<ModelCard> getHand() {
         return hand;

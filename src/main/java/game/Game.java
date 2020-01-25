@@ -28,6 +28,10 @@ public class Game {
 		this.roundCount = 1;
 	}
 
+	private void removePlayer(int i) {
+		this.players.remove(getPlayer(i));
+	}
+	
 	// Getters
 	public int getRoundCount() {
 		return this.roundCount;
@@ -35,6 +39,14 @@ public class Game {
 
 	public ModelPlayer getUser() {
 		return this.user;
+	}
+	
+	public ModelPlayer getPlayer(int i) {
+		return players.get(i);
+	}
+	
+	public String getPlayerName(int i) {
+		return players.get(i).getName();
 	}
 
 	public ModelDeck getDeck() {
@@ -45,6 +57,10 @@ public class Game {
 		return this.players;
 	}
 
+	public int getNumPlayers() {
+		return this.players.size();
+	}
+	
 	// Setting up a new game
 	public void gameInitialiser() {
 		buildDeck();
@@ -177,36 +193,30 @@ public class Game {
 		this.printInfo();
 	}
 	
+	public boolean userActive() {
+		if(this.players.contains(this.user)) return true;
+		return false;
+	}
+
 	// Compare stats, find a winner/winners
-	public void performRound() {			
-		
-		// Get and display player information
-		if(this.players.contains(this.user)) {
-			System.out.println("You drew " + this.user.getActiveCard().printCardInfo());
-		}
-		
-		// display all player's card names
-		for (int i = 1; i < this.players.size(); i++) {
-			System.out.println(this.players.get(i).getName() + " has drawn " + this.players.get(i).getActiveCard().getName());
-		}
+	public void newRound() {		
 
 		// Get current player
 		ModelPlayer activePlayer = this.players.get(this.turnTracker());
 		String chosenAttribute = this.statPicker(activePlayer);
 		
-		// round.gameHasWinner() returns true if a winner was found, false if there is a draw
 		Round round = new Round(this.players, activePlayer, chosenAttribute);
 		if (!round.gameHasWinner()) {
 			this.roundWasDraw(round);
 		} else {
 			// 1 winner: all cards go to winner, winner picks category
-			this.redistributeCards(round.getRoundWinner());
+			this.giveWinnerCards(round.getRoundWinner());
 			this.printInfo();
 		}
 		this.roundCount++;
 	}
 
-	public void redistributeCards(ModelPlayer winner) {
+	public void giveWinnerCards(ModelPlayer winner) {
 		boolean communalPileEmpty;
 		if (this.cp.isEmpty()) {
 			communalPileEmpty = true;
@@ -217,11 +227,11 @@ public class Game {
 		// Loop through all players and move card to winner's hand
 		for (int i = 0; i < this.players.size(); i++) {
 			// find the winning player
-			if (!this.players.get(i).equals(winner)) {
-				winner.addToHand(this.players.get(i).getActiveCard());
-				this.players.get(i).removeFromHand(this.players.get(i).getActiveCard());
-				if(this.players.get(i).getHand().size() <= 0) {
-					this.players.remove(this.players.get(i));
+			if (!this.getPlayer(i).equals(winner)) {
+				winner.addToHand(this.getPlayer(i).getActiveCard());
+				this.getPlayer(i).removeFromHand(this.getPlayer(i).getActiveCard());
+				if(this.getPlayer(i).getHand().size() <= 0) {
+					this.removePlayer(i);
 				}
 			}
 		}

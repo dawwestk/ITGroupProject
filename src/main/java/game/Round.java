@@ -32,7 +32,7 @@ public class Round {
 //      return highestValue;
 //  }
 
-    // Compares the chosen stat and detects whether there is a single winner or a draw. Returns the player who won or null for a draw.
+    // Compares the chosen stat and detects whether there is a single winner or a draw. Returns true for a win or null for a draw.
     public boolean gameHasWinner() {
         int drawCount = 0;
 
