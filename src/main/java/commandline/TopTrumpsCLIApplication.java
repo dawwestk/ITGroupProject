@@ -52,7 +52,7 @@ public class TopTrumpsCLIApplication {
 	public static int chooseOpponents(Scanner keyboard) {
 		System.out.print("How many opponents would you like to face (max 4)? ");
 		int opponents = keyboard.nextInt();
-		keyboard.nextLine();
+//		keyboard.nextLine();
 		return opponents;
 	}
 
@@ -61,10 +61,11 @@ public class TopTrumpsCLIApplication {
 		Scanner keyboard = new Scanner(System.in);
 		int opponents = chooseOpponents(keyboard);
 
-		while (opponents <= 0 || opponents >= 5) {
+		while (opponents <= 0 || opponents >= 5) { 
 			System.out.println("Sorry, you must face 1-4 opponents.");
 			opponents = chooseOpponents(keyboard);
 		}
+//		keyboard.close();
 		return opponents;
 	}
 
@@ -75,9 +76,21 @@ public class TopTrumpsCLIApplication {
 		do {
 			System.out.println("Which category do you want to select?: ");
 			choice = scanner.nextInt();
-			scanner.nextLine();
+//			scanner.nextLine();
 		} while (choice < 1 || choice > 5);
+//		scanner.close();
 		return choice;
+	}
+
+	public static boolean askForNextRound() {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Move to next round? y/n");
+		String line = "";
+		while(scanner.hasNext()) line = scanner.nextLine();
+//		scanner.close();
+		boolean answer = false;
+		if(line.toLowerCase().contains("y")) answer = true; 
+		return answer;
 	}
 
 	/**
@@ -99,7 +112,7 @@ public class TopTrumpsCLIApplication {
 		superLoop:while (!userWantsToQuit) {
 			System.out.print("1. Play Game." + "\n2. Statistics." + "\n3. Quit." + "\nUser Choice: ");
 			int userChoice = scanner.nextInt();
-			scanner.nextLine();
+//			scanner.nextLine();
 			switch (userChoice) {
 			case 1:
 				// create new Deck
@@ -113,14 +126,24 @@ public class TopTrumpsCLIApplication {
 				Game game = new Game(modelDeck, numPlayers);
 
 				// While the game isn't finished
-				while (game.activePlayers()) {		
+				while (game.activePlayers()) {	
+					System.out.println("");
+					System.out.println("------------------------X----------------------------");
+					System.out.println("-----------------BEGIN NEW ROUND---------------------");
 					System.out.println("Round " + game.getRoundCount());
-
+					System.out.println("------------------------X----------------------------");
+					System.out.println("");
+					
 					// Get and display human players information
 					if(game.userActive()) {
 						System.out.println("You drew " + game.getUser().getActiveCard().printCardInfo());
 					}
 
+					System.out.println("");
+					for (int i = 1; i < game.getNumPlayers(); i++) {
+						System.out.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCard().printCardInfo());
+					}  
+					
 					// display all player's card names
 					for (int i = 1; i < game.getNumPlayers(); i++) {
 						System.out.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCardName());
@@ -141,18 +164,21 @@ public class TopTrumpsCLIApplication {
 					System.out.println("Score to beat is: " + game.getActivePlayer().getActiveCard().getValue(stat) + "\n");
 					System.out.println("\t" + game.getActivePlayer().getActiveCard().printCardInfo());
 
-					boolean hasWinner = game.checkIfWinner(stat);
+					// Check if win or draw
+					boolean hasWinner = game.hasWinner(stat);
 
 					for (int i = 0; i < game.getNumPlayers(); i++) {
 						System.out.println(game.getPlayer(i).getInfo());
 					}
 
+					// Check size of communal pile
 					if (game.communalDeckSize() == 0) {
 						System.out.println("\nCommunalPile is empty.\n");
 					} else {
 						System.out.println("\nCommunalPile has: " + game.communalDeckSize() + " cards in it.\n");
 					}
 
+					System.out.println("------------------Round Summary----------------------");
 					if(hasWinner) {
 						System.out.println(game.getRoundWinner().getName() + " has won!  His card was: " + 
 								game.getRoundWinner().getActiveCard().getName() + " and it's " + stat + " attribute was " + 
@@ -160,7 +186,22 @@ public class TopTrumpsCLIApplication {
 					} else {
 						System.out.println("There has been a draw.\n");
 					}
+					System.out.println("-----------------------------------------------------");
 
+//					if(game.userActive()) {
+////						boolean nextRound = askForNextRound();
+//						boolean nextRound = true;
+//
+//						if(nextRound) {
+//							game.advanceRound();
+//							continue;
+//						}
+//						else {
+//							userWantsToQuit = true;
+//							continue;
+//						}
+//					}
+					game.giveWinnerCards(game.getRoundWinner());
 					game.advanceRound();
 				}
 

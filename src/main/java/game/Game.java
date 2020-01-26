@@ -16,35 +16,40 @@ public class Game {
 	private int roundCount;
 	private String playerName = "Player One";
 	private ModelPlayer winningPlayer;
+	private ModelPlayer activePlayer;
 
 	public Game(ModelDeck deck, int numPlayers) {
 		this.user = new ModelPlayer(this.playerName);
 		this.players = new ArrayList<ModelPlayer>(numPlayers);
 		this.players.add(this.user);
 		this.deck = deck;
-		this.winningPlayer = this.user;
+		
 		this.cp = this.deck.getCP();
 		for (int i = 0; i < numPlayers; i++) {
 			String playerName = "CPU-" + (i + 1);
 			this.addPlayer(playerName);
 		}
+		
+		this.winningPlayer = null;
+		this.activePlayer = null;
+		this.playerToGoFirst();
+		
 		this.roundCount = 1;
 		this.dealDeck();
 	}
 
-	public boolean checkIfWinner(String stat) {	
-		boolean hasWinner = this.hasWinner(stat);
-		if (!hasWinner) {
-			this.roundWasDraw();
-		} else {
-			this.giveWinnerCards(this.getRoundWinner());
-		}
-		return hasWinner;
+	private void playerToGoFirst() {
+		this.activePlayer = this.getPlayer(this.whoFirst());
+		this.winningPlayer = this.activePlayer;
 	}
-
-	public void advanceRound() {
-		this.roundCount++;
-	}
+	
+//	public boolean checkIfWinner(String stat) {	
+//		boolean hasWinner = this.hasWinner(stat);
+//		if (!hasWinner) {
+//		} else {
+//		}
+//		return hasWinner;
+//	}
 
 	// If active player is user, return their choice of Stat. Otherwise have AIPlayer choose their highest card.
 	public String getStat(int choice) {
@@ -61,76 +66,35 @@ public class Game {
 
 	// Compares the chosen stat and detects whether there is a single winner or a draw. Returns true for a win or null for a draw.
 	public boolean hasWinner(String stat) {
-		int drawCount = 0;
-		ModelPlayer currentWinningPlayer = this.winningPlayer;
-		for (int i = 1; i < getNumPlayers(); i++) {
+		ModelPlayer currentWinningPlayer = this.getRoundWinner();
+				
+		int drawCount = 0;		
+		for (int i = 0; i < getNumPlayers(); i++) {
 			// compare attributes
 			// if activePlayer attribute > current winningPlayer attribute
 			ModelPlayer otherPlayer = getPlayer(i);
+			if(otherPlayer.equals(currentWinningPlayer)) continue; // Don't compare the same player
 			int otherAttributeHigher = compareHighestAttribute(otherPlayer, currentWinningPlayer, stat);
 			if (otherAttributeHigher == 1) {
-				currentWinningPlayer = otherPlayer;
-
-				currentWinningPlayer.setWinner(true);
-				this.winningPlayer = currentWinningPlayer;
-
+				currentWinningPlayer = otherPlayer; // otherPlayer is new currentWinningPlayer
 				drawCount = 0;
 			}else if (otherAttributeHigher == 0) {
-				drawCount++;
-				currentWinningPlayer.setWinner(false);            	
-				otherPlayer.setWinner(false);
-			}else {
-				otherPlayer.setWinner(false);
+				System.out.println("Draw count " + drawCount++); 
 			}
 		}
 
 		// if no draws
 		if (drawCount<1) {
-			this.winningPlayer = currentWinningPlayer;
+			this.setRoundWinner(currentWinningPlayer);
+			this.setActivePlayer(currentWinningPlayer);
 			return true;
+		} else {
+			this.roundWasDraw();
 		}
 
 		return false;
 	}
 
-
-	// p1 attribute higher return 1, equal return 0, otherwise return -1
-	private int compareHighestAttribute(ModelPlayer p1, ModelPlayer p2, String attr) {
-		if(p1.getActiveCard().getValue(attr) > p2.getActiveCard().getValue(attr)) return 1;
-		if(p1.getActiveCard().getValue(attr) == p2.getActiveCard().getValue(attr)) return 0;
-		return -1;
-	}
-
-	// It's either the user's turn or it isn't
-	public boolean usersTurn() {
-		if(getActivePlayer() == getUser()) return true;
-		return false;
-	}
-
-	// Choosing which player is to start on 1st round
-	private int whoFirst() {
-		Random random = new Random();
-		int max = this.players.size();
-		return random.nextInt(max - 1) + 1;
-	}
-
-	// Checking who the stat-picking player will be this round
-	public int turnTracker() {
-		int theirTurn = 0;
-
-		// if round 1 choose random player to go first
-		if (this.getRoundCount() == 1) {
-			int firstTurn = whoFirst();
-			return firstTurn;
-		} else { // choose winning player from last round
-			for (int i = 0; i < this.players.size(); ++i) {
-				if (this.players.get(i).isWinner()) {
-					theirTurn = i;
-				}
-			}
-			return theirTurn;
-		}
-	}
 
 	// on a draw, all cards go to the communal pile
 	private void roundWasDraw() {
@@ -140,19 +104,9 @@ public class Game {
 			if(this.players.get(i).getHand().size() <= 0) {
 				this.players.remove(this.players.get(i));
 			}
-			this.getRoundWinner().setWinner(true);
 		}
-	}
-
-	public boolean userActive() {
-		if(this.players.contains(this.user)) return true;
-		return false;
-	}
-
-	public ModelPlayer getRoundWinner() {
-		return winningPlayer;
-	}
-
+	}	
+	
 	public void giveWinnerCards(ModelPlayer winner) {
 		boolean communalPileEmpty;
 		if (this.cp.isEmpty()) {
@@ -181,7 +135,53 @@ public class Game {
 			this.cp.pickedUpByWinner(winner);
 		}
 	}
+	
+	// p1 attribute higher return 1, equal return 0, otherwise return -1
+	private int compareHighestAttribute(ModelPlayer p1, ModelPlayer p2, String attr) {
+		if(p1.getActiveCard().getValue(attr) > p2.getActiveCard().getValue(attr)) return 1;
+		if(p1.getActiveCard().getValue(attr) == p2.getActiveCard().getValue(attr)) return 0;
+		return -1;
+	}
 
+	// It's either the user's turn or it isn't
+	public boolean usersTurn() {
+		if(getActivePlayer() == getUser()) return true;
+		return false;
+	}
+
+	// Choosing which player is to start on 1st round
+	private int whoFirst() {
+		Random random = new Random();
+		int max = this.players.size();
+		return random.nextInt(max - 1) + 1;
+	}
+
+	public void setActivePlayer(ModelPlayer player) {
+		this.activePlayer = player;
+	}
+
+	public ModelPlayer getActivePlayer() {
+		return this.activePlayer;
+	}
+	
+	public void setRoundWinner(ModelPlayer player) {
+		this.winningPlayer = player;		
+	}
+
+	public ModelPlayer getRoundWinner() {
+		return winningPlayer;
+	}
+	
+	public boolean userActive() {
+		if(this.players.contains(this.user)) return true;
+		return false;
+	}
+
+	public boolean isWinningPlayer(ModelPlayer player) {
+		if(player.equals(this.getRoundWinner())) return true;
+		return false;
+	}
+	
 	// Counts the amount of players still in the game
 	public boolean activePlayers() {
 		if(this.players.size() > 1){
@@ -220,11 +220,6 @@ public class Game {
 		return players.get(i);
 	}
 
-	public ModelPlayer getActivePlayer() {
-		ModelPlayer activePlayer = this.players.get(this.turnTracker());
-		return activePlayer;
-	}
-
 	public String getPlayerName(int i) {
 		return players.get(i).getName();
 	}
@@ -246,8 +241,44 @@ public class Game {
 		this.deck.deal(this.players);
 	}
 
-	// Print general game info
-	public void printInfo() {
+	public void advanceRound() {
+		this.roundCount++;
 	}
+	
 
+	// Checking who the stat-picking player will be this round
+//	public int turnTracker() {
+//		int theirTurn = 0;
+//
+//		// if round 1 choose random player to go first
+//		if (this.getRoundCount() == 1) {
+//			int firstTurn = whoFirst();
+//			return firstTurn;
+//		} else { // choose winning player from last round
+////			for (int i = 0; i < this.getNumPlayers(); ++i) {
+////				if (isWinningPlayer(this.getPlayer(i))) {
+////					theirTurn = i;
+////				}
+////			}
+//			theirTurn = 
+//			return theirTurn;
+//		}
+//	}
+	
+//	public ModelPlayer turnTracker() {
+//		ModelPlayer theirTurn = null;
+//		if(this.getRoundCount() == 1) {
+//			theirTurn = this.getPlayer(this.whoFirst());
+//			this.setActivePlayer(theirTurn);
+//		} else {
+//			theirTurn = this.getRoundWinner(); // want to be winner of last round and not current round
+//		}
+//		return theirTurn;
+//	}
+	
+//	// The current player
+//	public ModelPlayer getActivePlayer() {
+//		ModelPlayer activePlayer = this.turnTracker();
+//		return activePlayer;
+//	}
 }
