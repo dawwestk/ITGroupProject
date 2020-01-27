@@ -12,16 +12,86 @@
 
     	<style>
     		.container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
-    		#game-board{display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 200px}
+    		#game-board{display: grid; grid-template-columns: repeat(6, 1fr);}
     		/* change repeat(X, 1fr) to number of opponents somehow */
-    		#game-user-card{display: grid; grid-template-rows: repeat(6, 1fr);}
+    		#game-user-card{display: grid; grid-template-rows: repeat(6, auto);}
     		/* 6 rows - one for picture, 5 for attribute buttons? */
-    		#game-board-separator{grid-column-start: 2; grid-column-end: 2; grid-row-start: 1; grid-row-end: 6; background-color: black}
+    		#game-board-separator{grid-column-start: 2; grid-column-end: 2; grid-row-start: 1; grid-row-end: 6; background-color: black;}
     		/* again, change 6 here if needed (just a separator) */
-    		#game-AI-card{display: grid; grid-template-rows: repeat(6, 1fr);}
+    		#game-AI-card1{display: grid; grid-template-rows: repeat(6, auto);}
+    		#game-AI-card2{display: grid; grid-template-rows: repeat(6, auto);}
+    		#game-AI-card3{display: grid; grid-template-rows: repeat(6, auto);}
+    		#game-AI-card4{display: grid; grid-template-rows: repeat(6, auto);}
+    		#game-AI-card1 h3, 
+    		#game-AI-card2 h3, 
+    		#game-AI-card3 h3, 
+    		#game-AI-card4 h3{border: solid;}
+    		button{width: 10em;}
+    		img {max-width:100%; height:auto;}
+
+    		/* unsure how to get all rows to only fill the used height - lots of whitespace currently */    		
 
     	</style>
 
+    	<script>
+
+			function gamePageSetUp(){
+				setUpButtonNames();
+				setUpHideBoard();
+				createAICards();
+			}
+
+    		// Replace hardcoded strings from dictionary somehow?
+    		function setUpButtonNames(){
+    			var exampleStat = 5;
+	    		document.getElementById('game-user-card-attr1').innerHTML = "<button id = 'game-user-card-attr1' onclick='highlightAttribute(this.id)'><h3>Size: " + exampleStat + "</h3></button>";
+	    		document.getElementById('game-user-card-attr2').innerHTML = "<button id = 'game-user-card-attr2' onclick='highlightAttribute(this.id)'><h3>Speed: " + exampleStat + "</h3></button>";
+	    		document.getElementById('game-user-card-attr3').innerHTML = "<button id = 'game-user-card-attr3' onclick='highlightAttribute(this.id)'><h3>Range: " + exampleStat + "</h3></button>";
+	    		document.getElementById('game-user-card-attr4').innerHTML = "<button id = 'game-user-card-attr4' onclick='highlightAttribute(this.id)'><h3>Firepower: " + exampleStat + "</h3></button>";
+	    		document.getElementById('game-user-card-attr5').innerHTML = "<button  id = 'game-user-card-attr5'onclick='highlightAttribute(this.id)'><h3>Cargo: " + exampleStat + "</h3></button>";
+	    	}
+
+	    	function setUpHideBoard(){
+	    		document.getElementById("game-board").style.visibility = "hidden";
+	    	}
+
+	    	function unHideBoard(){
+	    		document.getElementById("game-board").style.visibility = "visible";
+	    		/*	CODE HERE DOES NOT WORK - need to use HTTP POST maybe to read input?
+	    		var numberOfOpponents = document.getElementById("numberOfOpponents");
+	    		alert("Creating game with " + numberOfOpponents + " opponents!");
+	    		*/
+	    	}
+
+
+	    	// createAICards will take an integer 1-4 once we can read from the input
+	    	function createAICards(){
+	    		var cardHTML = "<div class = 'container' id = 'game-AI-card-image'>					<img src = '/assets/spaceship_test.jpg'><h2> AI active card placeholder </h2>				</div>				<div class = 'game-AI-card-attr1' id = 'game-AI-card-attr1'>					<h3>AI Attribute 1</h3>				</div>				<div class = 'game-AI-card-attr2' id = 'game-AI-card-attr2'>					<h3>AI Attribute 2</h3>				</div>				<div class = 'game-AI-card-attr3' id = 'game-AI-card-attr3'>					<h3>AI Attribute 3</h3>				</div>				<div class = 'game-AI-card-attr4' id = 'game-AI-card-attr4'>					<h3>AI Attribute 4</h3>				</div>				<div class = 'game-AI-card-attr5' id = 'game-AI-card-attr5'>					<h3>AI Attribute 5</h3>				</div>";
+	    		var i;
+	    		for(i = 1; i < 5; i++){
+	    			var AIname = 'game-AI-card' + i;
+	    			document.getElementById(AIname).innerHTML = cardHTML;
+	    		}
+
+	    	}
+
+	    	function highlightAttribute(chosenAttribute){
+	    		var attr = chosenAttribute.substring(chosenAttribute.length - 1, chosenAttribute.length);
+	    		var attribute = 'game-AI-card-attr' + attr;
+	    		var i;
+	    		//alert('updating ' + attribute + '...');
+	    		var listOfAICards = document.getElementsByClassName("AI-card");
+	    		
+	    		//alert("found " + listOfAICards.length + " AI-cards");
+
+	    		for(i = 0; i < listOfAICards.length; i++){
+	    			//alert(listOfAICards[i].getElementsByClassName(attribute)[0].innerHTML);
+	    			listOfAICards[i].getElementsByClassName(attribute)[0].style.color = "red";
+	    		} 
+	    		//alert(i);
+	    	}
+
+    	</script>
     	<!-- ALL stylesheets here
     	
     	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -41,7 +111,7 @@
 		
 	</head>
 
-    <body> <!-- onload="initalize()"> <!-- Call the initalize method when the page loads -->
+    <body onload="gamePageSetUp()"> <!-- onload="initalize()"> <!-- Call the initalize method when the page loads -->
     	
     	<div class="container" id = "game-title">
 	
@@ -58,30 +128,29 @@
 
 		<div class = "container" id = "game-choose-opponents">
 			<!-- will hold the "How many opponents would you like to face?" input/button (then greyed out during game) -->
-			<h3>How many opponents would you like to face?<input type="text" name="numberOfOpponents"><input type="submit"></h3>
+			<h3>How many opponents would you like to face?<input type="text" name="numberOfOpponents"><input type="submit" onclick="unHideBoard()"></h3>
 		</div>
 
 		<div class = "container" id = "game-board">
 			<div class = "container" id = "game-user-card">
 				<div class = "container" id = "game-user-card-image">
-					<!-- <img TBD> -->
-					<img src = "https://static7.depositphotos.com/1224164/721/i/450/depositphotos_7211858-stock-photo-spaceship.jpg">
+					<img src = "/assets/spaceship_test.jpg">
 					<h2> User active card placeholder </h2>
 				</div>
 				<div class = "container" id = "game-user-card-attr1">
-					<button><h3>User Attribute 1</h3></button>
+					<!--<button><h3>User Attribute 1</h3></button> -->
 				</div>
 				<div class = "container" id = "game-user-card-attr2">
-					<button><h3>User Attribute 2</h3></button>
+					<!--<button><h3>User Attribute 2</h3></button> -->
 				</div>
 				<div class = "container" id = "game-user-card-attr3">
-					<button><h3>User Attribute 3</h3></button>
+					<!--<button><h3>User Attribute 3</h3></button> -->
 				</div>
 				<div class = "container" id = "game-user-card-attr4">
-					<button><h3>User Attribute 4</h3></button>
+					<!--<button><h3>User Attribute 4</h3></button> -->
 				</div>
 				<div class = "container" id = "game-user-card-attr5">
-					<button><h3>User Attribute 5</h3></button>
+					<!--<button><h3>User Attribute 5</h3></button> -->
 				</div>
 			</div>
 
@@ -91,10 +160,10 @@
 					Separator
 				</div>
 			</div>
+			<div class = "AI-card" id = "game-AI-card1">
 
-			<div class = "container" id = "game-AI-card">
-				<div class = "container" id = "game-AI-card-image">
-					<!-- <img TBD> -->
+				<!-- <div class = "container" id = "game-AI-card-image">
+					<img TBD>
 					<img src = "https://static7.depositphotos.com/1224164/721/i/450/depositphotos_7211858-stock-photo-spaceship.jpg">
 					<h2> AI active card placeholder </h2>
 				</div>
@@ -113,6 +182,16 @@
 				<div class = "container" id = "game-AI-card-attr5">
 					<h3>AI Attribute 5</h3>
 				</div>
+			-->
+			</div>
+			<div class = "AI-card" id = "game-AI-card2">
+
+			</div>
+			<div class = "AI-card" id = "game-AI-card3">
+
+			</div>
+			<div class = "AI-card" id = "game-AI-card4">
+
 			</div>
 		</div>
 
