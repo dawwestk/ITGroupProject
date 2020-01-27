@@ -2,30 +2,70 @@
 
 	<head>
 		<!-- Web page title -->
-    	<title>Top Trumps</title>
-    	
+    	<title>Top Trumps Selection</title>
+    
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
     	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
+    	<link rel="stylesheet" href="toptrumps.css"/>
+
+    	<style>
+    		.container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
+    		#selection-grid{display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px}
+    	</style>
+
+    	<!-- ALL stylesheets here
+    	
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/flick/jquery-ui.css">
+		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/TREC_IS/bootstrap.min.css">
+		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex.css"/>
+    	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex-theme-os.css"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		
+		-->
 
 		<!-- Optional Styling of the Website, for the demo I used Bootstrap (see https://getbootstrap.com/docs/4.0/getting-started/introduction/) -->
-		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/TREC_IS/bootstrap.min.css">
+		
     	<script src="http://dcs.gla.ac.uk/~richardm/vex.combined.min.js"></script>
     	<script>vex.defaultOptions.className = 'vex-theme-os';</script>
-    	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex.css"/>
-    	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex-theme-os.css"/>
     	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
+		
 	</head>
 
-    <body onload="initalize()"> <!-- Call the initalize method when the page loads -->
-    	
-    	<div class="container">
+    <body> <!-- onload="initalize()"> Call the initalize method when the page loads -->
+    	<div class="container" id = "selection-title">
 
 			<!-- Add your HTML Here -->
-		
+			<h1>Top Trumps Game!</h1>
+
+		</div>
+		<div class="container" id = "selection-text">
+			<h2>Would you like to play a game or view stats?</h2>
+			
+			<!--
+
+    	<script type="text/javascript">
+    		$( document ).ready(function() {
+			    $( "a" ).click(function( event ) {
+			        alert( "Starting a new game!" );
+			    });
+			});
+    	</script>
+
+    		-->
+		</div>
+
+		<div class="container" id = "selection-grid">
+			<div class="container" id = "selection-new-game">
+				<!-- <a href="http://localhost:7777/toptrumps/game/">New game</a> -->
+				<button><a href="http://localhost:7777/toptrumps/game/"><h3>New Game</h3></a></button>
+			</div>
+			<div class="container" id = "selection-stats">
+				<!-- <a href="http://localhost:7777/toptrumps/game/">New game</a> -->
+				<button><a href="http://localhost:7777/toptrumps/stats/"><h3>View Stats</h3></a></button>
+			</div>
 		</div>
 		
 		<script type="text/javascript">
@@ -76,7 +116,29 @@
 		
 		<!-- Here are examples of how to call REST API Methods -->
 		<script type="text/javascript">
-		
+			
+			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
+			function printStuff() {
+			
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/printStuff"); // Request type and URL
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//alert(responseText); // lets produce an alert
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();		
+			}
+
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloJSONList() {
 			

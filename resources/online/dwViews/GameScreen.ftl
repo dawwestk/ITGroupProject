@@ -2,34 +2,155 @@
 
 	<head>
 		<!-- Web page title -->
-    	<title>Top Trumps</title>
+    	<title>Top Trumps Game</title>
     	
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
     	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
+    	<link rel="stylesheet" href="toptrumps.css"/>
+
+    	<style>
+    		.container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
+    		#game-board{display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 200px}
+    		/* change repeat(X, 1fr) to number of opponents somehow */
+    		#game-user-card{display: grid; grid-template-rows: repeat(6, 1fr);}
+    		/* 6 rows - one for picture, 5 for attribute buttons? */
+    		#game-board-separator{grid-column-start: 2; grid-column-end: 2; grid-row-start: 1; grid-row-end: 6; background-color: black}
+    		/* again, change 6 here if needed (just a separator) */
+    		#game-AI-card{display: grid; grid-template-rows: repeat(6, 1fr);}
+
+    	</style>
+
+    	<!-- ALL stylesheets here
+    	
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/flick/jquery-ui.css">
+		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/TREC_IS/bootstrap.min.css">
+		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex.css"/>
+    	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex-theme-os.css"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		
+		-->
 
 		<!-- Optional Styling of the Website, for the demo I used Bootstrap (see https://getbootstrap.com/docs/4.0/getting-started/introduction/) -->
-		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/TREC_IS/bootstrap.min.css">
+		
     	<script src="http://dcs.gla.ac.uk/~richardm/vex.combined.min.js"></script>
     	<script>vex.defaultOptions.className = 'vex-theme-os';</script>
-    	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex.css"/>
-    	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex-theme-os.css"/>
     	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
+		
 	</head>
 
-    <body onload="initalize()"> <!-- Call the initalize method when the page loads -->
+    <body> <!-- onload="initalize()"> <!-- Call the initalize method when the page loads -->
     	
-    	<div class="container">
-
+    	<div class="container" id = "game-title">
+	
 			<!-- Add your HTML Here -->
-		
+			
+			<h1>Top Trumps Game!</h1> 
+
+		<!--
+			<p>Using myFunction(10, 2) = </p>
+			<p id="demo"></p>
+		-->
+	
 		</div>
+
+		<div class = "container" id = "game-choose-opponents">
+			<!-- will hold the "How many opponents would you like to face?" input/button (then greyed out during game) -->
+			<h3>How many opponents would you like to face?<input type="text" name="numberOfOpponents"><input type="submit"></h3>
+		</div>
+
+		<div class = "container" id = "game-board">
+			<div class = "container" id = "game-user-card">
+				<div class = "container" id = "game-user-card-image">
+					<!-- <img TBD> -->
+					<img src = "https://static7.depositphotos.com/1224164/721/i/450/depositphotos_7211858-stock-photo-spaceship.jpg">
+					<h2> User active card placeholder </h2>
+				</div>
+				<div class = "container" id = "game-user-card-attr1">
+					<button><h3>User Attribute 1</h3></button>
+				</div>
+				<div class = "container" id = "game-user-card-attr2">
+					<button><h3>User Attribute 2</h3></button>
+				</div>
+				<div class = "container" id = "game-user-card-attr3">
+					<button><h3>User Attribute 3</h3></button>
+				</div>
+				<div class = "container" id = "game-user-card-attr4">
+					<button><h3>User Attribute 4</h3></button>
+				</div>
+				<div class = "container" id = "game-user-card-attr5">
+					<button><h3>User Attribute 5</h3></button>
+				</div>
+			</div>
+
+			<div class = "container" id = "game-board-separator">
+				<!-- keeping the user card separate from the AI cards (for now) -->
+				<div class = "container">
+					Separator
+				</div>
+			</div>
+
+			<div class = "container" id = "game-AI-card">
+				<div class = "container" id = "game-AI-card-image">
+					<!-- <img TBD> -->
+					<img src = "https://static7.depositphotos.com/1224164/721/i/450/depositphotos_7211858-stock-photo-spaceship.jpg">
+					<h2> AI active card placeholder </h2>
+				</div>
+				<div class = "container" id = "game-AI-card-attr1">
+					<h3>AI Attribute 1</h3>
+				</div>
+				<div class = "container" id = "game-AI-card-attr2">
+					<h3>AI Attribute 2</h3>
+				</div>
+				<div class = "container" id = "game-AI-card-attr3">
+					<h3>AI Attribute 3</h3>
+				</div>
+				<div class = "container" id = "game-AI-card-attr4">
+					<h3>AI Attribute 4</h3>
+				</div>
+				<div class = "container" id = "game-AI-card-attr5">
+					<h3>AI Attribute 5</h3>
+				</div>
+			</div>
+		</div>
+
+		<!-- Could keep this column layout as container for Grid items
+			<div class="container">
+			  <div class="row">
+			    <div class="col-sm">
+			      1) One of three columns
+			    </div>
+			    <div class="col-sm">
+			      2) Two of three columns
+			    </div>
+			    <div class="col-sm">
+			      3) Three of three columns
+			    </div>
+			  </div>
+			  <div class="row">
+			    <div class="col-sm">
+			      A) One of three columns
+			    </div>
+			    <div class="col-sm">
+			      B) One of three columns
+			    </div>
+			    <div class="col-sm">
+			      C) One of three columns
+			    </div>
+			  </div>
+			</div>
+
+		-->
 		
 		<script type="text/javascript">
-		
+			
+			function myFunction(a, b){
+				return a * b;
+			}
+			document.getElementById("demo").innerHTML = myFunction(10, 2);
+
 			// Method that is called on page load
 			function initalize() {
 			
@@ -38,7 +159,6 @@
 				// --------------------------------------------------------------------------
 				
 				// For example, lets call our sample methods
-				helloJSONList();
 				helloWord("Student");
 				
 			}
@@ -114,7 +234,7 @@
 				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
+					alert(responseText + " TEST"); // lets produce an alert
 				};
 				
 				// We have done everything we need to prepare the CORS request, so send it
