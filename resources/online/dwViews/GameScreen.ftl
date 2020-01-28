@@ -76,6 +76,9 @@
 
 	    	}
 
+	    	/*
+			highlightAttribute - Could now be done much more easily in jQuery??
+			*/
 	    	function highlightAttribute(chosenAttribute){
 	    		var attr = chosenAttribute.substring(chosenAttribute.length - 1, chosenAttribute.length);
 	    		var attribute = 'game-AI-card-attr' + attr;
@@ -98,21 +101,38 @@
 			/* 
 			 - $(variable)
 			 -	
-			*/
+			
 			$(document).ready(function(){
 			  $(".AI-card").click(function(){
 			    $(this).hide();		// can change $(this) to something else $("<here>")
 			  });
 			});
-		</script>
-
-		<script> 
+			*/
+ 
 			$(document).ready(function(){
 			  $("#game-user-card-image").click(function(){
 			    $(".container-attribute").slideDown("slow");
 			  });
 			});
 		</script>
+		
+		<script>
+			$(document).ready(function(){
+			  $("[id*='game-user-card-attr']").mouseenter(function(){
+			    $(this).css("background-color", "red");
+			  });
+			});
+
+		</script>
+		<script>
+			$(document).ready(function(){
+			  $("[id*='game-user-card-attr']").mouseleave(function(){
+			    $(this).css("background-color", "transparent");
+			  });
+			});
+
+		</script>
+
 
     	<!-- ALL stylesheets here
     	
