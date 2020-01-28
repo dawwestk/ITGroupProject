@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 
 /*
@@ -21,28 +22,57 @@ import java.sql.Statement;
  *  	This will be changed to link to a yacata server.
  * 
  
-
+*/
 
 public class DatabaseQuery {
 
-	Connection c = null;
-	String connString = "jdbc:postgresql://localhost/postgres";
-	String x = "postgres";
+	private Connection c = null;
+	private String connString = "jdbc:postgresql://";
+	private String database;
+	private HashMap<String, Integer> statsToAdd;
+	private HashMap<String, String> previousStats;
+	private int lastGameID;
 	
-	public DatabaseQuery() {
-		c = setup(c, connString, x, x);
+	public DatabaseQuery(String server, String db) {
+		connString += server + "/" + db;
+		database = db;
+		c = setup(c, connString, database, database);
+		statsToAdd = new HashMap<String, Integer>();
+		previousStats = new HashMap<String, String>();
+		pullTableStats(previousStats);
+		statsPopulate(statsToAdd);
+		lastGameID = getTotalGames() + 1;
+		
 	}
 	
-	public static void main(String[] args) {
-		DatabaseQuery dbq = new DatabaseQuery();
-		Game g = new Game();
+	public String toString() {
+		String output = "";
+		for(String key : previousStats.keySet()) {
+			output += key + previousStats.get(key) + "\n";
+		}
+		return output;
+	}
+	
+	private void pullTableStats(HashMap<String, String> map) {
+		map.put("Total games: ", "" + getTotalGames());
+		map.put("Human wins: ", "" + getHumanWins());
+		map.put("AI wins: ", "" + getAIWins());
+		map.put("Average Draws: ", "" + getAverageDraws());
+		map.put("Highest Round Count: ", "" + getHighestRounds());
+	}
+	
+	private void statsPopulate(HashMap<String, Integer> map) {
+		map.put("gameid", 0);
+		map.put("winhuman", 0);
+		map.put("winai", 0);
+		map.put("rounds", 0);
+		map.put("draws", 0);
+		map.put("humanrounds", 0);
+		map.put("cpu1rounds", 0);
+		map.put("cpu2rounds", 0);
+		map.put("cpu3rounds", 0);
+		map.put("cpu4rounds", 0);
 		
-		System.out.println(dbq.printDB());
-		System.out.println(dbq.getHumanWins());
-		System.out.println(dbq.getAIWins());
-		System.out.println(dbq.getAverageDraws());
-		System.out.println(dbq.getHighestRounds());
-		System.out.println(dbq.getTotalGames());
 	}
 	
 	private int query(String s) {
@@ -89,19 +119,53 @@ public class DatabaseQuery {
 	}
 	
 	public void addGameToDB(Game g) {
-		int gameID = g.getID();
-		int winHuman = 0;
-		int winAI = 0;
-		if(g.getWinner().equals("Human")) {
-			winHuman = 1;
-		} else if(g.getWinner().equals("AI")){
-			winAI = 1;
+		
+		statsToAdd.put("gameid", lastGameID); // pulled from previous database info
+		
+		/*
+		if(g.getPlayers().get(0).getName().equals("Player One")) {
+			stats.put("winhuman", 1);
+		} else if(g.getPlayers().get(0).getName().substring(0,3).equals("CPU")){
+			stats.put("winai", 1);
 		}
-		int rounds = g.getRoundsPlayed();
-		int draws = g.getDraws();
+		
+		stats.put("rounds", g.getRounds());
+		stats.put("draws", g.getRounds());
+		stats.put("humanrounds", g.getRounds());
+		stats.put("cpu1rounds", g.getRounds());
+		stats.put("cpu2rounds", g.getRounds());
+		stats.put("cpu3rounds", g.getRounds());
+		stats.put("cpu4rounds", g.getRounds());
+		
+		*/
+		
+		// Test Data
+		statsToAdd.put("winai", 1);
+		statsToAdd.put("rounds", 40);
+		statsToAdd.put("draws", 4);
+		statsToAdd.put("humanrounds", 10);
+		statsToAdd.put("cpu1rounds", 20);
+		statsToAdd.put("cpu2rounds", 5);
+		statsToAdd.put("cpu3rounds", 0);
+		statsToAdd.put("cpu4rounds", 5);
 
-		String insertQuery = String.format("INSERT INTO toptrumps.stats(gameid, winhuman, winai, rounds, draws) VALUES(%d, %d, %d, %d, %d)", gameID, winHuman, winAI, rounds, draws);
-
+		// INSERT INTO toptrumps.stats(gameid, winhuman, winai, rounds, draws, humanrounds, cpu1rounds, cpu2rounds, cpu3rounds, cpu4rounds) 
+		// VALUES(2, 0, 1, 50, 4, 5, 10, 10, 5, 10)
+		String insert = "INSERT INTO toptrumps.stats(";
+		String values = "VALUES(";
+		for(String key : statsToAdd.keySet()) {
+			insert += key + ",";
+			values += statsToAdd.get(key) + ",";
+		}
+		
+		insert = insert.substring(0, insert.length() - 1) + ")";
+		values = values.substring(0, values.length() - 1) + ")";
+		
+		String insertQuery = insert + " " + values;
+		
+		//String insertQuery = "INSERT INTO toptrumps.stats(gameid, winhuman, winai, rounds, draws, humanrounds, cpu1rounds, cpu2rounds, cpu3rounds, cpu4rounds)"
+		//		+ "VALUES(%d, %d, %d, %d, %d, %d, %d, %d, %d, %d)", stats.get("gameid"),);
+		
 		try {
 			Statement stmt = c.createStatement();
 			int status = stmt.executeUpdate(insertQuery);
@@ -167,6 +231,5 @@ public class DatabaseQuery {
 
 }
 
-*/
 
 

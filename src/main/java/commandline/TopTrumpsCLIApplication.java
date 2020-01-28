@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import game.DatabaseQuery;
 import game.Game;
 import game.ModelAIPlayer;
 import game.ModelCard;
@@ -110,6 +111,9 @@ public class TopTrumpsCLIApplication {
 		Scanner scanner = new Scanner(System.in);
 		// Loop until the user wants to exit the game
 		superLoop:while (!userWantsToQuit) {
+			// Read stats from the database
+			DatabaseQuery dbq = new DatabaseQuery("localhost", "postgres");
+			
 			System.out.print("1. Play Game." + "\n2. Statistics." + "\n3. Quit." + "\nUser Choice: ");
 			int userChoice = scanner.nextInt();
 //			scanner.nextLine();
@@ -207,9 +211,10 @@ public class TopTrumpsCLIApplication {
 
 				// Display winning player's information, winner is the last player left
 				System.out.println(game.getPlayers().get(0).getName() + " is the winner!");
+				dbq.addGameToDB(game);
 				break;
 			case 2:
-				// Display Stats
+				System.out.println(dbq.toString());
 				break;
 
 			case 3:
