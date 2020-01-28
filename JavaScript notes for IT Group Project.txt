@@ -1,0 +1,95 @@
+JS can change HTML code:
+document.getElementById('demo').innerHTML = 'Hello JavaScript';
+
+
+Can change HTML attribute values:
+(below it changes the img src destination)
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>What Can JavaScript Do?</h2>
+
+<p>JavaScript can change HTML attribute values.</p>
+
+<p>In this case JavaScript changes the value of the src (source) attribute of an image.</p>
+
+<button onclick="document.getElementById('myImage').src='pic_bulbon.gif'">Turn on the light</button>
+
+<img id="myImage" src="pic_bulboff.gif" style="width:100px">
+
+<button onclick="document.getElementById('myImage').src='pic_bulboff.gif'">Turn off the light</button>
+
+</body>
+</html>
+
+
+Can change CSS styles:
+document.getElementById("demo").style.fontSize = "35px";		// could use to make user selection bold/green or something (and winning/losing attributes could be colour coded)
+
+
+Can hide HTML elements:
+document.getElementById("demo").style.display = "none";			// use to hide the "how many players would you like to face" thing
+
+And show them again:
+document.getElementById("demo").style.display = "block";		// maybe useful for showing/hiding AI player hands?
+
+
+-----------------------------------------------------------------------------------------------
+
+ - Uses <script> and </script> tags
+ - Can be placed in either the head or body
+ - functions called from onclick etc
+  e.g. below
+  
+ <!DOCTYPE html>
+<html>
+<head>
+<script>
+function myFunction() {
+  document.getElementById("demo").innerHTML = "Paragraph changed.";
+}
+</script>
+</head>
+<body>
+
+<h1>A Web Page</h1>
+<p id="demo">A Paragraph</p>
+<button type="button" onclick="myFunction()">Try it</button>
+
+</body>
+</html>
+
+**** Placing scripts at the bottom of the <body> element improves the display speed, because script interpretation slows down the display. ****
+
+ - Functions can also be defined in external .js files
+ 
+ function myFunction() {
+ document.getElementById("demo").innerHTML = "Paragraph changed.";
+}
+
+To use external, we need a script tag with the name of the src file
+<script src="myScript.js"></script>
+
+**** external scripts advised ****
+
+will probably use <script src="/assets/myScript1.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
