@@ -8,21 +8,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import game.DatabaseQuery;
-import game.Game;
-import game.ModelAIPlayer;
-import game.ModelCard;
-import game.ModelDeck;
-import game.ModelPlayer;
+import game.*;
 
 /**
  * Top Trumps command line application
  */
 public class TopTrumpsCLIApplication {
 
+	/* MOVED buildDeck to own class (for easier use in online version)
 	// Reading deck from text file
-	public static void buildDeck(ModelDeck deck) {
-		String filename = "StarCitizenDeck.txt";
+	public static void buildDeck(ModelDeck deck, String filename) {
 		FileReader fr = null;
 		String[] attributeList = null;
 		try {
@@ -48,6 +43,7 @@ public class TopTrumpsCLIApplication {
 			System.exit(0);
 		} 		
 	}
+	*/
 
 	// Choosing amount of players
 	public static int chooseOpponents(Scanner keyboard) {
@@ -73,7 +69,7 @@ public class TopTrumpsCLIApplication {
 	// Choosing which card stat will be compared
 	public static int askForStat() {
 		Scanner scanner = new Scanner(System.in);
-		int choice = 1;
+		int choice = 0;
 		do {
 			System.out.println("Which category do you want to select?: ");
 			choice = scanner.nextInt();
@@ -85,13 +81,27 @@ public class TopTrumpsCLIApplication {
 
 	public static boolean askForNextRound() {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Move to next round? y/n");
-		String line = "";
-		while(scanner.hasNext()) line = scanner.nextLine();
-//		scanner.close();
+		String choice = "";
+		do {
+			System.out.println("Move to next round? y/n");
+			choice = scanner.next();
+		} while (!choice.toLowerCase().equals("y") && !choice.toLowerCase().equals("n"));
+		
 		boolean answer = false;
-		if(line.toLowerCase().contains("y")) answer = true; 
+		if(choice.toLowerCase().contains("y")) {
+			answer = true; 
+		}
 		return answer;
+	}
+	
+	public static String roundIntro(int x) {
+		String output = "\n";
+		String line = "------------------------X----------------------------";
+		output +=  line + "\n";
+		output += "-----------------BEGIN NEW ROUND---------------------\n";
+		output += "Round " + x + "\n";
+		output += line + "\n";
+		return output;
 	}
 
 	/**
@@ -120,8 +130,10 @@ public class TopTrumpsCLIApplication {
 			switch (userChoice) {
 			case 1:
 				// create new Deck
+				String filename = "StarCitizenDeck.txt";
 				ModelDeck modelDeck = new ModelDeck();
-				buildDeck(modelDeck);
+				ModelDeckBuilder deckBuilder = new ModelDeckBuilder(modelDeck, filename);
+				//buildDeck(modelDeck, filename);
 
 				// get number of players from user
 				int numPlayers = askForNumberOfPlayers();
@@ -130,13 +142,9 @@ public class TopTrumpsCLIApplication {
 				Game game = new Game(modelDeck, numPlayers);
 
 				// While the game isn't finished
-				while (game.activePlayers()) {	
-					System.out.println("");
-					System.out.println("------------------------X----------------------------");
-					System.out.println("-----------------BEGIN NEW ROUND---------------------");
-					System.out.println("Round " + game.getRoundCount());
-					System.out.println("------------------------X----------------------------");
-					System.out.println("");
+				while (game.activePlayers() && !userWantsToQuit) {	
+					
+					System.out.println(roundIntro(game.getRoundCount()));
 					
 					// Get and display human players information
 					if(game.userActive()) {
@@ -192,29 +200,30 @@ public class TopTrumpsCLIApplication {
 					}
 					System.out.println("-----------------------------------------------------");
 
-//					if(game.userActive()) {
-////						boolean nextRound = askForNextRound();
-//						boolean nextRound = true;
-//
-//						if(nextRound) {
-//							game.advanceRound();
-//							continue;
-//						}
-//						else {
-//							userWantsToQuit = true;
-//							continue;
-//						}
-//					}
+					if(game.userActive()) {
+						boolean nextRound = askForNextRound();
+
+						if(!nextRound) {
+							userWantsToQuit = true;
+						}
+					}
 					game.giveWinnerCards(game.getRoundWinner());
 					game.advanceRound();
 				}
-
-				// Display winning player's information, winner is the last player left
-				System.out.println(game.getPlayers().get(0).getName() + " is the winner!");
-				dbq.addGameToDB(game);
+				
+				// If the user has indicated that they wish to quit, there should be no winner statement
+				// And the game shouldn't be added to the database
+				if(!userWantsToQuit) {
+					// Display winning player's information, winner is the last player left
+					System.out.println(game.getPlayers().get(0).getName() + " is the winner!");
+					dbq.addGameToDB(game);
+				}
 				break;
 			case 2:
-				System.out.println(dbq.toString());
+				
+				// DatabaseQuery object dbq returns a String with the stats
+				// Output can be altered to be more visually appealing
+				System.out.println("\n-------- Stats --------\n" + dbq.toString());
 				break;
 
 			case 3:
