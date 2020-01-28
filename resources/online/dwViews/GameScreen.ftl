@@ -28,6 +28,7 @@
     		#game-AI-card4 h3{border: solid;}
     		button{width: 10em;}
     		img {max-width:100%; height:auto;}
+    		.container-attribute{display: none;}
 
     		/* unsure how to get all rows to only fill the used height - lots of whitespace currently */    		
 
@@ -92,6 +93,27 @@
 	    	}
 
     	</script>
+
+		<script>
+			/* 
+			 - $(variable)
+			 -	
+			*/
+			$(document).ready(function(){
+			  $(".AI-card").click(function(){
+			    $(this).hide();		// can change $(this) to something else $("<here>")
+			  });
+			});
+		</script>
+
+		<script> 
+			$(document).ready(function(){
+			  $("#game-user-card-image").click(function(){
+			    $(".container-attribute").slideDown("slow");
+			  });
+			});
+		</script>
+
     	<!-- ALL stylesheets here
     	
     	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -128,8 +150,10 @@
 
 		<div class = "container" id = "game-choose-opponents">
 			<!-- will hold the "How many opponents would you like to face?" input/button (then greyed out during game) -->
-			<h3>How many opponents would you like to face?<input type="text" name="numberOfOpponents"><input type="submit" onclick="unHideBoard()"></h3>
+			<h3>How many opponents would you like to face?</h3><input type="text" name="numberOfOpponents"><input type="submit" onclick="unHideBoard()">
 		</div>
+
+		<hr>
 
 		<div class = "container" id = "game-board">
 			<div class = "container" id = "game-user-card">
@@ -137,19 +161,19 @@
 					<img src = "/assets/spaceship_test.jpg">
 					<h2> User active card placeholder </h2>
 				</div>
-				<div class = "container" id = "game-user-card-attr1">
+				<div class = "container-attribute" id = "game-user-card-attr1">
 					<!--<button><h3>User Attribute 1</h3></button> -->
 				</div>
-				<div class = "container" id = "game-user-card-attr2">
+				<div class = "container-attribute" id = "game-user-card-attr2">
 					<!--<button><h3>User Attribute 2</h3></button> -->
 				</div>
-				<div class = "container" id = "game-user-card-attr3">
+				<div class = "container-attribute" id = "game-user-card-attr3">
 					<!--<button><h3>User Attribute 3</h3></button> -->
 				</div>
-				<div class = "container" id = "game-user-card-attr4">
+				<div class = "container-attribute" id = "game-user-card-attr4">
 					<!--<button><h3>User Attribute 4</h3></button> -->
 				</div>
-				<div class = "container" id = "game-user-card-attr5">
+				<div class = "container-attribute" id = "game-user-card-attr5">
 					<!--<button><h3>User Attribute 5</h3></button> -->
 				</div>
 			</div>
