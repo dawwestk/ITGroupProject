@@ -10,17 +10,17 @@ public class ModelDeckBuilder {
 	private ModelDeck deck;
 	private String filename;
 	
-	public ModelDeckBuilder(ModelDeck d, String s) {
+	public ModelDeckBuilder(ModelDeck d, String s) throws IOException{
 		deck = d;
 		filename = s;
 		this.buildDeck(deck, filename);
 	}
 	
 	// Reading deck from text file
-	private static void buildDeck(ModelDeck deck, String filename) {
+	private void buildDeck(ModelDeck deck, String filename) throws IOException {
 		FileReader fr = null;
 		String[] attributeList = null;
-		try {
+//		try {
 			File file = new File(filename);
 			fr = new FileReader(file);
 			Scanner text = new Scanner(fr);
@@ -38,10 +38,10 @@ public class ModelDeckBuilder {
 				}
 			}
 
-		} catch (IOException e) {
-			System.out.println("Could not open file.");
-			System.exit(0);
-		} 		
+//		} catch (IOException e) {
+//			System.out.println("Could not open file.");
+//			System.exit(0);
+//		} 		
 	}
 	
 }

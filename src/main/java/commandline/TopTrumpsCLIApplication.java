@@ -132,7 +132,12 @@ public class TopTrumpsCLIApplication {
 				// create new Deck
 				String filename = "StarCitizenDeck.txt";
 				ModelDeck modelDeck = new ModelDeck();
+				try {
 				ModelDeckBuilder deckBuilder = new ModelDeckBuilder(modelDeck, filename);
+				} catch(IOException e) {
+					System.out.println("Deck file could not be opened.");
+					System.exit(0);
+				}
 				//buildDeck(modelDeck, filename);
 
 				// get number of players from user
