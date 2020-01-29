@@ -32,6 +32,7 @@ public class DatabaseQuery {
 	private HashMap<String, Integer> statsToAdd;
 	private HashMap<String, String> previousStats;
 	private int lastGameID;
+	private String humanPlayerName = "Player One";
 	
 	public DatabaseQuery(String server, String db) {
 		connString += server + "/" + db;
@@ -122,24 +123,23 @@ public class DatabaseQuery {
 		
 		statsToAdd.put("gameid", lastGameID); // pulled from previous database info
 		
-		/*
-		if(g.getPlayers().get(0).getName().equals("Player One")) {
-			stats.put("winhuman", 1);
+		if(g.getPlayers().get(0).getName().equals(humanPlayerName)) {
+			statsToAdd.put("winhuman", 1);
 		} else if(g.getPlayers().get(0).getName().substring(0,3).equals("CPU")){
-			stats.put("winai", 1);
+			statsToAdd.put("winai", 1);
 		}
 		
-		stats.put("rounds", g.getRounds());
-		stats.put("draws", g.getRounds());
-		stats.put("humanrounds", g.getRounds());
-		stats.put("cpu1rounds", g.getRounds());
-		stats.put("cpu2rounds", g.getRounds());
-		stats.put("cpu3rounds", g.getRounds());
-		stats.put("cpu4rounds", g.getRounds());
+		statsToAdd.put("rounds", g.getRoundCount());
+		statsToAdd.put("draws", g.getDrawCount());
+		statsToAdd.put("humanrounds", g.getRoundsWon(humanPlayerName));
+		statsToAdd.put("cpu1rounds", g.getRoundsWon("CPU-1"));
+		statsToAdd.put("cpu2rounds", g.getRoundsWon("CPU-2"));
+		statsToAdd.put("cpu3rounds", g.getRoundsWon("CPU-3"));
+		statsToAdd.put("cpu4rounds", g.getRoundsWon("CPU-4"));
 		
-		*/
 		
 		// Test Data
+		/*
 		statsToAdd.put("winai", 1);
 		statsToAdd.put("rounds", 40);
 		statsToAdd.put("draws", 4);
@@ -148,6 +148,7 @@ public class DatabaseQuery {
 		statsToAdd.put("cpu2rounds", 5);
 		statsToAdd.put("cpu3rounds", 0);
 		statsToAdd.put("cpu4rounds", 5);
+		*/
 
 		// INSERT INTO toptrumps.stats(gameid, winhuman, winai, rounds, draws, humanrounds, cpu1rounds, cpu2rounds, cpu3rounds, cpu4rounds) 
 		// VALUES(2, 0, 1, 50, 4, 5, 10, 10, 5, 10)

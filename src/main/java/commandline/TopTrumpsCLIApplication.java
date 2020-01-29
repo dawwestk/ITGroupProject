@@ -146,6 +146,8 @@ public class TopTrumpsCLIApplication {
 				// Create new game
 				Game game = new Game(modelDeck, numPlayers);
 
+				System.err.print(game.printRoundsWon());
+				
 				// While the game isn't finished
 				while (game.activePlayers() && !userWantsToQuit) {	
 					
@@ -156,10 +158,12 @@ public class TopTrumpsCLIApplication {
 						System.out.println("You drew " + game.getUser().getActiveCard().printCardInfo());
 					}
 
+					/* "Cheat mode" - prints all CPU cards
 					System.out.println("");
 					for (int i = 1; i < game.getNumPlayers(); i++) {
 						System.out.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCard().printCardInfo());
 					}  
+					*/
 					
 					// display all player's card names
 					for (int i = 1; i < game.getNumPlayers(); i++) {
@@ -198,8 +202,9 @@ public class TopTrumpsCLIApplication {
 					System.out.println("------------------Round Summary----------------------");
 					if(hasWinner) {
 						System.out.println(game.getRoundWinner().getName() + " has won!  His card was: " + 
-								game.getRoundWinner().getActiveCard().getName() + " and it's " + stat + " attribute was " + 
-								game.getRoundWinner().getActiveCard().getValue(stat)+"\n");
+						game.getRoundWinner().getActiveCard().getName() + " and it's " + stat + " attribute was " + 
+						game.getRoundWinner().getActiveCard().getValue(stat)+"\n");
+						
 					} else {
 						System.out.println("There has been a draw.\n");
 					}
@@ -221,6 +226,9 @@ public class TopTrumpsCLIApplication {
 				if(!userWantsToQuit) {
 					// Display winning player's information, winner is the last player left
 					System.out.println(game.getPlayers().get(0).getName() + " is the winner!");
+
+					//System.err.print(game.printRoundsWon());
+					//System.err.print(game.getDrawCount());
 					dbq.addGameToDB(game);
 				}
 				break;

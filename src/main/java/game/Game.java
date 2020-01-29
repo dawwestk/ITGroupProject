@@ -19,7 +19,7 @@ public class Game {
 	
 	public Game(ModelDeck deck, int numPlayers) {
 		this.user = new ModelPlayer(this.playerName);
-		this.players = new ArrayList<ModelPlayer>(numPlayers);
+		this.players = new ArrayList<ModelPlayer>();
 		this.players.add(this.user);
 		this.deck = deck;
 		this.roundsWon = new HashMap<String,Integer>();		
@@ -33,7 +33,8 @@ public class Game {
 		}
 		
 		// Add player names to roundsWon and set rounds won to 0
-		for(int i = 0 ; i < numPlayers; ++i) {
+		this.roundsWon.put(this.user.getName(), 0);
+		for(int i = 0 ; i < players.size(); ++i) {
 			this.roundsWon.put(this.getPlayerName(i), 0);
 		}
 		
@@ -43,6 +44,15 @@ public class Game {
 		
 		this.roundCount = 1;
 		this.dealDeck();
+	}
+	
+	// prints the roundsWon HashMap for debugging
+	public String printRoundsWon() {
+		String output = "";
+		for(String s : this.roundsWon.keySet()) {
+			output += s + ": " + this.roundsWon.get(s) + " rounds won.\n";
+		}
+		return output;
 	}
 
 	// number of rounds a player has won 
@@ -116,7 +126,8 @@ public class Game {
 	// increase number of rounds a player has won by 1
 	private void incrementPlayerWinCount(ModelPlayer player) {
 		Integer rounds = this.getRoundsWon(player);
-		++rounds;
+		rounds++;
+		this.roundsWon.put(player.getName(), rounds);
 	}
 	
 	// on a draw, all cards go to the communal pile
@@ -132,7 +143,7 @@ public class Game {
 	}	
 	
 	private void incrementDrawCount() {
-		++this.numRoundsDrawn;
+		this.numRoundsDrawn++;
 	}
 	
 	// get number of rounds that were a draw
