@@ -106,7 +106,7 @@ public class Game {
 				currentWinningPlayer = otherPlayer; // otherPlayer is new currentWinningPlayer
 				drawCount = 0;
 			}else if (otherAttributeHigher == 0) {
-				System.out.println("Draw count " + drawCount++); 
+				//System.out.println("Draw count " + drawCount++); 
 			}
 		}
 

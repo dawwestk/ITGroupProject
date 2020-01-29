@@ -67,7 +67,7 @@ public class TopTrumpsCLIApplication {
 	}
 
 	// Choosing which card stat will be compared
-	public static int askForStat() {
+	public static int askForStat(boolean userJustChoseAttribute) {
 		Scanner scanner = new Scanner(System.in);
 		int choice = 0;
 		do {
@@ -76,6 +76,7 @@ public class TopTrumpsCLIApplication {
 //			scanner.nextLine();
 		} while (choice < 1 || choice > 5);
 //		scanner.close();
+		userJustChoseAttribute = true;
 		return choice;
 	}
 
@@ -96,10 +97,9 @@ public class TopTrumpsCLIApplication {
 	
 	public static String roundIntro(int x) {
 		String output = "\n";
-		String line = "------------------------X----------------------------";
+		String line = "-----------------------------------------------------";
 		output +=  line + "\n";
-		output += "-----------------BEGIN NEW ROUND---------------------\n";
-		output += "Round " + x + "\n";
+		output += "------------------- ROUND " + String.format("%3s", x) + " -----------------------\n";
 		output += line + "\n";
 		return output;
 	}
@@ -118,6 +118,7 @@ public class TopTrumpsCLIApplication {
 
 		// State
 		boolean userWantsToQuit = false; // flag to check whether the user wants to quit the application
+		boolean userJustChoseAttribute = false;
 		Scanner scanner = new Scanner(System.in);
 		// Loop until the user wants to exit the game
 		superLoop:while (!userWantsToQuit) {
@@ -152,6 +153,10 @@ public class TopTrumpsCLIApplication {
 				while (game.activePlayers() && !userWantsToQuit) {	
 					
 					System.out.println(roundIntro(game.getRoundCount()));
+
+					for (int i = 0; i < game.getNumPlayers(); i++) {
+						System.out.println(game.getPlayer(i).getInfo());
+					}
 					
 					// Get and display human players information
 					if(game.userActive()) {
@@ -175,7 +180,9 @@ public class TopTrumpsCLIApplication {
 					// user goes first
 					if(game.usersTurn()) {	                    
 						// ask user for the stat they want to play                        
-						choice = askForStat();
+						choice = askForStat(userJustChoseAttribute);
+					} else {
+						userJustChoseAttribute = false;
 					}
 
 					stat = game.getStat(choice);
@@ -188,10 +195,6 @@ public class TopTrumpsCLIApplication {
 					// Check if win or draw
 					boolean hasWinner = game.hasWinner(stat);
 
-					for (int i = 0; i < game.getNumPlayers(); i++) {
-						System.out.println(game.getPlayer(i).getInfo());
-					}
-
 					// Check size of communal pile
 					if (game.communalDeckSize() == 0) {
 						System.out.println("\nCommunalPile is empty.\n");
@@ -201,7 +204,7 @@ public class TopTrumpsCLIApplication {
 
 					System.out.println("------------------Round Summary----------------------");
 					if(hasWinner) {
-						System.out.println(game.getRoundWinner().getName() + " has won!  His card was: " + 
+						System.out.println(game.getRoundWinner().getName() + " has won!  Their card was: " + 
 						game.getRoundWinner().getActiveCard().getName() + " and it's " + stat + " attribute was " + 
 						game.getRoundWinner().getActiveCard().getValue(stat)+"\n");
 						
@@ -210,7 +213,7 @@ public class TopTrumpsCLIApplication {
 					}
 					System.out.println("-----------------------------------------------------");
 
-					if(game.userActive()) {
+					if(game.userActive() && !userJustChoseAttribute) {
 						boolean nextRound = askForNextRound();
 
 						if(!nextRound) {
