@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Game {
@@ -13,17 +14,27 @@ public class Game {
 	private String playerName = "Player One";
 	private ModelPlayer winningPlayer;
 	private ModelPlayer activePlayer;
-
+	private HashMap<String, Integer> roundsWon;
+	int numRoundsDrawn;
+	
 	public Game(ModelDeck deck, int numPlayers) {
 		this.user = new ModelPlayer(this.playerName);
 		this.players = new ArrayList<ModelPlayer>(numPlayers);
 		this.players.add(this.user);
 		this.deck = deck;
+		this.roundsWon = new HashMap<String,Integer>();		
+		this.numRoundsDrawn = 0;
 		
 		this.cp = this.deck.getCP();
+		
 		for (int i = 0; i < numPlayers; i++) {
 			String playerName = "CPU-" + (i + 1);
 			this.addPlayer(playerName);
+		}
+		
+		// Add player names to roundsWon and set rounds won to 0
+		for(int i = 0 ; i < numPlayers; ++i) {
+			this.roundsWon.put(this.getPlayerName(i), 0);
 		}
 		
 		this.winningPlayer = null;
@@ -34,6 +45,16 @@ public class Game {
 		this.dealDeck();
 	}
 
+	// number of rounds a player has won 
+	public Integer getRoundsWon(String playerName) {
+		return roundsWon.get(playerName);
+	}
+	
+	// convenience method for number of rounds a player has won
+	private Integer getRoundsWon(ModelPlayer player) {
+		return getRoundsWon(player.getName());
+	}
+	
 	private void playerToGoFirst() {
 		this.activePlayer = this.getPlayer(this.whoFirst());
 		this.winningPlayer = this.activePlayer;
@@ -83,6 +104,7 @@ public class Game {
 		if (drawCount<1) {
 			this.setRoundWinner(currentWinningPlayer);
 			this.setActivePlayer(currentWinningPlayer);
+			this.incrementPlayerWinCount(currentWinningPlayer);
 			return true;
 		} else {
 			this.roundWasDraw();
@@ -90,8 +112,13 @@ public class Game {
 
 		return false;
 	}
-
-
+	
+	// increase number of rounds a player has won by 1
+	private void incrementPlayerWinCount(ModelPlayer player) {
+		Integer rounds = this.getRoundsWon(player);
+		++rounds;
+	}
+	
 	// on a draw, all cards go to the communal pile
 	private void roundWasDraw() {
 		for (int i = 0; i < this.players.size(); i++) {
@@ -101,7 +128,17 @@ public class Game {
 				this.players.remove(this.players.get(i));
 			}
 		}
+		this.incrementDrawCount();
 	}	
+	
+	private void incrementDrawCount() {
+		++this.numRoundsDrawn;
+	}
+	
+	// get number of rounds that were a draw
+	public int getDrawCount() {
+		return this.numRoundsDrawn;
+	}
 	
 	public void giveWinnerCards(ModelPlayer winner) {
 		boolean communalPileEmpty;

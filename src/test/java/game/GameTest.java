@@ -41,7 +41,7 @@ public class GameTest {
 	}
 	
 	@Test
-	public void getRoundWinnerNotNull() {
+	public void getRoundWinnerNotNullTest() {
 		int numPlayers = 4;
 		Game game = new Game(deck,numPlayers);
 		ModelPlayer expected = game.getRoundWinner();
@@ -54,7 +54,7 @@ public class GameTest {
 	 * particular round.
 	 */
 	@Test
-	public void getRoundWinnerHumanPlayer() {
+	public void getRoundWinnerHumanPlayerTest() {
 		int numPlayers = 4;
 		Game game = new Game(deck,numPlayers);
 		// int choice = 0;
@@ -63,6 +63,33 @@ public class GameTest {
 		ModelPlayer player = game.getRoundWinner();
 		String expected = "Player One";
 		assertEquals(expected, player.getName());
+	}
+	
+	@Test
+	/*
+	 * Number of rounds drawn should be zero to begin
+	 */
+	public void getDrawCountZeroTest() {
+		int numPlayers = 4;
+		Game game = new Game(deck,numPlayers);
+		int expected = 0;
+		int actual = game.getDrawCount();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void getWinCountRoundNotStartedTest(){
+		int numPlayers = 4;
+		Game game = new Game(deck,numPlayers);
+		int expected = 0;
+		int actual = -1;
+		String playerName = "";
+		for(int i = 0 ; i < numPlayers ; ++i) {
+			playerName = game.getPlayerName(i);
+			actual = game.getRoundsWon(playerName);
+			assertEquals(expected, actual);
+		}
+		assertTrue(true);
 	}
 	
 	@AfterEach
