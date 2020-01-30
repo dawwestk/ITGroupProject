@@ -7,16 +7,7 @@
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
     	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-    	<!-- ALL stylesheets here
     	
-    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/flick/jquery-ui.css">
-		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/TREC_IS/bootstrap.min.css">
-		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex.css"/>
-    	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex-theme-os.css"/>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-		
-		-->
 
 		<!-- Optional Styling of the Website, for the demo I used Bootstrap (see https://getbootstrap.com/docs/4.0/getting-started/introduction/) -->
 		
@@ -26,7 +17,7 @@
 		
 	</head>
 
-    <body> <!-- onload="initalize()"> Call the initalize method when the page loads -->
+    <body onload="loadTable()">  <!-- onload="initalize()"> Call the initalize method when the page loads -->
     	
     	<div class="container">
 
@@ -34,26 +25,56 @@
 			<h1>Top Trumps Game Stats!</h1>
 
 		</div>
-		
-		<script type="text/javascript">
-		
-			// Method that is called on page load
-			function initalize() {
-			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
-				
-				// For example, lets call our sample methods
-				helloJSONList();
-				helloWord("Student");
-				
+
+		<div>
+			<p id = 'tablePlaceholder'>
+				Some text here.
+			</p>
+		</div>
+
+		<div id = 'statsTable'>
+
+		</div>
+
+		<div>
+			<button onclick="alert('no linked function, just alert')">Press here</button>
+		</div>
+
+		<script>
+			function loadTable(){
+				getStats();
 			}
-			
+
+		</script>
+
+		<script type="text/javascript">
 			// -----------------------------------------
 			// Add your other Javascript methods Here
 			// -----------------------------------------
-		
+
+			function getStats(){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStats"); // Request type and URL
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+ 					//alert("1 - " + responseText);
+					document.getElementById('tablePlaceholder').innerHTML = "<ul>" + responseText + "</ul>" // Changing element innerHTML from function - works
+					//putStatsInTable(responseText);
+					//return responseText;
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();
+			}
+
 			// This is a reusable method for creating a CORS request. Do not edit this.
 			function createCORSRequest(method, url) {
   				var xhr = new XMLHttpRequest();

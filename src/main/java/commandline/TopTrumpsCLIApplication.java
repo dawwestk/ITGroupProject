@@ -134,7 +134,7 @@ public class TopTrumpsCLIApplication {
 				String filename = "StarCitizenDeck.txt";
 				ModelDeck modelDeck = new ModelDeck();
 				try {
-				ModelDeckBuilder deckBuilder = new ModelDeckBuilder(modelDeck, filename);
+					ModelDeckBuilder deckBuilder = new ModelDeckBuilder(modelDeck, filename);
 				} catch(IOException e) {
 					System.out.println("Deck file could not be opened.");
 					System.exit(0);
