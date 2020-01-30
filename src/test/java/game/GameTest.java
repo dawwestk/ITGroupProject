@@ -92,6 +92,21 @@ public class GameTest {
 		assertTrue(true);
 	}
 	
+	@Test
+	public void getWinCountRound1Test(){
+		int numPlayers = 4;
+		Game game = new Game(deck,numPlayers);
+		int expected = 0;
+		int actual = -1;
+		String playerName = "";
+		for(int i = 0 ; i < numPlayers ; ++i) {
+			playerName = game.getPlayerName(i);
+			actual = game.getRoundsWon(playerName);
+			assertEquals(expected, actual);
+		}
+		assertTrue(true);
+	}
+	
 	@AfterEach
 	/*
 	 * deck is null after each test
