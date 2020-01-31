@@ -3,6 +3,7 @@ package online.dwResources;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,8 +14,11 @@ import javax.ws.rs.core.MediaType;
 
 import online.configuration.TopTrumpsJSONConfiguration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+
+import game.*;
 
 @Path("/toptrumps") // Resources specified here should be hosted at http://localhost:7777/toptrumps
 @Produces(MediaType.APPLICATION_JSON) // This resource returns JSON content
@@ -27,14 +31,15 @@ import com.fasterxml.jackson.databind.ObjectWriter;
  * 
  * Below are provided some sample methods that illustrate how to create
  * REST API methods in Dropwizard. You will need to replace these with
- * methods that allow a TopTrumps game to be controlled from a Web page.
+ * methods that allow a TopTrumps game to be controled from a Web page.
  */
 public class TopTrumpsRESTAPI {
 
 	/** A Jackson Object writer. It allows us to turn Java objects
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
-	private static int counter = 1;
+	private String deckFile;
+	private DatabaseQuery dbq;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -47,12 +52,21 @@ public class TopTrumpsRESTAPI {
 		// Add relevant initalization here
 		// ----------------------------------------------------
 		
-		// 
-		String deckFileName = conf.getDeckFile();
-		System.out.println(deckFileName);
+		dbq = new DatabaseQuery("localhost", "postgres", "postgres");
 		
-		// Using GUI, set number of AI players (still 1-4)
-		// set inside conf file using conf.setNumAIPlayers();
+		deckFile = conf.getDeckFile();
+		ModelDeck deck = new ModelDeck();
+		try {
+			ModelDeckBuilder deckBuilder = new ModelDeckBuilder(deck, deckFile);
+		} catch(IOException e) {
+			System.out.println("Deck file could not be opened.");
+			System.exit(0);
+		}
+		int numPlayers = conf.getNumAIPlayers();	// will eventually pull from GUI
+		
+		Game game = new Game(deck, numPlayers);
+		
+		//System.err.println(dbq.toString());
 		
 		
 	}
@@ -60,15 +74,30 @@ public class TopTrumpsRESTAPI {
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
+	
 	@GET
-	@Path("/printStuff")
-	public void printStuff() {
-		try {
-			System.out.println(helloJSONList());
-			System.out.println(counter++);		// increments the static variable as expected - useful for in-game 
-		} catch(IOException e) {
+	@Path("/getStats/")
+	public String getStats() throws IOException {
+		String stats = dbq.toString();
+		Scanner s = new Scanner(stats);
+		
+		/*
+		ArrayList<String> list = new ArrayList<String>();
+		while(s.hasNext()) {
+			String nextEntry = s.nextLine();
+			nextEntry = nextEntry.replace("\n", "");
 			
+			nextEntry = "<li>" + nextEntry + "</li>";
+			list.add(nextEntry);
 		}
+		
+		String statsAsJSONString = list.toString();//oWriter.writeValueAsString(list);
+		statsAsJSONString = statsAsJSONString.replace("[", "");
+		statsAsJSONString = statsAsJSONString.replace("]", "");
+		statsAsJSONString = statsAsJSONString.replace(",", "");
+		*/
+		
+		return stats;
 	}
 	
 	@GET
@@ -89,8 +118,6 @@ public class TopTrumpsRESTAPI {
 		// Jackson seralization, assuming that the Java objects are not too complex.
 		String listAsJSONString = oWriter.writeValueAsString(listOfWords);
 		
-		// Testing output in console
-		//System.out.println(listAsJSONString);
 		return listAsJSONString;
 	}
 	
@@ -103,9 +130,7 @@ public class TopTrumpsRESTAPI {
 	 * @throws IOException
 	 */
 	public String helloWord(@QueryParam("Word") String Word) throws IOException {
-		// This method is called from the HTML code (initialise() method)
-		System.out.println("Can also affect the console here");	// this is printed to the terminal - can affect "offline" variables
-		return "Hello "+Word + " testing adding input to TopTrumpsRESTAPI.java";
+		return "Hello "+Word;
 	}
 	
 }
