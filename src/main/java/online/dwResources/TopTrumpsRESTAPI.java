@@ -52,7 +52,7 @@ public class TopTrumpsRESTAPI {
 		// Add relevant initalization here
 		// ----------------------------------------------------
 		
-		dbq = new DatabaseQuery("localhost", "postgres");
+		dbq = new DatabaseQuery("localhost", "postgres", "postgres");
 		
 		deckFile = conf.getDeckFile();
 		ModelDeck deck = new ModelDeck();

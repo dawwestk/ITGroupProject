@@ -123,7 +123,7 @@ public class TopTrumpsCLIApplication {
 		// Loop until the user wants to exit the game
 		superLoop:while (!userWantsToQuit) {
 			// Read stats from the database
-			DatabaseQuery dbq = new DatabaseQuery("localhost", "postgres");
+			DatabaseQuery dbq = new DatabaseQuery("localhost", "postgres", "postgres");
 			
 			System.out.print("1. Play Game." + "\n2. Statistics." + "\n3. Quit." + "\nUser Choice: ");
 			int userChoice = scanner.nextInt();

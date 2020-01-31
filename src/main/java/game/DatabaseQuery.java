@@ -29,15 +29,17 @@ public class DatabaseQuery {
 	private Connection c = null;
 	private String connString = "jdbc:postgresql://";
 	private String database;
+	private String password;
 	private HashMap<String, Integer> statsToAdd;
 	private HashMap<String, String> previousStats;
 	private int lastGameID;
 	private String humanPlayerName = "Player One";
 	
-	public DatabaseQuery(String server, String db) {
+	public DatabaseQuery(String server, String db, String pass) {
 		connString += server + "/" + db;
 		database = db;
-		c = setup(c, connString, database, database);
+		password = pass;
+		c = setup(c, connString, database, password);
 		statsToAdd = new HashMap<String, Integer>();
 		previousStats = new HashMap<String, String>();
 		pullTableStats(previousStats);
