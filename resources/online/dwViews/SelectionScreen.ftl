@@ -7,24 +7,15 @@
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
     	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-
-    	<link rel="stylesheet" href="toptrumps.css"/>
+    	<link rel="stylesheet" href="/assets/css/bootstrap.css"/>
+    	<link rel="stylesheet" href="/assets/js/bootstrap.js"/>
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     	<style>
     		.container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
     		#selection-grid{display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px}
     	</style>
-
-    	<!-- ALL stylesheets here
-    	
-    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/flick/jquery-ui.css">
-		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/TREC_IS/bootstrap.min.css">
-		<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex.css"/>
-    	<link rel="stylesheet" href="http://dcs.gla.ac.uk/~richardm/assets/stylesheets/vex-theme-os.css"/>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-		
-		-->
 
 		<!-- Optional Styling of the Website, for the demo I used Bootstrap (see https://getbootstrap.com/docs/4.0/getting-started/introduction/) -->
 		
@@ -43,30 +34,27 @@
 		</div>
 		<div class="container" id = "selection-text">
 			<h2>Would you like to play a game or view stats?</h2>
-			
-			<!--
-
-    	<script type="text/javascript">
-    		$( document ).ready(function() {
-			    $( "a" ).click(function( event ) {
-			        alert( "Starting a new game!" );
-			    });
-			});
-    	</script>
-
-    		-->
 		</div>
 
+		<div class="container px-lg-5">
+		  <div class="row mx-lg-n5">
+		    <div class="col py-3 px-lg-5 border bg-light"><button type="button" class="btn btn-primary btn-lg btn-block" onclick="window.location.href = '/toptrumps/game/';">Start a New Game</button></div>
+		    <div class="col py-3 px-lg-5 border bg-light"><button type="button" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href = '/toptrumps/stats/';">See Statistics</button></div>
+		  </div>
+		</div>
+
+<!--
 		<div class="container" id = "selection-grid">
 			<div class="container" id = "selection-new-game">
-				<!-- <a href="http://localhost:7777/toptrumps/game/">New game</a> -->
+				<a href="http://localhost:7777/toptrumps/game/">New game</a>
 				<button><a href="http://localhost:7777/toptrumps/game/"><h3>New Game</h3></a></button>
 			</div>
 			<div class="container" id = "selection-stats">
-				<!-- <a href="http://localhost:7777/toptrumps/game/">New game</a> -->
+				<a href="http://localhost:7777/toptrumps/game/">New game</a>
 				<button><a href="http://localhost:7777/toptrumps/stats/"><h3>View Stats</h3></a></button>
 			</div>
 		</div>
+-->
 		
 		<script type="text/javascript">
 		
