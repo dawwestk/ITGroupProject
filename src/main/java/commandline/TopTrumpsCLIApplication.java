@@ -45,25 +45,22 @@ public class TopTrumpsCLIApplication {
 	}
 	*/
 
-	// Choosing amount of players
-	public static int chooseOpponents(Scanner keyboard) {
-		System.out.print("How many opponents would you like to face (max 4)? ");
-		int opponents = keyboard.nextInt();
-//		keyboard.nextLine();
-		return opponents;
-	}
-
 	// Creating players based on choice
 	public static int askForNumberOfPlayers() {
-		Scanner keyboard = new Scanner(System.in);
-		int opponents = chooseOpponents(keyboard);
+		Scanner scanner = new Scanner(System.in);
+		int choice = 0;
+		
+		do {
+			System.out.println("How many opponents would you like to face (max 4)? ");
+			while(!scanner.hasNextInt()) {	
+				System.out.println("Please enter a number (1-4): ");
+				scanner.next();
+			}
+			choice = scanner.nextInt();
+		} while (choice < 1 || choice > 4);
 
-		while (opponents <= 0 || opponents >= 5) { 
-			System.out.println("Sorry, you must face 1-4 opponents.");
-			opponents = chooseOpponents(keyboard);
-		}
 //		keyboard.close();
-		return opponents;
+		return choice;
 	}
 
 	// Choosing which card stat will be compared
