@@ -72,8 +72,11 @@ public class TopTrumpsCLIApplication {
 		int choice = 0;
 		do {
 			System.out.println("Which category do you want to select?: ");
+			while(!scanner.hasNextInt()) {	
+				System.out.println("Please enter a number (1-5): ");
+				scanner.next();
+			}
 			choice = scanner.nextInt();
-//			scanner.nextLine();
 		} while (choice < 1 || choice > 5);
 //		scanner.close();
 		userJustChoseAttribute = true;
