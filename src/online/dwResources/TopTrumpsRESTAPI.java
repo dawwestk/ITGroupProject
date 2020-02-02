@@ -7,7 +7,9 @@ import java.util.Scanner;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -39,7 +41,8 @@ public class TopTrumpsRESTAPI {
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 	private String deckFile;
-	private DatabaseQuery dbq;
+	private DatabaseQuery dbq = null;
+	private int numPlayers = 0;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -52,7 +55,11 @@ public class TopTrumpsRESTAPI {
 		// Add relevant initalization here
 		// ----------------------------------------------------
 		
-		dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+		try {
+			dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+		} catch (Exception e) {
+			System.out.println(dbq.getNoConnection());
+		}
 		
 		deckFile = conf.getDeckFile();
 		ModelDeck deck = new ModelDeck();
@@ -62,7 +69,8 @@ public class TopTrumpsRESTAPI {
 			System.out.println("Deck file could not be opened.");
 			System.exit(0);
 		}
-		int numPlayers = conf.getNumAIPlayers();	// will eventually pull from GUI
+		
+		numPlayers = conf.getNumAIPlayers();	// will eventually pull from GUI
 		
 		Game game = new Game(deck, numPlayers);
 		
@@ -74,6 +82,38 @@ public class TopTrumpsRESTAPI {
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
+
+	
+	@POST
+	@Path("/game/setPlayers")
+	/*
+	 * 
+	 * See GameScreen.ftl for method called setPlayers(int) which calls this
+	 * 
+	 * This has @POST above as we are using it to pass information back.
+	 * 
+	 */
+	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
+		System.out.println("Setting number of players to " + players);
+		numPlayers = players;
+	}
+	
+	@GET
+	@Path("/game/getPlayers")
+	/*
+	 * 
+	 * See GameScreen.ftl for method called getPlayers which calls this
+	 * 
+	 * This has @GET above as we are requesting info.
+	 * 
+	 * To test this just go to the URL http://localhost:7777/toptrumps/game/getPlayers and 
+	 * 	it should say the number (and nothing else)
+	 * 
+	 */
+	public int getPlayers() throws IOException {
+		System.out.println("Number of players = " + numPlayers);
+		return numPlayers;
+	}
 	
 	@GET
 	@Path("/getStats/")
