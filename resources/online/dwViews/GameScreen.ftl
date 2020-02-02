@@ -67,9 +67,27 @@
 			<h1>Top Trumps Game!</h1>
 		</div>
 
-		<div class = "container" id = "game-choose-opponents">
-			<!-- will hold the "How many opponents would you like to face?" input/button (then greyed out during game) -->
-			<h3>How many opponents would you like to face?</h3><input type="text" name="numberOfOpponents"><input type="submit"> <!-- onclick="unHideBoard()"> -->
+		<div class = "row">
+			<div class = "col">
+				<h3>How many opponents would you like to face?</h3>
+			</div>
+			<div class = "col">
+				<div class="form-group">
+				    <label for="exampleFormControlSelect1">Select number of opponents...</label>
+				    <select class="form-control" id="numberOfOpponents">
+				      <option id="1">1</option>
+				      <option id="2">2</option>
+				      <option id="3">3</option>
+				      <option id="4">4</option>
+				    </select>  	
+				</div>
+			</div>
+			<div class = "col">
+				<button action="http://localhost:7777/toptrumps/game/getPlayers/" class="btn btn-outline-primary" onclick="selectPlayers()">Start Game</button>
+			</div>
+		</div>
+
+			<!--<input type="text" name="numberOfOpponents"><input type="submit" action="http://localhost:7777/toptrumps/game/setPlayers?players=3" onclick="setPlayers(3)"> <!-- onclick="unHideBoard()"> -->
 		</div>
 
 		<hr>
@@ -143,36 +161,57 @@
 			</div>
 		</div>
 
-		<!-- Could keep this column layout as container for Grid items
-			<div class="container">
-			  <div class="row">
-			    <div class="col-sm">
-			      1) One of three columns
-			    </div>
-			    <div class="col-sm">
-			      2) Two of three columns
-			    </div>
-			    <div class="col-sm">
-			      3) Three of three columns
-			    </div>
-			  </div>
-			  <div class="row">
-			    <div class="col-sm">
-			      A) One of three columns
-			    </div>
-			    <div class="col-sm">
-			      B) One of three columns
-			    </div>
-			    <div class="col-sm">
-			      C) One of three columns
-			    </div>
-			  </div>
-			</div>
-
-		-->
+		<script>
+			function selectPlayers() {
+			  var x = document.getElementById("numberOfOpponents").selectedIndex;
+			  //alert(document.getElementsByTagName("option")[x].value);
+			  setPlayers(document.getElementsByTagName("option")[x].value);
+			}
+		</script>
 		
 		<script type="text/javascript">
 			
+			function setPlayers(int){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/setPlayers?players="+int); // Request type and URL+parameters
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//alert(responseText + " TEST"); // lets produce an alert
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();
+			}
+
+			function getPlayers(){
+				var players = 0;
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getPlayers"); // Request type and URL+parameters
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					alert("Number of players = " + responseText); // lets produce an alert
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();	
+			}
+
 			function myFunction(a, b){
 				return a * b;
 			}
@@ -261,7 +300,7 @@
 				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
-					alert(responseText + " TEST"); // lets produce an alert
+					alert(responseText); // lets produce an alert
 				};
 				
 				// We have done everything we need to prepare the CORS request, so send it

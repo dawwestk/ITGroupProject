@@ -8,7 +8,7 @@ public class TopTrumps {
 	public static void main(String[] args) {
 		
 		System.out.println("--------------------");
-		System.out.println("--- Top Trumps   ---");
+		System.out.println("---  Top Trumps  ---");
 		System.out.println("--------------------");
 		
 		// command line switches
