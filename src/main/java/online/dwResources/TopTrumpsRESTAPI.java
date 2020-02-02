@@ -39,7 +39,7 @@ public class TopTrumpsRESTAPI {
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 	private String deckFile;
-	private DatabaseQuery dbq;
+	private DatabaseQuery dbq = null;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -52,7 +52,11 @@ public class TopTrumpsRESTAPI {
 		// Add relevant initalization here
 		// ----------------------------------------------------
 		
-		dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+		try {
+			dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+		} catch (Exception e) {
+			System.out.println(dbq.getNoConnection());
+		}
 		
 		deckFile = conf.getDeckFile();
 		ModelDeck deck = new ModelDeck();

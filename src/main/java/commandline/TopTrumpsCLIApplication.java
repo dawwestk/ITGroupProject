@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 import game.*;
@@ -15,76 +16,30 @@ import game.*;
  */
 public class TopTrumpsCLIApplication {
 
-	/* MOVED buildDeck to own class (for easier use in online version)
-	// Reading deck from text file
-	public static void buildDeck(ModelDeck deck, String filename) {
-		FileReader fr = null;
-		String[] attributeList = null;
-		try {
-			File file = new File(filename);
-			fr = new FileReader(file);
-			Scanner text = new Scanner(fr);
+	private static PrintStream ps = System.out;
 
-			while (text.hasNext()) {
-				String shipInfo = text.nextLine(); // shipInfo == card description + stats
-				String[] stats = shipInfo.split(" "); // card description + stats 
-
-				if (stats[0].toLowerCase().equals("description")) { // First row of text file
-					attributeList = new String[stats.length];
-					attributeList = stats;
-				} else { // every other row of text file
-					ModelCard card = new ModelCard(stats, attributeList);
-					deck.addCard(card);
-				}
-			}
-
-		} catch (IOException e) {
-			System.out.println("Could not open file.");
-			System.exit(0);
-		} 		
-	}
-	*/
-
-	// Creating players based on choice
-	public static int askForNumberOfPlayers() {
-		Scanner scanner = new Scanner(System.in);
+	// Combines all integer inputs with optional Strings/boundaries based on requirement
+	// Avoids re-use of code
+	public static int askForMenuChoice(Scanner scanner, String question, String invalidMessage, int lower, int upper) {
 		int choice = 0;
+		do {
+			ps.print(question);
+			while(!scanner.hasNextInt()) {	
+				ps.print(invalidMessage);
+				scanner.next();
+			}
+			choice = scanner.nextInt();
+		} while (choice < lower || choice > upper);
 		
-		do {
-			System.out.println("How many opponents would you like to face (max 4)? ");
-			while(!scanner.hasNextInt()) {	
-				System.out.println("Please enter a number (1-4): ");
-				scanner.next();
-			}
-			choice = scanner.nextInt();
-		} while (choice < 1 || choice > 4);
-
-//		keyboard.close();
 		return choice;
 	}
 
-	// Choosing which card stat will be compared
-	public static int askForStat(boolean userJustChoseAttribute) {
-		Scanner scanner = new Scanner(System.in);
-		int choice = 0;
-		do {
-			System.out.println("Which category do you want to select?: ");
-			while(!scanner.hasNextInt()) {	
-				System.out.println("Please enter a number (1-5): ");
-				scanner.next();
-			}
-			choice = scanner.nextInt();
-		} while (choice < 1 || choice > 5);
-//		scanner.close();
-		userJustChoseAttribute = true;
-		return choice;
-	}
-
+	// User is asked whether to move to the next round - String input, so differing logic from above
 	public static boolean askForNextRound() {
 		Scanner scanner = new Scanner(System.in);
 		String choice = "";
 		do {
-			System.out.println("Move to next round? y/n");
+			ps.print("Move to next round? (Y/N) ");
 			choice = scanner.next();
 		} while (!choice.toLowerCase().equals("y") && !choice.toLowerCase().equals("n"));
 		
@@ -104,6 +59,7 @@ public class TopTrumpsCLIApplication {
 		return output;
 	}
 
+
 	/**
 	 * This main method is called by TopTrumps.java when the user specifies that they want to run in
 	 * command line mode. The contents of args[0] is whether we should write game logs to a file.
@@ -115,19 +71,24 @@ public class TopTrumpsCLIApplication {
 
 		boolean writeGameLogsToFile = false; // Should we write game logs to file?
 		if (args[0].equalsIgnoreCase("true")) writeGameLogsToFile = true; // Command line selection
-
+		
+		DatabaseQuery dbq = null;
+		Scanner keyboard = new Scanner(System.in);
+		
 		// State
 		boolean userWantsToQuit = false; // flag to check whether the user wants to quit the application
 		boolean userJustChoseAttribute = false;
-		Scanner scanner = new Scanner(System.in);
 		// Loop until the user wants to exit the game
-		superLoop:while (!userWantsToQuit) {
+		while (!userWantsToQuit) {
 			// Read stats from the database
-			DatabaseQuery dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+			try {
+				dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+			} catch (Exception e){
+				ps.println(dbq.getNoConnection());
+			}
 			
-			System.out.print("1. Play Game." + "\n2. Statistics." + "\n3. Quit." + "\nUser Choice: ");
-			int userChoice = scanner.nextInt();
-//			scanner.nextLine();
+			int userChoice = askForMenuChoice(keyboard, "1. Play Game." + "\n2. Statistics." + "\n3. Quit." + "\nUser Choice: ", 
+					"Please enter a valid menu option (1-3): ", 1, 3);
 			switch (userChoice) {
 			case 1:
 				// create new Deck
@@ -136,13 +97,13 @@ public class TopTrumpsCLIApplication {
 				try {
 					ModelDeckBuilder deckBuilder = new ModelDeckBuilder(modelDeck, filename);
 				} catch(IOException e) {
-					System.out.println("Deck file could not be opened.");
+					ps.println("Deck file could not be opened.");
 					System.exit(0);
 				}
-				//buildDeck(modelDeck, filename);
 
 				// get number of players from user
-				int numPlayers = askForNumberOfPlayers();
+				int numPlayers = askForMenuChoice(keyboard, "How many opponents would you like to face (max 4)? ", 
+						"Please enter a number (1-4): ", 1, 4);
 
 				// Create new game
 				Game game = new Game(modelDeck, numPlayers);
@@ -152,27 +113,27 @@ public class TopTrumpsCLIApplication {
 				// While the game isn't finished
 				while (game.activePlayers() && !userWantsToQuit) {	
 					
-					System.out.println(roundIntro(game.getRoundCount()));
+					ps.println(roundIntro(game.getRoundCount()));
 
 					for (int i = 0; i < game.getNumPlayers(); i++) {
-						System.out.println(game.getPlayer(i).getInfo());
+						ps.println(game.getPlayer(i).getInfo());
 					}
 					
 					// Get and display human players information
 					if(game.userActive()) {
-						System.out.println("You drew " + game.getUser().getActiveCard().printCardInfo());
+						ps.println("You drew " + game.getUser().getActiveCard().printCardInfo());
 					}
 
 					/* "Cheat mode" - prints all CPU cards
-					System.out.println("");
+					ps.println("");
 					for (int i = 1; i < game.getNumPlayers(); i++) {
-						System.out.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCard().printCardInfo());
+						ps.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCard().printCardInfo());
 					}  
 					*/
 					
 					// display all player's card names
 					for (int i = 1; i < game.getNumPlayers(); i++) {
-						System.out.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCardName());
+						ps.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCardName());
 					}            	
 
 					String stat = "";
@@ -180,38 +141,40 @@ public class TopTrumpsCLIApplication {
 					// user goes first
 					if(game.usersTurn()) {	                    
 						// ask user for the stat they want to play                        
-						choice = askForStat(userJustChoseAttribute);
+						choice = askForMenuChoice(keyboard, "Which category do you want to select?: ", 
+								"Please enter a number (1-5): ", 1, 5);
+						userJustChoseAttribute = true;
 					} else {
 						userJustChoseAttribute = false;
 					}
 
 					stat = game.getStat(choice);
 
-					System.out.println("It is " + game.getActivePlayer().getName() + "'s turn.");
-					System.out.println(game.getActivePlayer().getName() + " picked attribute " + stat +"\n");    // note this is array index, not numbered attribute
-					System.out.println("Score to beat is: " + game.getActivePlayer().getActiveCard().getValue(stat) + "\n");
-					System.out.println("\t" + game.getActivePlayer().getActiveCard().printCardInfo());
+					ps.println("It is " + game.getActivePlayer().getName() + "'s turn.");
+					ps.println(game.getActivePlayer().getName() + " picked attribute " + stat +"\n");    // note this is array index, not numbered attribute
+					ps.println("Score to beat is: " + game.getActivePlayer().getActiveCard().getValue(stat) + "\n");
+					ps.println("\t" + game.getActivePlayer().getActiveCard().printCardInfo());
 
 					// Check if win or draw
 					boolean hasWinner = game.hasWinner(stat);
 
 					// Check size of communal pile
 					if (game.communalDeckSize() == 0) {
-						System.out.println("\nCommunalPile is empty.\n");
+						ps.println("\nCommunalPile is empty.\n");
 					} else {
-						System.out.println("\nCommunalPile has: " + game.communalDeckSize() + " cards in it.\n");
+						ps.println("\nCommunalPile has: " + game.communalDeckSize() + " cards in it.\n");
 					}
 
-					System.out.println("------------------Round Summary----------------------");
+					ps.println("------------------Round Summary----------------------");
 					if(hasWinner) {
-						System.out.println(game.getRoundWinner().getName() + " has won!  Their card was: " + 
+						ps.println(game.getRoundWinner().getName() + " has won!  Their card was: " + 
 						game.getRoundWinner().getActiveCard().getName() + " and it's " + stat + " attribute was " + 
 						game.getRoundWinner().getActiveCard().getValue(stat)+"\n");
 						
 					} else {
-						System.out.println("There has been a draw.\n");
+						ps.println("There has been a draw.\n");
 					}
-					System.out.println("-----------------------------------------------------");
+					ps.println("-----------------------------------------------------");
 
 					if(game.userActive() && !userJustChoseAttribute) {
 						boolean nextRound = askForNextRound();
@@ -228,18 +191,24 @@ public class TopTrumpsCLIApplication {
 				// And the game shouldn't be added to the database
 				if(!userWantsToQuit) {
 					// Display winning player's information, winner is the last player left
-					System.out.println(game.getPlayers().get(0).getName() + " is the winner!");
+					ps.println(game.getPlayers().get(0).getName() + " is the winner!");
 
-					//System.err.print(game.printRoundsWon());
-					//System.err.print(game.getDrawCount());
-					dbq.addGameToDB(game);
+					try {
+						dbq.addGameToDB(game);
+					} catch (Exception e) {
+						// no need to print explanation, handled on creation of dbq
+					}
 				}
 				break;
 			case 2:
 				
 				// DatabaseQuery object dbq returns a String with the stats
 				// Output can be altered to be more visually appealing
-				System.out.println("\n-------- Stats --------\n" + dbq.toString());
+				try {
+					ps.println("\n-------- Stats --------\n" + dbq.toString());
+				} catch(Exception e) {
+					ps.println(dbq.getNoConnection());
+				}
 				break;
 
 			case 3:
@@ -247,7 +216,6 @@ public class TopTrumpsCLIApplication {
 			}
 
 		}
-		scanner.close();
 	}
 }
 

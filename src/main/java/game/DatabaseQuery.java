@@ -34,12 +34,17 @@ public class DatabaseQuery {
 	private HashMap<String, String> previousStats;
 	private int lastGameID;
 	private String humanPlayerName = "Player One";
+	private static String noConnection = "Could not connect to database. Stats can not be viewed or recorded.";
 	
-	public DatabaseQuery(String server, String db, String pass) {
+	public DatabaseQuery(String server, String db, String pass) throws Exception {
 		connString += server + "/" + db;
 		database = db;
 		password = pass;
-		c = setup(c, connString, database, password);
+		try {	
+			c = setup(c, connString, database, password);
+		} catch (Exception e) {
+			throw e;
+		}
 		statsToAdd = new HashMap<String, Integer>();
 		previousStats = new HashMap<String, String>();
 		pullTableStats(previousStats);
@@ -54,6 +59,10 @@ public class DatabaseQuery {
 			output += key + previousStats.get(key) + "\n";
 		}
 		return output;
+	}
+	
+	public static String getNoConnection() {
+		return noConnection;
 	}
 	
 	private void pullTableStats(HashMap<String, String> map) {
@@ -91,7 +100,7 @@ public class DatabaseQuery {
 				return -1;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return -1;
 		}
 	}
@@ -179,7 +188,7 @@ public class DatabaseQuery {
 				System.out.println("Unable to add game to DB.");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -214,19 +223,21 @@ public class DatabaseQuery {
 		//System.out.println("Operation done successfully");
 	}
 	
-	public static Connection setup(Connection conn, String db, String username, String pass) {
+	public static Connection setup(Connection conn, String db, String username, String pass) throws ClassNotFoundException, SQLException {
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
-			System.out.println("Class not found");
-			e.printStackTrace();
+			//System.out.println("Class not found");
+			//e.printStackTrace();
+			throw e;
 		}
 		
 		try {
 			conn = DriverManager.getConnection(db, username, pass); 
 		} catch (SQLException e) {
-			System.out.println("SQL Exception");
-			e.printStackTrace();
+			//System.out.println("SQL Exception");
+			//e.printStackTrace();
+			throw e;
 		}
 		
 		return conn;
