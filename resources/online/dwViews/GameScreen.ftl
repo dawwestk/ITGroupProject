@@ -67,6 +67,7 @@
 			<h1>Top Trumps Game!</h1>
 		</div>
 
+		<div class = "container">
 		<div class = "row">
 			<div class = "col">
 				<h3>How many opponents would you like to face?</h3>
@@ -84,6 +85,7 @@
 			</div>
 			<div class = "col">
 				<button action="http://localhost:7777/toptrumps/game/getPlayers/" class="btn btn-outline-primary" onclick="selectPlayers()">Start Game</button>
+				<button class="btn btn-outline-secondary" onclick="unHideBoard()">Hide/Show</button>
 			</div>
 		</div>
 
@@ -160,6 +162,7 @@
 				</div>
 			</div>
 		</div>
+	</div>
 
 		<script>
 			function selectPlayers() {
@@ -167,6 +170,16 @@
 			  //alert(document.getElementsByTagName("option")[x].value);
 			  setPlayers(document.getElementsByTagName("option")[x].value);
 			}
+
+			function unHideBoard(){
+				var x = document.getElementById("game-board");
+				if (x.style.visibility === "visible") {
+				  x.style.visibility = "hidden";
+				} else {
+				  x.style.visibility = "visible";
+				}
+			}
+
 		</script>
 		
 		<script type="text/javascript">
