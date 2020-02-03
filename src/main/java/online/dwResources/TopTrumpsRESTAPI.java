@@ -131,23 +131,16 @@ public class TopTrumpsRESTAPI {
 		String stats = dbq.toString();
 		Scanner s = new Scanner(stats);
 		
-		/*
 		ArrayList<String> list = new ArrayList<String>();
 		while(s.hasNext()) {
 			String nextEntry = s.nextLine();
-			nextEntry = nextEntry.replace("\n", "");
 			
-			nextEntry = "<li>" + nextEntry + "</li>";
 			list.add(nextEntry);
 		}
 		
-		String statsAsJSONString = list.toString();//oWriter.writeValueAsString(list);
-		statsAsJSONString = statsAsJSONString.replace("[", "");
-		statsAsJSONString = statsAsJSONString.replace("]", "");
-		statsAsJSONString = statsAsJSONString.replace(",", "");
-		*/
+		String statsAsJSONString = oWriter.writeValueAsString(list);
 		
-		return stats;
+		return statsAsJSONString;
 	}
 	
 	@GET
@@ -167,6 +160,8 @@ public class TopTrumpsRESTAPI {
 		// We can turn arbatory Java objects directly into JSON strings using
 		// Jackson seralization, assuming that the Java objects are not too complex.
 		String listAsJSONString = oWriter.writeValueAsString(listOfWords);
+		listAsJSONString = listAsJSONString.replace("[", "");
+		listAsJSONString = listAsJSONString.replace("]", "");
 		
 		return listAsJSONString;
 	}

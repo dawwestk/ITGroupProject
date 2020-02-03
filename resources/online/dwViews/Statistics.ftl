@@ -70,7 +70,16 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
  					//alert("1 - " + responseText);
-					document.getElementById('tablePlaceholder').innerHTML = "<ul>" + responseText + "</ul>" // Changing element innerHTML from function - works
+ 					var r = responseText;
+ 					var string = r.replace('[', '').replace(']', '');
+ 					var array = string.split(",");
+ 					var i;
+ 					var output = "<ul>";
+ 					for(i = 0; i < array.length; i++){
+ 						output += "<li>" + array[i] + "</li>";
+ 					}
+ 					output += "</ul>";
+					document.getElementById('tablePlaceholder').innerHTML = output// Changing element innerHTML from function - works
 					//putStatsInTable(responseText);
 					//return responseText;
 				};

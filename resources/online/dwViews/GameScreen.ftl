@@ -155,7 +155,6 @@
 				if (x.style.visibility === "visible") {
 				  x.style.visibility = "hidden";
 				} else {
-				  	x.style.visibility = "visible";
 				  	var columns = "1fr 1fr";
 				  	var i;
 				  	var z = getPlayers();
@@ -165,6 +164,7 @@
 				  	}
 
 				  	x.style.gridTemplateColumns = columns;
+				  	x.style.visibility = "visible";
 				}
 			}
 
