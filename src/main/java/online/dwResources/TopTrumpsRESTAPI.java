@@ -1,5 +1,6 @@
 package online.dwResources;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,8 @@ public class TopTrumpsRESTAPI {
 	private String deckFile;
 	private DatabaseQuery dbq = null;
 	private int numPlayers = 0;
+	private Game game;
+	private ModelDeck deck;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -62,19 +65,18 @@ public class TopTrumpsRESTAPI {
 		}
 		
 		deckFile = conf.getDeckFile();
-		ModelDeck deck = new ModelDeck();
+		
+		deck = new ModelDeck();
 		try {
 			ModelDeckBuilder deckBuilder = new ModelDeckBuilder(deck, deckFile);
 		} catch(IOException e) {
 			System.out.println("Deck file could not be opened.");
 			System.exit(0);
 		}
-		
-		numPlayers = conf.getNumAIPlayers();	// will eventually pull from GUI
-		
-		Game game = new Game(deck, numPlayers);
-		
-		//System.err.println(dbq.toString());
+
+		// Create new Game with only deck - need to set players before playing
+		// this logic will be handled by the GUI
+		game = new Game(deck);
 		
 		
 	}
@@ -82,10 +84,9 @@ public class TopTrumpsRESTAPI {
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
-
 	
 	@POST
-	@Path("/game/setPlayers")
+	@Path("game/setPlayers")
 	/*
 	 * 
 	 * See GameScreen.ftl for method called setPlayers(int) which calls this
@@ -96,10 +97,11 @@ public class TopTrumpsRESTAPI {
 	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
 		System.out.println("Setting number of players to " + players);
 		numPlayers = players;
+		game.dealDeck();
 	}
 	
 	@GET
-	@Path("/game/getPlayers")
+	@Path("game/getPlayers")
 	/*
 	 * 
 	 * See GameScreen.ftl for method called getPlayers which calls this

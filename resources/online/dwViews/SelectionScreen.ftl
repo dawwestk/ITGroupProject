@@ -15,6 +15,7 @@
     	<style>
     		.container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
     		#selection-grid{display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px}
+    		#dropdown-select{display: none}
     	</style>
 
 		<!-- Optional Styling of the Website, for the demo I used Bootstrap (see https://getbootstrap.com/docs/4.0/getting-started/introduction/) -->
@@ -38,26 +39,70 @@
 
 		<div class="container px-lg-5">
 		  <div class="row mx-lg-n5">
-		    <div class="col py-3 px-lg-5 border bg-light"><button type="button" class="btn btn-primary btn-lg btn-block" onclick="window.location.href = '/toptrumps/game/';">Start a New Game</button></div>
+		    <div class="col py-3 px-lg-5 border bg-light"><button type="button" class="btn btn-primary btn-lg btn-block" id = "new-game-button">Start a New Game</button></div>
+		    <!-- was inside new game button onclick="window.location.href = '/toptrumps/game/';" -->
 		    <div class="col py-3 px-lg-5 border bg-light"><button type="button" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href = '/toptrumps/stats/';">See Statistics</button></div>
 		  </div>
 		</div>
 
-<!--
-		<div class="container" id = "selection-grid">
-			<div class="container" id = "selection-new-game">
-				<a href="http://localhost:7777/toptrumps/game/">New game</a>
-				<button><a href="http://localhost:7777/toptrumps/game/"><h3>New Game</h3></a></button>
+		<div class = "row" id = "dropdown-select">
+			<div class = "col">
+				<h3>How many opponents would you like to face?</h3>
 			</div>
-			<div class="container" id = "selection-stats">
-				<a href="http://localhost:7777/toptrumps/game/">New game</a>
-				<button><a href="http://localhost:7777/toptrumps/stats/"><h3>View Stats</h3></a></button>
+			<div class = "col">
+				<div class="form-group">
+				    <label for="exampleFormControlSelect1">Select number of opponents...</label>
+				    <select class="form-control" id="numberOfOpponents">
+				      <option id="1">1</option>
+				      <option id="2">2</option>
+				      <option id="3">3</option>
+				      <option id="4">4</option>
+				    </select>  	
+				</div>
+			</div>
+			<div class = "col">
+				<button class="btn btn-outline-primary" onclick="selectPlayers()">Start Game</button>
+				<!-- add number of players as URL variable? -->
 			</div>
 		</div>
--->
+
+		<script> 
+			$(document).ready(function(){
+			  $("#new-game-button").click(function(){
+			    $("#dropdown-select").slideDown("slow");
+			  });
+			});
+		</script>
 		
 		<script type="text/javascript">
-		
+			
+			function selectPlayers() {
+			  var x = document.getElementById("numberOfOpponents").selectedIndex;
+			  //alert(document.getElementsByTagName("option")[x].value);
+			  setPlayers(document.getElementsByTagName("option")[x].value);
+			  window.location.href = '/toptrumps/game/';
+			}
+
+			function setPlayers(int){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/setPlayers?players="+int); // Request type and URL+parameters
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//alert(responseText + " TEST"); // lets produce an alert
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();
+			}
+
 			// Method that is called on page load
 			function initalize() {
 			

@@ -46,6 +46,36 @@ public class Game {
 		this.dealDeck();
 	}
 	
+	public Game(ModelDeck deck) {
+		this.user = new ModelPlayer(this.playerName);
+		this.players = new ArrayList<ModelPlayer>();
+		this.players.add(this.user);
+		this.deck = deck;
+		this.roundsWon = new HashMap<String,Integer>();		
+		this.numRoundsDrawn = 0;
+		
+		this.cp = this.deck.getCP();
+		
+		this.winningPlayer = null;
+		this.activePlayer = null;
+		
+		this.roundCount = 1;
+	}
+	
+	public void setNumberOfPlayersAndDeal(int numPlayers) {
+		for (int i = 0; i < numPlayers; i++) {
+			String playerName = "CPU-" + (i + 1);
+			this.addPlayer(playerName);
+		}
+		// Add player names to roundsWon and set rounds won to 0
+		this.roundsWon.put(this.user.getName(), 0);
+		for(int i = 0 ; i < players.size(); ++i) {
+			this.roundsWon.put(this.getPlayerName(i), 0);
+		}
+		this.playerToGoFirst();
+		this.dealDeck();
+	}
+	
 	// prints the roundsWon HashMap for debugging
 	public String printRoundsWon() {
 		String output = "";

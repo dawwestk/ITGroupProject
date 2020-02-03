@@ -61,38 +61,13 @@
 		
 	</head>
 
-    <body> <!--onload="gamePageSetUp()">  onload="initalize()">  Call the initalize method when the page loads -->
+    <body onload="unHideBoard()"> <!-- onload="initalize()">  Call the initalize method when the page loads -->
     	
     	<div class="container" id = "game-title">
 			<h1>Top Trumps Game!</h1>
 		</div>
 
-		<div class = "container">
-			<div class = "row">
-				<div class = "col">
-					<h3>How many opponents would you like to face?</h3>
-				</div>
-				<div class = "col">
-					<div class="form-group">
-					    <label for="exampleFormControlSelect1">Select number of opponents...</label>
-					    <select class="form-control" id="numberOfOpponents">
-					      <option id="1">1</option>
-					      <option id="2">2</option>
-					      <option id="3">3</option>
-					      <option id="4">4</option>
-					    </select>  	
-					</div>
-				</div>
-				<div class = "col">
-					<button action="http://localhost:7777/toptrumps/game/getPlayers/" class="btn btn-outline-primary" onclick="selectPlayers()">Start Game</button>
-					<hr>
-					<button class="btn btn-outline-secondary" onclick="unHideBoard()">Hide/Show</button>
-				</div>
-			</div>
-		</div>
-
 		<hr>
-
 
 		<div class = "container" id = "game-board">
 			<div class = "user-card" id = "game-user-card">
@@ -180,12 +155,10 @@
 				if (x.style.visibility === "visible") {
 				  x.style.visibility = "hidden";
 				} else {
-					var y = document.getElementById("numberOfOpponents").selectedIndex;
-			  		var z = document.getElementsByTagName("option")[y].value;
-			  		//alert("Creating" + z + " columns");
 				  	x.style.visibility = "visible";
 				  	var columns = "1fr 1fr";
 				  	var i;
+				  	var z = getPlayers();
 				  	for(i = 0; i < z; i++){
 				  		//alert("i = " + i);
 				  		columns += " 1fr"
