@@ -17,15 +17,12 @@
     		#selection-grid{display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px}
     		#dropdown-select{display: none}
     		body{
-    			background-image: url("https://raw.githubusercontent.com/Caimpson/ITTeamProject_Documentation/master/SpaceBackgroundSmoothed.jpg?token=ANPHJFV5FUOJQFUQMNHLEUS6IFJT6");
+    			background-image: url("/assets/SpaceBackgroundSmoothed.jpg");
     			background-size: cover;
     		}
-    		#titleHeader{
-    			color: white;	
-    		}
-    		#selection-text{
-    			color: white;
-    		}
+    		#titleHeader{color: white;}
+    		#selection-text{color: white;}
+    		#dropdown-select{color: white;}
     	</style>
 
 		<!-- Optional Styling of the Website, for the demo I used Bootstrap (see https://getbootstrap.com/docs/4.0/getting-started/introduction/) -->
@@ -71,7 +68,7 @@
 				</div>
 			</div>
 			<div class = "col">
-				<button class="btn btn-outline-primary" onclick="selectPlayers()">Start Game</button>
+				<button class="btn btn-outline-light" onclick="newGameAndSetPlayers()">Start Game</button>
 				<!-- add number of players as URL variable? -->
 			</div>
 		</div>
@@ -86,11 +83,36 @@
 		
 		<script type="text/javascript">
 			
+			function newGameAndSetPlayers(){
+				selectPlayers();
+				newGame();
+			}
+
 			function selectPlayers() {
 			  var x = document.getElementById("numberOfOpponents").selectedIndex;
 			  //alert(document.getElementsByTagName("option")[x].value);
 			  setPlayers(document.getElementsByTagName("option")[x].value);
 			  window.location.href = '/toptrumps/game/';
+			}
+
+			function newGame(){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/newGame"); // Request type and URL+parameters
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//alert(responseText + " TEST"); // lets produce an alert
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();
 			}
 
 			function setPlayers(int){

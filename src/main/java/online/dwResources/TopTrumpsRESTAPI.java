@@ -44,7 +44,7 @@ public class TopTrumpsRESTAPI {
 	private String deckFile;
 	private DatabaseQuery dbq = null;
 	private int numPlayers = 0;
-	private Game game;
+	private Game game = null;
 	private ModelDeck deck;
 	
 	/**
@@ -74,9 +74,8 @@ public class TopTrumpsRESTAPI {
 			System.exit(0);
 		}
 
-		// Create new Game with only deck - need to set players before playing
-		// this logic will be handled by the GUI
-		game = new Game(deck);
+		
+		
 		
 		
 	}
@@ -84,6 +83,16 @@ public class TopTrumpsRESTAPI {
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
+	
+	@GET
+	@Path("game/newGame")
+	public void newGame() throws IOException{
+		// Create new Game with only deck - need to set players before playing
+		// this logic will be handled by the GUI
+		game = new Game(deck);
+		game.setNumberOfPlayersAndDeal(numPlayers);
+		System.out.println("Game created with " + numPlayers + " players");
+	}
 	
 	@POST
 	@Path("game/setPlayers")
@@ -97,7 +106,6 @@ public class TopTrumpsRESTAPI {
 	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
 		System.out.println("Setting number of players to " + players);
 		numPlayers = players;
-		game.dealDeck();
 	}
 	
 	@GET
