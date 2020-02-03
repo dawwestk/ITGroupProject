@@ -17,7 +17,7 @@
     		#selection-grid{display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px}
     		#dropdown-select{display: none}
     		body{
-    			background-image: url("/assets/SpaceBackgroundSmoothed.jpg");
+    			background-image: url("/assets/images/SpaceBackgroundSmoothed.jpg");
     			background-size: cover;
     		}
     		#titleHeader{color: white;}
