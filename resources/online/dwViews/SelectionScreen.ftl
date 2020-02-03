@@ -16,6 +16,16 @@
     		.container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
     		#selection-grid{display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px}
     		#dropdown-select{display: none}
+    		body{
+    			background-image: url("https://raw.githubusercontent.com/Caimpson/ITTeamProject_Documentation/master/SpaceBackgroundSmoothed.jpg?token=ANPHJFV5FUOJQFUQMNHLEUS6IFJT6");
+    			background-size: cover;
+    		}
+    		#titleHeader{
+    			color: white;	
+    		}
+    		#selection-text{
+    			color: white;
+    		}
     	</style>
 
 		<!-- Optional Styling of the Website, for the demo I used Bootstrap (see https://getbootstrap.com/docs/4.0/getting-started/introduction/) -->
@@ -30,7 +40,7 @@
     	<div class="container" id = "selection-title">
 
 			<!-- Add your HTML Here -->
-			<h1>Top Trumps Game!</h1>
+			<h1 id=titleHeader>Top Trumps Game!</h1>
 
 		</div>
 		<div class="container" id = "selection-text">
