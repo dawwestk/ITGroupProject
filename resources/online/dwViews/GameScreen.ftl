@@ -23,7 +23,8 @@
     		#game-AI-card3 h3, 
     		#game-AI-card4 h3{border: solid;}
     		img {max-width:100%;}
-    		
+    		#text-box-and-button{width: 100%; }
+    		#game-text{width: 80%;}
 			#game-AI-card-container-1,
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
@@ -72,6 +73,12 @@
     	<div class="container" id = "game-title">
 			<h1>Top Trumps Game!</h1>
 		</div>
+
+		<div class = "container" id="text-box-and-button">
+			<h4><span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
+			<button type="button" class="btn btn-outline-secondary" id="next-round-button">Next Round</button></h4>
+		</div>
+
 
 		<hr>
 
