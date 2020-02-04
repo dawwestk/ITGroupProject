@@ -1,5 +1,12 @@
 package game;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -16,6 +23,7 @@ public class Game {
 	private ModelPlayer activePlayer;
 	private HashMap<String, Integer> roundsWon;
 	int numRoundsDrawn;
+
 	
 	public Game(ModelDeck deck, int numPlayers) {
 		this.user = new ModelPlayer(this.playerName);
@@ -44,6 +52,7 @@ public class Game {
 		
 		this.roundCount = 1;
 		this.dealDeck();
+
 	}
 	
 	public Game(ModelDeck deck) {
@@ -74,6 +83,7 @@ public class Game {
 		}
 		this.playerToGoFirst();
 		this.dealDeck();
+		saveJSON();
 	}
 	
 	// prints the roundsWon HashMap for debugging
@@ -317,8 +327,24 @@ public class Game {
 
 	public void advanceRound() {
 		this.roundCount++;
+		saveJSON();
 	}
-	
+
+	public void saveJSON(){
+
+		try {
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			File playersJSON = new File("resources/assets", "playersJSON.json");
+			Writer writer = new FileWriter(playersJSON);
+			gson.toJson(this.players, writer);
+			writer.flush();
+			writer.close();
+
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+
 
 	// Checking who the stat-picking player will be this round
 //	public int turnTracker() {
