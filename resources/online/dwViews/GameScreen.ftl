@@ -90,11 +90,11 @@
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" role="group" aria-label="...">
-					<button type="button" class="btn btn-outline-primary" id="#Size" onclick="clickedAttribute(this)">Size</button>
-  					<button type="button" class="btn btn-outline-primary" id="#Speed" onclick="clickedAttribute(this)">Speed</button>
-					<button type="button" class="btn btn-outline-primary" id="#Range" onclick="clickedAttribute(this)">Range</button>
-  					<button type="button" class="btn btn-outline-primary" id="#Firepower" onclick="clickedAttribute(this)">Firepower</button>
-  					<button type="button" class="btn btn-outline-primary" id="#Cargo" onclick="clickedAttribute(this)">Cargo</button>
+					<button type="button" class="btn btn-outline-primary" id="#Size" onclick="clickedAttribute(this)">Size:<span class="badge badge-light" id="playerSizeBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-primary" id="#Speed" onclick="clickedAttribute(this)">Speed:<span class="badge badge-light" id="playerSpeedBadge">temp</span></button>
+					<button type="button" class="btn btn-outline-primary" id="#Range" onclick="clickedAttribute(this)">Range:<span class="badge badge-light" id="playerRangeBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-primary" id="#Firepower" onclick="clickedAttribute(this)">Firepower:<span class="badge badge-light" id="playerFirepowerBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-primary" id="#Cargo" onclick="clickedAttribute(this)">Cargo:<span class="badge badge-light" id="playerCargoBadge">temp</span></button>
 				</div>
 			</div>
 
@@ -225,6 +225,11 @@
 
 					document.getElementById('mainPlayerName').innerHTML = players[0].name;
 					document.getElementById('game-user-name').innerHTML = players[0].cardName;
+					document.getElementById('playerSizeBadge').innerHTML = players[0].Size;
+					document.getElementById('playerSpeedBadge').innerHTML = players[0].Speed;
+					document.getElementById('playerRangeBadge').innerHTML = players[0].Range;
+					document.getElementById('playerFirepowerBadge').innerHTML = players[0].Firepower;
+					document.getElementById('playerCargoBadge').innerHTML = players[0].Cargo;
 
 					var i;
 					for(i = 1; i < players.length; i++){
@@ -232,6 +237,12 @@
 						var cardID = '#game-AI-card-container-' + i;
 						$(cardID).find("h3").text(players[i].cardName);
 						$(cardID).find('h2').text(players[i].name);
+						$(cardID).find('#aiSizeBadge').text(players[i].Size);
+						$(cardID).find('#aiSpeedBadge').text(players[i].Speed);
+						$(cardID).find('#aiRangeBadge').text(players[i].Range);
+						$(cardID).find('#aiFirepowerBadge').text(players[i].Firepower);
+						$(cardID).find('#aiCargoBadge').text(players[i].Cargo);
+
 
 					}
 
