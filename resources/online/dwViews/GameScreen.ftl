@@ -125,6 +125,10 @@
 
 		<script>
 
+			function updateText(textString, buttonString){
+				$('#game-text').text(textString);
+				$('#next-round-button').text(buttonString);
+			}
 
 			function selectAttribute(int){
 				// First create a CORS request, this is the message we are going to send (a get request in this case)
@@ -140,7 +144,8 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert("User chose " + int);
-					$('#game-text').text("Player One chose " + int);
+					updateText("Player One chose " + int, "Next round");
+
 				};
 				
 				// We have done everything we need to prepare the CORS request, so send it
@@ -150,8 +155,7 @@
 			function setUpBoard(){
 				getPlayers();
 				//unHideBoard();
-				document.getElementById('game-text').textContent = 'Welcome to Top Trumps - hit this button to begin...';
-				document.getElementById('next-round-button').textContent = "Begin round 1";
+				updateText("Welcome to Top Trumps - hit this button to begin...", "Begin round 1");
 			}
 
 			function startRoundOne(){
