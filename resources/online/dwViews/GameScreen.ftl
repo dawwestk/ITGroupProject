@@ -77,7 +77,7 @@
 
 		<div class = "container" id="text-box-and-button">
 			<h4><span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
-			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne()">Next Round</button></h4>
+			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne()">Next Round</button><button onclick="advance()">Advance</button></h4>
 		</div>
 
 
@@ -156,13 +156,59 @@
 
 			function setUpBoard(){
 				getPlayers();
-				//unHideBoard();
 				updateText("Welcome to Top Trumps - hit this button to begin...", "Begin round 1");
 			}
 
 			function startRoundOne(){
 				getJSON();
 				unHideBoard();
+			}
+
+			function advance(){
+				nextRound();
+				getJSON();
+				getRoundCount();
+			}
+
+			function getRoundCount(){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getRoundCount/"); // Request type and URL
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//return responseText; // lets produce an alert
+					updateText("Starting round " + responseText, "Next")
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();
+			}
+
+			function nextRound(){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/nextRound/"); // Request type and URL
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//alert(responseText); // lets produce an alert
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();
 			}
 
 			function unHideBoard(){

@@ -51,6 +51,7 @@ public class TopTrumpsRESTAPI {
 	private ModelDeck deck;
 	private File JSONfile = new File("resources/assets", "JSONtest.json");
 	private String JSONoutput = "";
+	private JSONGetter j = null;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -106,13 +107,18 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/game/getRoundCount/")
 	public int getRoundCount() throws IOException{
-		return game.getRoundCount();
+		int roundCount = game.getRoundCount();
+		System.out.println("Round Count: " + roundCount);
+		return roundCount;
 	}
 	
 	@GET
 	@Path("/game/nextRound/")
 	public void nextRound() throws IOException {
 		game.advanceRound();
+		game.giveWinnerCards(game.getActivePlayer());
+		j = new JSONGetter(game.getPlayers());
+		JSONoutput = j.getJSON();
 	}
 	
 	@GET
@@ -129,10 +135,10 @@ public class TopTrumpsRESTAPI {
 		game = new Game(deck);
 		game.setNumberOfPlayersAndDeal(numPlayers);
 		System.out.println("Game created with " + numPlayers + " players");
-		JSONGetter j = new JSONGetter(game.getPlayers());
+		j = new JSONGetter(game.getPlayers());
+		JSONoutput = j.getJSON();
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
-			JSONoutput = j.getJSON();
 			fw.write(JSONoutput);
 			fw.flush();
 			fw.close();
