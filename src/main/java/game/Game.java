@@ -344,4 +344,8 @@ public class Game {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setActivePlayerToUserForGUITest() {
+		this.activePlayer = this.user;
+	}
 }

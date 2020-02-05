@@ -90,6 +90,29 @@ public class TopTrumpsRESTAPI {
 	// Add relevant API methods here
 	// ----------------------------------------------------
 	
+	@POST
+	@Path("/game/selectAttribute/")
+	public void selectAttribute(@QueryParam("attribute") int attribute) throws IOException{
+		// reads which attribute was chosen and compares etc
+		// needs active player to be chosen by this point
+		game.setActivePlayerToUserForGUITest();
+		int choice = attribute;
+		String attributeName = game.getStat(choice);
+		System.out.println("User chose " + attributeName);
+	}
+	
+	@GET
+	@Path("/game/getRoundCount/")
+	public int getRoundCount() throws IOException{
+		return game.getRoundCount();
+	}
+	
+	@GET
+	@Path("/game/nextRound/")
+	public void nextRound() throws IOException {
+		game.advanceRound();
+	}
+	
 	@GET
 	@Path("/game/getJSON/")
 	public String getJSON() throws IOException{
@@ -104,7 +127,6 @@ public class TopTrumpsRESTAPI {
 		game = new Game(deck);
 		game.setNumberOfPlayersAndDeal(numPlayers);
 		System.out.println("Game created with " + numPlayers + " players");
-		game.saveJSON();
 		JSONGetter j = new JSONGetter(game.getPlayers());
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
@@ -115,7 +137,7 @@ public class TopTrumpsRESTAPI {
 		} catch(Exception e) {
 			System.out.println("Couldn't write to file");
 		}
-		System.out.println("Saved JSON of player names");
+		System.out.println("Saved JSON of player names and cards");
 	}
 	
 	@POST

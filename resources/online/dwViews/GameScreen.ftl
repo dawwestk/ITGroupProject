@@ -89,11 +89,11 @@
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" role="group" aria-label="...">
-					<button type="button" class="btn btn-outline-primary">Size</button>
-  					<button type="button" class="btn btn-outline-primary">Speed</button>
-					<button type="button" class="btn btn-outline-primary">Range</button>
-  					<button type="button" class="btn btn-outline-primary">Firepower</button>
-  					<button type="button" class="btn btn-outline-primary">Cargo</button>
+					<button type="button" class="btn btn-outline-primary" id="1" onclick="clickedAttribute(this)">Size</button>
+  					<button type="button" class="btn btn-outline-primary" id="2" onclick="clickedAttribute(this)">Speed</button>
+					<button type="button" class="btn btn-outline-primary" id="3" onclick="clickedAttribute(this)">Range</button>
+  					<button type="button" class="btn btn-outline-primary" id="4" onclick="clickedAttribute(this)">Firepower</button>
+  					<button type="button" class="btn btn-outline-primary" id="5" onclick="clickedAttribute(this)">Cargo</button>
 				</div>
 			</div>
 
@@ -115,7 +115,37 @@
 			</div>
 		</div>
 
+		<script type="text/javascript">
+		   function clickedAttribute(item) {
+		    var choice = $(item).attr("id"); 
+		    //alert(choice);
+		    selectAttribute(choice);
+		   }
+		</script>
+
 		<script>
+
+
+			function selectAttribute(int){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/selectAttribute?attribute=" + int); // Request type and URL+parameters
+				
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//alert("User chose " + int);
+					$('#game-text').text("Player One chose " + int);
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();
+			}
 
 			function setUpBoard(){
 				getPlayers();
