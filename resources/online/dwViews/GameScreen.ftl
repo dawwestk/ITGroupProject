@@ -68,7 +68,7 @@
 		
 	</head>
 
-    <body onload="unHideBoard()"> <!-- onload="initalize()">  Call the initalize method when the page loads -->
+    <body onload="setUpBoard()"> <!-- onload="initalize()">  Call the initalize method when the page loads -->
     	
     	<div class="container" id = "game-title">
 			<h1>Top Trumps Game!</h1>
@@ -76,7 +76,7 @@
 
 		<div class = "container" id="text-box-and-button">
 			<h4><span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
-			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="nextRound()">Next Round</button></h4>
+			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne()">Next Round</button></h4>
 		</div>
 
 
@@ -86,7 +86,7 @@
 			<div class = "user-card" id = "game-user-card">
 				<div class = "container" id = "game-user-card-image">
 					<img src = "/assets/images/spaceship_test.jpg">
-					<h3>Your card name</h3>
+					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" role="group" aria-label="...">
 					<button type="button" class="btn btn-outline-primary">Size</button>
@@ -117,37 +117,25 @@
 
 		<script>
 
-			function unHideBoard(){
-				getJSON();
+			function setUpBoard(){
 				getPlayers();
+				//unHideBoard();
+				document.getElementById('game-text').textContent = 'Welcome to Top Trumps - hit this button to begin...';
+				document.getElementById('next-round-button').textContent = "Begin round 1";
+			}
+
+			function startRoundOne(){
+				getJSON();
+				unHideBoard();
+			}
+
+			function unHideBoard(){
 				var x = document.getElementById("game-board");
 				if (x.style.visibility === "visible") {
 				  x.style.visibility = "hidden";
 				} else {
 				  	x.style.visibility = "visible";
 				}
-			}
-
-			function getJSON(){
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
-
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
-
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-					var players = JSON.parse(responseText);
-					alert(players[0].name);
-				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();	
 			}
 
 			function getPlayers(){
@@ -164,6 +152,10 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert("Number of players = " + responseText); // lets produce an alert
+					$.ajaxSetup ({
+					    // Disable caching of AJAX responses
+					    cache: false
+					});
 					var i;
 					var opponents = parseInt(responseText, 10);
 					for(i = 0; i < opponents; i++){
@@ -172,6 +164,39 @@
 					$('#game-board').css('grid-template-columns', 'repeat(' + (opponents + 2) + ', 1fr)');
 					
 					return responseText;
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();	
+			}
+
+
+			function getJSON(){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
+
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//alert(responseText); // lets produce an alert
+					var players = JSON.parse(responseText);
+					//alert(players[0].name);
+
+					document.getElementById('game-user-name').innerHTML = players[0].cardName;
+
+					var i;
+					for(i = 1; i < players.length; i++){
+						//alert("finding i " + i);
+						var cardID = '#game-AI-card-container-' + i;
+						$(cardID).find("h3").text(players[i].cardName);
+					}
+
 				};
 				
 				// We have done everything we need to prepare the CORS request, so send it
@@ -224,6 +249,10 @@
   				 return xhr;
 			}
 		
+		</script>
+
+		<script>
+			$(window).load(getJSON());	// execute once window has loaded
 		</script>
 		
 		<!-- Here are examples of how to call REST API Methods -->
