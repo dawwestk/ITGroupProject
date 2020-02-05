@@ -89,11 +89,11 @@
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" role="group" aria-label="...">
-					<button type="button" class="btn btn-outline-primary" id="1" onclick="clickedAttribute(this)">Size</button>
-  					<button type="button" class="btn btn-outline-primary" id="2" onclick="clickedAttribute(this)">Speed</button>
-					<button type="button" class="btn btn-outline-primary" id="3" onclick="clickedAttribute(this)">Range</button>
-  					<button type="button" class="btn btn-outline-primary" id="4" onclick="clickedAttribute(this)">Firepower</button>
-  					<button type="button" class="btn btn-outline-primary" id="5" onclick="clickedAttribute(this)">Cargo</button>
+					<button type="button" class="btn btn-outline-primary" id="#Size" onclick="clickedAttribute(this)">Size</button>
+  					<button type="button" class="btn btn-outline-primary" id="#Speed" onclick="clickedAttribute(this)">Speed</button>
+					<button type="button" class="btn btn-outline-primary" id="#Range" onclick="clickedAttribute(this)">Range</button>
+  					<button type="button" class="btn btn-outline-primary" id="#Firepower" onclick="clickedAttribute(this)">Firepower</button>
+  					<button type="button" class="btn btn-outline-primary" id="#Cargo" onclick="clickedAttribute(this)">Cargo</button>
 				</div>
 			</div>
 
@@ -230,6 +230,12 @@
 						var cardID = '#game-AI-card-container-' + i;
 						$(cardID).find("h3").text(players[i].cardName);
 					}
+
+					$("#Size").text( "Size: " + players[0].Size);
+					$('#Speed').text( "Speed: " + players[0].Speed);
+					$('#Range').text( "Range: " + players[0].Range);
+					$('#Firepower').text( "Firepower: " + players[0].Firepower);
+					$('#Cargo').text( "Cargo: " + players[0].Cargo);
 
 				};
 				
