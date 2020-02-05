@@ -131,9 +131,9 @@
 				$('#next-round-button').text(buttonString);
 			}
 
-			function selectAttribute(int){
+			function selectAttribute(attrName){
 				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/selectAttribute?attribute=" + int); // Request type and URL+parameters
+				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/selectAttribute?attribute=" + attrName); // Request type and URL+parameters
 				
 				// Message is not sent yet, but we can check that the browser supports CORS
 				if (!xhr) {
@@ -145,7 +145,7 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert("User chose " + int);
-					updateText("Player One chose " + int, "Next round");
+					updateText("Player One chose " + attrName.slice(1,20), "Next round");
 
 				};
 				
@@ -246,11 +246,11 @@
 
 					}
 
-					$("#Size").text( "Size: " + players[0].Size);
-					$('#Speed').text( "Speed: " + players[0].Speed);
-					$('#Range').text( "Range: " + players[0].Range);
-					$('#Firepower').text( "Firepower: " + players[0].Firepower);
-					$('#Cargo').text( "Cargo: " + players[0].Cargo);
+					// $("#Size").text( "Size: " + players[0].Size);
+					// $('#Speed').text( "Speed: " + players[0].Speed);
+					// $('#Range').text( "Range: " + players[0].Range);
+					// $('#Firepower').text( "Firepower: " + players[0].Firepower);
+					// $('#Cargo').text( "Cargo: " + players[0].Cargo);
 
 				};
 				
