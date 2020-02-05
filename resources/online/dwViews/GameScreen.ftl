@@ -84,6 +84,7 @@
 
 		<div class = "container" id = "game-board">
 			<div class = "user-card" id = "game-user-card">
+				<h2 id="mainPlayerName">Placeholder</h2>
 				<div class = "container" id = "game-user-card-image">
 					<img src = "/assets/images/spaceship_test.jpg">
 					<h3 id = "game-user-name">Your card name</h3>
@@ -222,6 +223,7 @@
 					var players = JSON.parse(responseText);
 					//alert(players[0].name);
 
+					document.getElementById('mainPlayerName').innerHTML = players[0].name;
 					document.getElementById('game-user-name').innerHTML = players[0].cardName;
 
 					var i;
@@ -229,6 +231,8 @@
 						//alert("finding i " + i);
 						var cardID = '#game-AI-card-container-' + i;
 						$(cardID).find("h3").text(players[i].cardName);
+						$(cardID).find('h2').text(players[i].name);
+
 					}
 
 					$("#Size").text( "Size: " + players[0].Size);
