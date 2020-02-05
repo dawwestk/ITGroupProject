@@ -29,6 +29,7 @@
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
     		#game-AI-card-container-4{}
+    		#separator{background-color: rgb(211, 211, 211)}
     		
 
     	</style>
@@ -98,8 +99,8 @@
 				</div>
 			</div>
 
-			<div class = "container">
-				Separator
+			<div class = "container" id="separator">
+				
 			</div>
 
 			<div id = "game-AI-card-container-1">
@@ -196,7 +197,7 @@
 					for(i = 0; i < opponents; i++){
 						$('#game-AI-card-container-' + (i+1)).load('/assets/html/AIcard.html');
 					}
-					$('#game-board').css('grid-template-columns', 'repeat(' + (opponents + 2) + ', 1fr)');
+					$('#game-board').css('grid-template-columns', '1fr 20px repeat(' + opponents + ', 1fr)');
 					
 					return responseText;
 				};

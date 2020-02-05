@@ -28,8 +28,9 @@
     	
     	<div class="container">
     		<div id = 'header'>
-			<!-- Add your HTML Here -->
-			<h1>Top Trumps Game Stats!</h1>
+				<!-- Add your HTML Here -->
+				<h1>Top Trumps Game Stats!</h1>
+			</div>
 		</div>
 
 		<div>
@@ -40,7 +41,7 @@
 
 		<div id = 'statsTable'>
 
-
+		</div>
 
 		<script>
 			function loadTable(){
@@ -161,11 +162,9 @@
 			}
 
 		</script>
-	</div>
 
 		<div id='footer'>
 			<button onclick="alert('no linked function, just alert')">Press here</button>
 		</div>
-</div>
 	</body>
 </html>
