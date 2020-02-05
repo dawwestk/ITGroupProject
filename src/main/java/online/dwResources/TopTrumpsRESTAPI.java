@@ -92,13 +92,15 @@ public class TopTrumpsRESTAPI {
 	
 	@POST
 	@Path("/game/selectAttribute/")
-	public void selectAttribute(@QueryParam("attribute") int attribute) throws IOException{
+	public void selectAttribute(@QueryParam("attribute") String attribute) throws IOException{
 		// reads which attribute was chosen and compares etc
 		// needs active player to be chosen by this point
+		String choice = attribute;
+		System.out.println("Attribute " + choice);
 		game.setActivePlayerToUserForGUITest();
-		int choice = attribute;
-		String attributeName = game.getStat(choice);
-		System.out.println("User chose " + attributeName);
+		ModelCard activeCard = game.getActivePlayer().getActiveCard();
+		Integer attributeName = activeCard.getValue(choice);
+		System.out.println("User chose " + choice + " => " + attributeName);
 	}
 	
 	@GET

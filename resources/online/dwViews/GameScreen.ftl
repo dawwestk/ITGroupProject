@@ -91,11 +91,11 @@
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" role="group" aria-label="...">
-					<button type="button" class="btn btn-outline-primary" id="#Size" onclick="clickedAttribute(this)">Size:<span class="badge badge-light" id="playerSizeBadge">temp</span></button>
-  					<button type="button" class="btn btn-outline-primary" id="#Speed" onclick="clickedAttribute(this)">Speed:<span class="badge badge-light" id="playerSpeedBadge">temp</span></button>
-					<button type="button" class="btn btn-outline-primary" id="#Range" onclick="clickedAttribute(this)">Range:<span class="badge badge-light" id="playerRangeBadge">temp</span></button>
-  					<button type="button" class="btn btn-outline-primary" id="#Firepower" onclick="clickedAttribute(this)">Firepower:<span class="badge badge-light" id="playerFirepowerBadge">temp</span></button>
-  					<button type="button" class="btn btn-outline-primary" id="#Cargo" onclick="clickedAttribute(this)">Cargo:<span class="badge badge-light" id="playerCargoBadge">temp</span></button>
+					<button type="button" class="btn btn-outline-primary" id="Size" onclick="clickedAttribute(this)">Size:<span class="badge badge-light" id="playerSizeBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-primary" id="Speed" onclick="clickedAttribute(this)">Speed:<span class="badge badge-light" id="playerSpeedBadge">temp</span></button>
+					<button type="button" class="btn btn-outline-primary" id="Range" onclick="clickedAttribute(this)">Range:<span class="badge badge-light" id="playerRangeBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-primary" id="Firepower" onclick="clickedAttribute(this)">Firepower:<span class="badge badge-light" id="playerFirepowerBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-primary" id="Cargo" onclick="clickedAttribute(this)">Cargo:<span class="badge badge-light" id="playerCargoBadge">temp</span></button>
 				</div>
 			</div>
 
@@ -146,7 +146,7 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert("User chose " + int);
-					updateText("Player One chose " + attrName.slice(1,20), "Next round");
+					updateText("Player One chose " + attrName, "Next round");
 
 				};
 				
