@@ -76,7 +76,7 @@
 
 		<div class = "container" id="text-box-and-button">
 			<h4><span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
-			<button type="button" class="btn btn-outline-secondary" id="next-round-button">Next Round</button></h4>
+			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="nextRound()">Next Round</button></h4>
 		</div>
 
 
@@ -118,6 +118,7 @@
 		<script>
 
 			function unHideBoard(){
+				getJSON();
 				getPlayers();
 				var x = document.getElementById("game-board");
 				if (x.style.visibility === "visible") {
@@ -125,6 +126,28 @@
 				} else {
 				  	x.style.visibility = "visible";
 				}
+			}
+
+			function getJSON(){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
+
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+  					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives 
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					alert(responseText); // lets produce an alert
+					var players = JSON.parse(responseText);
+					alert(players[0].name);
+				};
+				
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();	
 			}
 
 			function getPlayers(){

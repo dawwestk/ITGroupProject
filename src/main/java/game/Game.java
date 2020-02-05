@@ -344,41 +344,4 @@ public class Game {
 			e.printStackTrace();
 		}
 	}
-
-
-	// Checking who the stat-picking player will be this round
-//	public int turnTracker() {
-//		int theirTurn = 0;
-//
-//		// if round 1 choose random player to go first
-//		if (this.getRoundCount() == 1) {
-//			int firstTurn = whoFirst();
-//			return firstTurn;
-//		} else { // choose winning player from last round
-////			for (int i = 0; i < this.getNumPlayers(); ++i) {
-////				if (isWinningPlayer(this.getPlayer(i))) {
-////					theirTurn = i;
-////				}
-////			}
-//			theirTurn = 
-//			return theirTurn;
-//		}
-//	}
-	
-//	public ModelPlayer turnTracker() {
-//		ModelPlayer theirTurn = null;
-//		if(this.getRoundCount() == 1) {
-//			theirTurn = this.getPlayer(this.whoFirst());
-//			this.setActivePlayer(theirTurn);
-//		} else {
-//			theirTurn = this.getRoundWinner(); // want to be winner of last round and not current round
-//		}
-//		return theirTurn;
-//	}
-	
-//	// The current player
-//	public ModelPlayer getActivePlayer() {
-//		ModelPlayer activePlayer = this.turnTracker();
-//		return activePlayer;
-//	}
 }

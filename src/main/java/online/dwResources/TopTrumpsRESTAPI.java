@@ -1,5 +1,7 @@
 package online.dwResources;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import game.*;
+import online.*;
 
 @Path("/toptrumps") // Resources specified here should be hosted at http://localhost:7777/toptrumps
 @Produces(MediaType.APPLICATION_JSON) // This resource returns JSON content
@@ -46,6 +49,8 @@ public class TopTrumpsRESTAPI {
 	private int numPlayers = 0;
 	private Game game = null;
 	private ModelDeck deck;
+	private File JSONfile = new File("resources/assets", "JSONtest.json");
+	private String JSONoutput = "";
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -78,11 +83,18 @@ public class TopTrumpsRESTAPI {
 		
 		
 		
+		
 	}
 	
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
+	
+	@GET
+	@Path("/game/getJSON/")
+	public String getJSON() throws IOException{
+		return JSONoutput;
+	}
 	
 	@GET
 	@Path("game/newGame")
@@ -92,6 +104,18 @@ public class TopTrumpsRESTAPI {
 		game = new Game(deck);
 		game.setNumberOfPlayersAndDeal(numPlayers);
 		System.out.println("Game created with " + numPlayers + " players");
+		game.saveJSON();
+		JSONGetter j = new JSONGetter(game.getPlayers());
+		try {
+			FileWriter fw = new FileWriter(JSONfile);
+			JSONoutput = j.getJSON();
+			fw.write(JSONoutput);
+			fw.flush();
+			fw.close();
+		} catch(Exception e) {
+			System.out.println("Couldn't write to file");
+		}
+		System.out.println("Saved JSON of player names");
 	}
 	
 	@POST
@@ -157,7 +181,7 @@ public class TopTrumpsRESTAPI {
 		listOfWords.add("Hello");
 		listOfWords.add("World!");
 		
-		// We can turn arbatory Java objects directly into JSON strings using
+		// We can turn arbitrary Java objects directly into JSON strings using
 		// Jackson seralization, assuming that the Java objects are not too complex.
 		String listAsJSONString = oWriter.writeValueAsString(listOfWords);
 		listAsJSONString = listAsJSONString.replace("[", "");

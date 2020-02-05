@@ -65,6 +65,10 @@ public class ModelCard {
     	return attributeDefinitions[index];
     }
     
+    public int getNumberOfAttributes() {
+    	return attributeMap.size();
+    }
+    
     public Integer getValue(String s) {
     	// Checks the HashMap for existence of a key, then returns the value or null
     	if(attributeMap.containsKey(s)) {	
