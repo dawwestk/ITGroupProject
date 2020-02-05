@@ -3,7 +3,10 @@
 	<head>
 		<!-- Web page title -->
     	<title>Top Trumps Statistics</title>
-    	
+
+    	<!-- This is the link to the OUR CSS file -->
+    	<link rel="stylesheet" type="text/css" href="/statistics"/>
+
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
     	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
@@ -24,10 +27,9 @@
     <body onload="loadTable()">  <!-- onload="initalize()"> Call the initalize method when the page loads -->
     	
     	<div class="container">
-
+    		<div id = 'header'>
 			<!-- Add your HTML Here -->
 			<h1>Top Trumps Game Stats!</h1>
-
 		</div>
 
 		<div>
@@ -38,11 +40,7 @@
 
 		<div id = 'statsTable'>
 
-		</div>
 
-		<div>
-			<button onclick="alert('no linked function, just alert')">Press here</button>
-		</div>
 
 		<script>
 			function loadTable(){
@@ -163,6 +161,11 @@
 			}
 
 		</script>
-		
-		</body>
+	</div>
+
+		<div id='footer'>
+			<button onclick="alert('no linked function, just alert')">Press here</button>
+		</div>
+</div>
+	</body>
 </html>

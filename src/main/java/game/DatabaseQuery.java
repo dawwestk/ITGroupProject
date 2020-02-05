@@ -66,11 +66,11 @@ public class DatabaseQuery {
 	}
 	
 	private void pullTableStats(HashMap<String, String> map) {
-		map.put("Total games: ", "" + getTotalGames());
-		map.put("Human wins: ", "" + getHumanWins());
-		map.put("AI wins: ", "" + getAIWins());
-		map.put("Average Draws: ", "" + getAverageDraws());
-		map.put("Highest Round Count: ", "" + getHighestRounds());
+		map.put("\n Total games: ", "" + getTotalGames());
+		map.put("\nHuman wins: ", "" + getHumanWins());
+		map.put("\nAI wins: ", "" + getAIWins());
+		map.put("\nAverage Draws: ", "" + getAverageDraws());
+		map.put("\nHighest Round Count: ", "" + getHighestRounds());
 	}
 	
 	private void statsPopulate(HashMap<String, Integer> map) {
