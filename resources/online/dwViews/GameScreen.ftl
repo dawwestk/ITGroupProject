@@ -123,7 +123,7 @@
 		   function clickedAttribute(item) {
 		    var choice = $(item).attr("id"); 
 		    //alert(choice);
-		    selectAttribute(choice);
+		    selectAttributeAsPOST(choice);
 		   }
 		</script>
 
@@ -132,6 +132,21 @@
 			function updateText(textString, buttonString){
 				$('#game-text').text(textString);
 				$('#next-round-button').text(buttonString);
+			}
+
+			function selectAttributeAsPOST(attrName){
+			    $.ajax({
+			        type: 'POST',
+			        dataType: "json",
+			        url: "http://localhost:7777/toptrumps/game/selectAttribute",
+			        contentType: "application/json; charset=UTF-8", 
+			        data: attrName,
+			        /*		SUCCESS function not required - but can be used
+			        success: function (attrName) {
+			            alert(attrName + " written to API");
+			        }
+			        */
+			    });
 			}
 
 			function selectAttribute(attrName){

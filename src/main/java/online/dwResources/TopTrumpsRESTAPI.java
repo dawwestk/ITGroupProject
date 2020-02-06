@@ -93,7 +93,7 @@ public class TopTrumpsRESTAPI {
 	
 	@POST
 	@Path("/game/selectAttribute/")
-	public void selectAttribute(@QueryParam("attribute") String attribute) throws IOException{
+	public void selectAttribute(String attribute) throws IOException{
 		// reads which attribute was chosen and compares etc
 		// needs active player to be chosen by this point
 		String choice = attribute;
@@ -160,9 +160,7 @@ public class TopTrumpsRESTAPI {
 	/*
 	 * 
 	 * See GameScreen.ftl for method called setPlayers(int) which calls this
-	 * 
-	 * This has @POST above as we are using it to pass information back.
-	 * 
+	 *
 	 */
 	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
 		System.out.println("Setting number of players to " + players);
