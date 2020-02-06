@@ -270,16 +270,27 @@
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
 					var players = JSON.parse(responseText);
+					var playersLength = players.length;
 					//alert(players[0].name);
 
-					$('#mainPlayerName').text(players[0].name);
-					$('#game-user-name').text(players[0].cardName);
-					$('#playerSizeBadge').text(players[0].Size);
-					$('#playerSpeedBadge').text(players[0].Speed);
-					$('#playerRangeBadge').text(players[0].Range);
-					$('#playerFirepowerBadge').text(players[0].Firepower);
-					$('#playerCargoBadge').text(players[0].Cargo);
-					$('#playerHandSize').text(players[0].handSize);
+					if(playersLength < 5){
+						var i = playersLength+1;
+						var cardID = '#game-AI-card-container-' + i;
+						for(i; i<5; i++){
+							removeContainers(cardID)
+						}
+					}
+
+					if(players[0].handSize !== 0){
+						$('#mainPlayerName').text(players[0].name);
+						$('#game-user-name').text(players[0].cardName);
+						$('#playerSizeBadge').text(players[0].Size);
+						$('#playerSpeedBadge').text(players[0].Speed);
+						$('#playerRangeBadge').text(players[0].Range);
+						$('#playerFirepowerBadge').text(players[0].Firepower);
+						$('#playerCargoBadge').text(players[0].Cargo);
+						$('#playerHandSize').text(players[0].handSize);
+					}
 
 					var i;
 					for(i = 1; i < players.length; i++){
@@ -292,6 +303,7 @@
 						} else {
 							$(cardID).css('border-stle', 'none');
 						}
+
 
 						$(cardID).find("h3").text(players[i].cardName);
 						$(cardID).find('h2').text(players[i].name);
@@ -313,7 +325,27 @@
 				};
 				
 				// We have done everything we need to prepare the CORS request, so send it
-				xhr.send();	
+				xhr.send();
+			}
+
+			function removeContainers(containerID){
+				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
+
+				// Message is not sent yet, but we can check that the browser supports CORS
+				if (!xhr) {
+					alert("CORS not supported");
+				}
+
+				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
+				// to do when the response arrives
+				xhr.onload = function(e) {
+					$(containerID).empty();
+				};
+
+				// We have done everything we need to prepare the CORS request, so send it
+				xhr.send();
+
 			}
 
 			function myFunction(a, b){

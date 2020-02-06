@@ -127,6 +127,12 @@ public class TopTrumpsRESTAPI {
 	public String getJSON() throws IOException{
 		return JSONoutput;
 	}
+
+	@GET
+	@Path("/game/getActivePlayer")
+	public String getActivePlayer(){
+		return game.getActivePlayer().getName();
+	}
 	
 	@GET
 	@Path("game/newGame")
