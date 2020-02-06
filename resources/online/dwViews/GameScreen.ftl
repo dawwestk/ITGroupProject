@@ -272,19 +272,27 @@
 					var players = JSON.parse(responseText);
 					//alert(players[0].name);
 
-					document.getElementById('mainPlayerName').innerHTML = players[0].name;
-					document.getElementById('game-user-name').innerHTML = players[0].cardName;
-					document.getElementById('playerSizeBadge').innerHTML = players[0].Size;
-					document.getElementById('playerSpeedBadge').innerHTML = players[0].Speed;
-					document.getElementById('playerRangeBadge').innerHTML = players[0].Range;
-					document.getElementById('playerFirepowerBadge').innerHTML = players[0].Firepower;
-					document.getElementById('playerCargoBadge').innerHTML = players[0].Cargo;
-					document.getElementById('playerHandSize').innerHTML = players[0].handSize;
+					$('#mainPlayerName').text(players[0].name);
+					$('#game-user-name').text(players[0].cardName);
+					$('#playerSizeBadge').text(players[0].Size);
+					$('#playerSpeedBadge').text(players[0].Speed);
+					$('#playerRangeBadge').text(players[0].Range);
+					$('#playerFirepowerBadge').text(players[0].Firepower);
+					$('#playerCargoBadge').text(players[0].Cargo);
+					$('#playerHandSize').text(players[0].handSize);
 
 					var i;
 					for(i = 1; i < players.length; i++){
 						//alert("finding i " + i);
 						var cardID = '#game-AI-card-container-' + i;
+
+						if(players[i].activePlayer){
+							$(cardID).css('border-style', 'solid');
+							$(cardID).css('border-color', 'blue');
+						} else {
+							$(cardID).css('border-stle', 'none');
+						}
+
 						$(cardID).find("h3").text(players[i].cardName);
 						$(cardID).find('h2').text(players[i].name);
 						$(cardID).find('#aiHandSize').text(players[i].handSize);
@@ -293,7 +301,6 @@
 						$(cardID).find('#aiRangeBadge').text(players[i].Range);
 						$(cardID).find('#aiFirepowerBadge').text(players[i].Firepower);
 						$(cardID).find('#aiCargoBadge').text(players[i].Cargo);
-
 
 					}
 
