@@ -288,8 +288,8 @@
 					var playersLength = players.length;
 					//alert(players[0].name);
 
-					if(playersLength < 5){
-						var i = playersLength+1;
+					if(playersLength < 5 && playersLength > 1){
+						var i = playersLength;
 						var cardID = '#game-AI-card-container-' + i;
 						for(i; i<5; i++){
 							removeContainers(cardID)
