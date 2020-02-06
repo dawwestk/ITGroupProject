@@ -5,7 +5,7 @@
     	<title>Top Trumps Statistics</title>
 
     	<!-- This is the link to the OUR CSS file -->
-    	<link rel="stylesheet" type="text/css" href="/statistics"/>
+    	<link rel="stylesheet" type="text/css" href="/assets/css/statistics.css"/>
 
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
