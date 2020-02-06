@@ -116,8 +116,9 @@ public class TopTrumpsRESTAPI {
 	@Path("/game/nextRound/")
 	public void nextRound() throws IOException {
 		game.advanceRound();
-		game.giveWinnerCards(game.getActivePlayer());
-		j = new JSONGetter(game.getPlayers());
+		ModelPlayer activePlayer = game.getActivePlayer();
+		game.giveWinnerCards(activePlayer);
+		j = new JSONGetter(game.getPlayers(), activePlayer);
 		JSONoutput = j.getJSON();
 	}
 	
@@ -135,7 +136,7 @@ public class TopTrumpsRESTAPI {
 		game = new Game(deck);
 		game.setNumberOfPlayersAndDeal(numPlayers);
 		System.out.println("Game created with " + numPlayers + " players");
-		j = new JSONGetter(game.getPlayers());
+		j = new JSONGetter(game.getPlayers(), game.getActivePlayer());
 		JSONoutput = j.getJSON();
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
