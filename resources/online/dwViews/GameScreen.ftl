@@ -87,7 +87,7 @@
 			<div class = "user-card" id = "game-user-card">
 				<h2 id="mainPlayerName">Placeholder<span class="badge badge-light" id="mainPlayerHandSize">temp</span></h2>
 				<div class = "container" id = "game-user-card-image">
-					<img src = "/assets/images/spaceship_test.jpg" alt="missing spaceship">
+					<img src = "/assets/images/+ <game-user-name>" alt="missing spaceship">
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" role="group" aria-label="...">
