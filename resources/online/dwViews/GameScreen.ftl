@@ -290,6 +290,8 @@
 						$('#playerFirepowerBadge').text(players[0].Firepower);
 						$('#playerCargoBadge').text(players[0].Cargo);
 						$('#playerHandSize').text(players[0].handSize);
+					} else {
+						$('#game-user-card').empty();
 					}
 
 					var i;
