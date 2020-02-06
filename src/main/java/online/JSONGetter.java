@@ -18,6 +18,8 @@ public class JSONGetter{
 			output += "{";
 			ModelCard activeCard = p.getActiveCard();
 			output += "\"name\":\"" + p.getName() + "\", ";
+			int handSize = p.getHand().size();
+			output += "\"handSize\":" + handSize + ", ";
 			output += "\"cardName\":\"" + activeCard.getName() + "\", ";
 			for(int i = 0; i <= numAttributes; i++) {
 				String currentAttribute = activeCard.getAttribute(i);
