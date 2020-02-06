@@ -85,9 +85,9 @@
 
 		<div class = "container" id = "game-board">
 			<div class = "user-card" id = "game-user-card">
-				<h2 id="mainPlayerName">Placeholder</h2>
+				<h2 id="mainPlayerName">Placeholder<span class="badge badge-light" id="mainPlayerHandSize">temp</span></h2>
 				<div class = "container" id = "game-user-card-image">
-					<img src = "/assets/images/spaceship_test.jpg">
+					<img src = "/assets/images/spaceship_test.jpg" alt="missing spaceship">
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" role="group" aria-label="...">
@@ -96,6 +96,8 @@
 					<button type="button" class="btn btn-outline-primary" id="Range" onclick="clickedAttribute(this)">Range:<span class="badge badge-light" id="playerRangeBadge">temp</span></button>
   					<button type="button" class="btn btn-outline-primary" id="Firepower" onclick="clickedAttribute(this)">Firepower:<span class="badge badge-light" id="playerFirepowerBadge">temp</span></button>
   					<button type="button" class="btn btn-outline-primary" id="Cargo" onclick="clickedAttribute(this)">Cargo:<span class="badge badge-light" id="playerCargoBadge">temp</span></button>
+					<button type="button" class="btn btn-outline-primary" id="HandSize">No. Cards in Hand:<span class="badge badge-info" id="playerHandSize">New</span></button>
+
 				</div>
 			</div>
 
@@ -277,6 +279,7 @@
 					document.getElementById('playerRangeBadge').innerHTML = players[0].Range;
 					document.getElementById('playerFirepowerBadge').innerHTML = players[0].Firepower;
 					document.getElementById('playerCargoBadge').innerHTML = players[0].Cargo;
+					document.getElementById('playerHandSize').innerHTML = players[0].handSize;
 
 					var i;
 					for(i = 1; i < players.length; i++){
@@ -284,6 +287,7 @@
 						var cardID = '#game-AI-card-container-' + i;
 						$(cardID).find("h3").text(players[i].cardName);
 						$(cardID).find('h2').text(players[i].name);
+						$(cardID).find('#aiHandSize').text(players[i].handSize);
 						$(cardID).find('#aiSizeBadge').text(players[i].Size);
 						$(cardID).find('#aiSpeedBadge').text(players[i].Speed);
 						$(cardID).find('#aiRangeBadge').text(players[i].Range);

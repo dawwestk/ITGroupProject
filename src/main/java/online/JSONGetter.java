@@ -21,6 +21,7 @@ public class JSONGetter{
 			int handSize = p.getHand().size();
 			output += "\"handSize\":" + handSize + ", ";
 			output += "\"cardName\":\"" + activeCard.getName() + "\", ";
+			output += "\"highestAttribute\":\"" + p.getActiveCard().getHighestAttribute() + "\", ";
 			for(int i = 0; i <= numAttributes; i++) {
 				String currentAttribute = activeCard.getAttribute(i);
 				output += "\"" + currentAttribute + "\":" + activeCard.getValue(currentAttribute) + ", ";
