@@ -281,7 +281,7 @@
 						}
 					}
 
-					if(players[0].handSize !== 0){
+					if((players[0].name.localeCompare('Player One')) === 0){
 						$('#mainPlayerName').text(players[0].name);
 						$('#game-user-name').text(players[0].cardName);
 						$('#playerSizeBadge').text(players[0].Size);
