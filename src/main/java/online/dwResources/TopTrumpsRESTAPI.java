@@ -52,6 +52,7 @@ public class TopTrumpsRESTAPI {
 	private File JSONfile = new File("resources/assets", "JSONtest.json");
 	private String JSONoutput = "";
 	private JSONGetter j = null;
+	private String lastChosenAttribute;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -101,6 +102,7 @@ public class TopTrumpsRESTAPI {
 		ModelCard activeCard = game.getActivePlayer().getActiveCard();
 		Integer attributeName = activeCard.getValue(choice);
 		System.out.println("User chose " + choice + " => " + attributeName);
+		lastChosenAttribute = choice;
 	}
 	
 	@GET
@@ -115,9 +117,19 @@ public class TopTrumpsRESTAPI {
 	@Path("/game/nextRound/")
 	public void nextRound() throws IOException {
 		game.advanceRound();
+		
+		/*
+		// this logic is just for testing purposes
 		ModelPlayer activePlayer = game.getActivePlayer();
 		game.giveWinnerCards(activePlayer);
-		JSONoutput = j.updateJSON(game.getPlayers(), activePlayer);
+		*/
+		ModelPlayer winner = null;
+		if(game.hasWinner(lastChosenAttribute)) {
+			winner = game.getRoundWinner();
+			game.giveWinnerCards(winner);
+		}
+		
+		JSONoutput = j.updateJSON(game.getPlayers(), game.getActivePlayer());
 	}
 	
 	@GET
