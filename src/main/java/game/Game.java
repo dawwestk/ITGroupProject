@@ -32,7 +32,7 @@ public class Game {
 		this.deck = deck;
 		this.roundsWon = new HashMap<String,Integer>();		
 		this.numRoundsDrawn = 0;
-		
+		this.deck.shuffle(); // moved from ModelDeck
 		this.cp = this.deck.getCP();
 		
 		for (int i = 0; i < numPlayers; i++) {
@@ -145,7 +145,7 @@ public class Game {
 				currentWinningPlayer = otherPlayer; // otherPlayer is new currentWinningPlayer
 				drawCount = 0;
 			}else if (otherAttributeHigher == 0) {
-				//System.out.println("Draw count " + drawCount++); 
+				drawCount++;
 			}
 		}
 

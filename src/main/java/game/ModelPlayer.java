@@ -72,5 +72,14 @@ public class ModelPlayer {
         Gson gson = new Gson();
 
     }
+    
+    public String toString() {
+    	String playerString = this.getName();    	
+    	for(ModelCard card: this.hand) {
+    		playerString += "\n";
+    		playerString += card.toString();
+    	}
+    	return playerString;
+    }
 
 }

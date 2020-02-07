@@ -30,5 +30,14 @@ public class ModelCommunalPile extends ArrayList<ModelCard>{
     public boolean isEmpty() {
         return empty;
     }
+   
+    public String toString() {
+    	String communalString = "";
+    	for(ModelCard card: this) {
+    		communalString += card.toString();
+    		communalString += "\n";
+    	}
+    	return communalString;
+    }
 
 }

@@ -72,6 +72,8 @@ public class TopTrumpsCLIApplication {
 		boolean writeGameLogsToFile = false; // Should we write game logs to file?
 		if (args[0].equalsIgnoreCase("true")) writeGameLogsToFile = true; // Command line selection
 		
+		String logFileName = "toptrumps.log"; 
+		
 		DatabaseQuery dbq = null;
 		Scanner keyboard = new Scanner(System.in);
 		
@@ -100,14 +102,48 @@ public class TopTrumpsCLIApplication {
 					ps.println("Deck file could not be opened.");
 					System.exit(0);
 				}
+				
+				// create a new file to output logs to
+				PrintStream fileStream = null;
+				if(writeGameLogsToFile) {
+					try {
+						fileStream = new PrintStream(logFileName);					
+					} catch(IOException e) {
+						ps.println("log file could not be opened");
+						System.exit(0);
+					}
+				}
+				
+				// log files if -t passed through command line
+				Logger logger = new Logger(fileStream, writeGameLogsToFile);					
 
+				// log deck before shuffling
+				logger.appendln("deck before shuffling");
+				logger.appendln(modelDeck.toString());
+				
 				// get number of players from user
 				int numPlayers = askForMenuChoice(keyboard, "How many opponents would you like to face (max 4)? ", 
 						"Please enter a number (1-4): ", 1, 4);
 
 				// Create new game
 				Game game = new Game(modelDeck, numPlayers);
-
+				
+				// log deck after shuffling
+				logger.appendln("deck after shuffling");
+				logger.appendln(modelDeck.toString());
+				
+				// Get all players
+				ArrayList<ModelPlayer> players = new ArrayList<ModelPlayer>(game.getNumPlayers());
+				for(int i = 0 ; i < game.getNumPlayers(); ++i) {
+					players.add(game.getPlayer(i));
+				}
+				
+				// log hand of each player
+				logger.appendln("hand of each player");
+				for(ModelPlayer player: players) {
+					logger.appendln(player.toString());
+				}
+				
 				System.err.print(game.printRoundsWon());
 				
 				// While the game isn't finished
@@ -147,9 +183,32 @@ public class TopTrumpsCLIApplication {
 					} else {
 						userJustChoseAttribute = false;
 					}
-
+					
 					stat = game.getStat(choice);
-
+					
+					// re-initialize players
+					players = new ArrayList<ModelPlayer>(game.getNumPlayers());
+					for(int i = 0 ; i < game.getNumPlayers(); ++i) {
+						players.add(game.getPlayer(i));
+					}
+					
+					// log cards in play
+					logger.appendln("Current cards in play");
+					for(ModelPlayer player: players) {
+						ModelCard card = player.getActiveCard();
+						logger.append(player.getName());
+						logger.append(" ");
+						logger.appendln(card.toString());
+					}
+					
+					// log category selected and card values
+					logger.appendln("Category selected and card values");
+					for(ModelPlayer player: players) {
+						ModelCard card = player.getActiveCard();
+						logger.appendln("" + card.getValue(stat));
+						logger.appendln("");
+					}
+					
 					ps.println("It is " + game.getActivePlayer().getName() + "'s turn.");
 					ps.println(game.getActivePlayer().getName() + " picked attribute " + stat +"\n");    // note this is array index, not numbered attribute
 					ps.println("Score to beat is: " + game.getActivePlayer().getActiveCard().getValue(stat) + "\n");
@@ -157,6 +216,11 @@ public class TopTrumpsCLIApplication {
 
 					// Check if win or draw
 					boolean hasWinner = game.hasWinner(stat);
+					
+					// log cards in communal pile (cards added or no cards in it)
+					ModelCommunalPile cp = modelDeck.getCP();
+					logger.appendln("cards in communal pile (cards added or no cards");
+					logger.appendln(cp.toString());
 
 					// Check size of communal pile
 					if (game.communalDeckSize() == 0) {
@@ -183,7 +247,35 @@ public class TopTrumpsCLIApplication {
 							userWantsToQuit = true;
 						}
 					}
-					game.giveWinnerCards(game.getRoundWinner());
+					game.giveWinnerCards(game.getRoundWinner());									
+					
+					// log communal pile after cards removed from it
+					logger.appendln("Communal pile after cards removed");
+					logger.appendln(cp.toString());
+
+					// log round winner
+					logger.appendln("Round Winner");
+					logger.appendln(game.getRoundWinner().getName());
+					
+					// log contents of each deck after a round
+					logger.appendln("Deck");
+					logger.appendln(modelDeck.toString());
+					logger.appendln("Communal Pile");
+					logger.appendln(modelDeck.getCP().toString());
+					logger.appendln("Users Decks");
+					
+					// re-initialize players
+					players = new ArrayList<ModelPlayer>(game.getNumPlayers());
+					for(int i = 0 ; i < game.getNumPlayers(); ++i) {
+						players.add(game.getPlayer(i));
+					}
+					
+					for(ModelPlayer player: players) {
+						logger.appendln(player.toString());
+					}
+					
+					// write to file
+					logger.flush();
 					game.advanceRound();
 				}
 				

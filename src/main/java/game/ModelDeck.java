@@ -7,7 +7,7 @@ public class ModelDeck {
 
     private int totalCards;
     private int createdCards;
-    private ModelCard[] initialArrayOfCards;
+    private ArrayList<ModelCard> initialArrayOfCards;
     private ArrayList<ModelCard> shuffled;
     private ArrayList<Integer> shuffledIndex;
     private ModelCommunalPile communalPile;
@@ -15,11 +15,16 @@ public class ModelDeck {
     public ModelDeck() {
         totalCards = 40;		// hard coded for now as specified
         createdCards = 0;
-        initialArrayOfCards = new ModelCard[totalCards];
+        initialArrayOfCards = new ArrayList<ModelCard>();
         communalPile = new ModelCommunalPile();
     }
+    
+//    private void initializeShuffledDeck() {
+//        shuffled = new ArrayList<ModelCard>();
+//        for()
+//    }
 
-    private void shuffle() {
+    public void shuffle() {
         shuffled = new ArrayList<ModelCard>();
         shuffledIndex = new ArrayList<Integer>();
         Random r = new Random();
@@ -28,9 +33,10 @@ public class ModelDeck {
             while(shuffledIndex.contains(rand)) {
                 rand = r.nextInt(totalCards);
             }
-            shuffled.add(initialArrayOfCards[rand]);
+            shuffled.add(initialArrayOfCards.get(rand));
             shuffledIndex.add(rand);
         }
+        initialArrayOfCards = shuffled; // hack because we use two arrays for the deck, consider using a single array
     }
 
     public void deal(ArrayList<ModelPlayer> players) {
@@ -66,15 +72,28 @@ public class ModelDeck {
     }
 
     public void addCard(ModelCard card) {
-        initialArrayOfCards[createdCards++] = card;
+    	if(this.createdCards < this.totalCards) {
+	    	createdCards++;
+	        initialArrayOfCards.add(card);
+    	}
 
-        if(createdCards == totalCards) {
-            shuffle();
-        }
+    	// shuffle() now called in Game
+//        if(createdCards == totalCards) {
+//            shuffle();
+//        }
     }
 
     public int getCreatedCards() {
         return createdCards;
+    }
+    
+    public String toString() {
+    	String deckString = "";
+    	for(ModelCard card: initialArrayOfCards) {
+    		deckString += card.toString();
+    		deckString += "\n";
+    	}
+    	return deckString;
     }
 
 }

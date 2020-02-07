@@ -89,5 +89,15 @@ public class ModelCard {
         }
         return highest;
     }
+    
+    public String toString() {
+    	String cardString = "";
+    	cardString += this.name;
+    	for(String attribute: this.attributeDefinitions) {
+        	cardString += " ";
+    		cardString += this.getValue(attribute);    		
+    	}
+    	return cardString;
+    }
 
 }
