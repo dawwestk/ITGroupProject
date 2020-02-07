@@ -7,9 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
 
@@ -215,6 +213,7 @@ public class Game {
 		winner.getHand().add(0, winningCard);
 
 		if (!communalPileEmpty) {
+			Collections.shuffle(cp);
 			this.cp.pickedUpByWinner(winner);
 		}
 	}
