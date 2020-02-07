@@ -228,6 +228,7 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
+					updateText(responseText, 'Next');
 				};
 				xhr.send();
 			}
@@ -374,12 +375,14 @@
 
 			function playerEliminated(){
 				$('#game-user-card').empty();
-				$('#game-user-card').append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='Player Eliminated'>");
+				$('#game-user-card').append("<h1>&#9760</h1>");
+				//$('#game-user-card').append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='Player Eliminated'>");
 			}
 
 			function AIeliminated(cardID){
 				$(cardID).empty();
-				$(cardID).append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='AI Eliminated'>");
+				$(cardID).append("<h1>&#9760</h1>");
+				//$(cardID).append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='AI Eliminated'>");
 			}
 
 			function removeContainers(containerID){

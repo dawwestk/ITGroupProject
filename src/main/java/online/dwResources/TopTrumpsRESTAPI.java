@@ -114,7 +114,7 @@ public class TopTrumpsRESTAPI {
 	
 	@GET
 	@Path("/game/nextRound/")
-	public void nextRound() throws IOException {
+	public String nextRound() throws IOException {
 		game.advanceRound();
 		
 		/*
@@ -123,13 +123,19 @@ public class TopTrumpsRESTAPI {
 		game.giveWinnerCards(activePlayer);
 		*/
 		ModelPlayer winner = null;
+		String output = "";
 		if(game.hasWinner(lastChosenAttribute)) {
 			winner = game.getRoundWinner();
 			game.giveWinnerCards(winner);
+			output = winner.getName() + " has won!";
+		} else {
+			output = "This round was a draw!";
 		}
 		
 		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), game.getActivePlayer());
 		writeJSONtoFile(JSONoutput);
+		
+		return output;
 	}
 	
 	@GET
