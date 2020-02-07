@@ -279,12 +279,16 @@ public class TopTrumpsCLIApplication {
 					game.advanceRound();
 				}
 				
+				// log game winner
+				logger.appendln("Game winner");
+				logger.appendln(game.getRoundWinner().getName());
+				
 				// If the user has indicated that they wish to quit, there should be no winner statement
 				// And the game shouldn't be added to the database
 				if(!userWantsToQuit) {
 					// Display winning player's information, winner is the last player left
 					ps.println(game.getPlayers().get(0).getName() + " is the winner!");
-
+					
 					try {
 						dbq.addGameToDB(game);
 					} catch (Exception e) {
