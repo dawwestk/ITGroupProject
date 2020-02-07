@@ -228,6 +228,7 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
+					updateText(responseText, 'Next');
 				};
 				xhr.send();
 			}
@@ -293,7 +294,7 @@
 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
-					//alert(responseText); // lets produce an alert
+					
 					var players = JSON.parse(responseText);
 					var playersLength = players.length;
 					//alert(players[0].name);
@@ -311,18 +312,23 @@
 					    cache: false
 					});
 
-					if((players[0].name.localeCompare('Player One')) === 0){
-						$('#mainPlayerName').text(players[0].name);
-						$('#game-user-name').text(players[0].cardName);
-						$('#game-user-card-image').find('img').attr('src', '/assets/images/' + players[0].cardName + '.jpg');
-						$('#playerSizeBadge').text(players[0].Size);
-						$('#playerSpeedBadge').text(players[0].Speed);
-						$('#playerRangeBadge').text(players[0].Range);
-						$('#playerFirepowerBadge').text(players[0].Firepower);
-						$('#playerCargoBadge').text(players[0].Cargo);
-						$('#playerHandSize').text(players[0].handSize);
+					if(players[0].eliminated){
+						//alert("Player One eliminated");
+						playerEliminated();
 					} else {
-						$('#game-user-card').empty();
+						if((players[0].name.localeCompare('Player One')) === 0){
+							$('#mainPlayerName').text(players[0].name);
+							$('#game-user-name').text(players[0].cardName);
+							$('#game-user-card-image').find('img').attr('src', '/assets/images/' + players[0].cardName + '.jpg');
+							$('#playerSizeBadge').text(players[0].Size);
+							$('#playerSpeedBadge').text(players[0].Speed);
+							$('#playerRangeBadge').text(players[0].Range);
+							$('#playerFirepowerBadge').text(players[0].Firepower);
+							$('#playerCargoBadge').text(players[0].Cargo);
+							$('#playerHandSize').text(players[0].handSize);
+						} else {
+							$('#game-user-card').empty();
+						}
 					}
 
 					var activePlayerSet = false;
@@ -331,28 +337,32 @@
 						//alert("finding i " + i);
 						var cardID = '#game-AI-card-container-' + i;
 
-						if(players[i].activePlayer){
-							if(!activePlayerSet){	
-								$('#game-active-player-name').text(players[i].name);
-								activePlayerSet = true;
-							}
-							$(cardID).css('border-style', 'solid');
-							$(cardID).css('border-color', 'blue');
+						if(players[i].eliminated){
+							//alert(players[i].name + " is eliminated");
+							AIeliminated(cardID);
 						} else {
-							$(cardID).css('border-style', 'none');
+							if(players[i].activePlayer){
+								if(!activePlayerSet){	
+									$('#game-active-player-name').text(players[i].name);
+									activePlayerSet = true;
+								}
+								$(cardID).css('border-style', 'solid');
+								$(cardID).css('border-color', 'blue');
+							} else {
+								$(cardID).css('border-style', 'none');
+							}
+
+
+							$(cardID).find("h3").text(players[i].cardName);
+							$(cardID).find('h2').text(players[i].name);
+							$(cardID).find('img').attr('src', '/assets/images/' + players[i].cardName + '.jpg');
+							$(cardID).find('#aiHandSize').text(players[i].handSize);
+							$(cardID).find('#aiSizeBadge').text(players[i].Size);
+							$(cardID).find('#aiSpeedBadge').text(players[i].Speed);
+							$(cardID).find('#aiRangeBadge').text(players[i].Range);
+							$(cardID).find('#aiFirepowerBadge').text(players[i].Firepower);
+							$(cardID).find('#aiCargoBadge').text(players[i].Cargo);
 						}
-
-
-						$(cardID).find("h3").text(players[i].cardName);
-						$(cardID).find('h2').text(players[i].name);
-						$(cardID).find('img').attr('src', '/assets/images/' + players[i].cardName + '.jpg');
-						$(cardID).find('#aiHandSize').text(players[i].handSize);
-						$(cardID).find('#aiSizeBadge').text(players[i].Size);
-						$(cardID).find('#aiSpeedBadge').text(players[i].Speed);
-						$(cardID).find('#aiRangeBadge').text(players[i].Range);
-						$(cardID).find('#aiFirepowerBadge').text(players[i].Firepower);
-						$(cardID).find('#aiCargoBadge').text(players[i].Cargo);
-
 					}
 
 					if(!activePlayerSet){
@@ -361,6 +371,18 @@
 					}
 				};
 				xhr.send();
+			}
+
+			function playerEliminated(){
+				$('#game-user-card').empty();
+				$('#game-user-card').append("<h1>&#9760</h1>");
+				//$('#game-user-card').append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='Player Eliminated'>");
+			}
+
+			function AIeliminated(cardID){
+				$(cardID).empty();
+				$(cardID).append("<h1>&#9760</h1>");
+				//$(cardID).append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='AI Eliminated'>");
 			}
 
 			function removeContainers(containerID){
