@@ -117,8 +117,7 @@ public class TopTrumpsRESTAPI {
 		game.advanceRound();
 		ModelPlayer activePlayer = game.getActivePlayer();
 		game.giveWinnerCards(activePlayer);
-		j = new JSONGetter(game.getPlayers(), activePlayer);
-		JSONoutput = j.getJSON();
+		JSONoutput = j.updateJSON(game.getPlayers(), activePlayer);
 	}
 	
 	@GET
@@ -142,8 +141,10 @@ public class TopTrumpsRESTAPI {
 		game.setNumberOfPlayersAndDeal(numPlayers);
 		System.out.println("Game created with " + numPlayers + " players");
 		ModelPlayer activePlayer = game.getActivePlayer();
-		j = new JSONGetter(game.getPlayers(), activePlayer);
-		JSONoutput = j.getJSON();
+		j = new JSONGetter(game);
+		JSONoutput = j.updateJSON(game.getPlayers(), activePlayer);
+		
+		/* is writing the JSON to a file necessary?
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
 			fw.write(JSONoutput);
@@ -152,6 +153,7 @@ public class TopTrumpsRESTAPI {
 		} catch(Exception e) {
 			System.out.println("Couldn't write to file");
 		}
+		*/
 		
 	}
 	

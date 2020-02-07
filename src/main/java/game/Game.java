@@ -83,7 +83,6 @@ public class Game {
 		}
 		this.playerToGoFirst();
 		this.dealDeck();
-		saveJSON();
 	}
 	
 	// prints the roundsWon HashMap for debugging
@@ -330,25 +329,5 @@ public class Game {
 
 	public void advanceRound() {
 		this.roundCount++;
-		saveJSON();
-	}
-
-	public void saveJSON(){
-
-		try {
-			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-			File playersJSON = new File("resources/assets", "playersJSON.json");
-			Writer writer = new FileWriter(playersJSON);
-			gson.toJson(this.players, writer);
-			writer.flush();
-			writer.close();
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
-	}
-	
-	public void setActivePlayerToUserForGUITest() {
-		this.activePlayer = this.user;
 	}
 }

@@ -25,8 +25,8 @@
     		img {max-width:100%;}
     		#text-box-and-button{width: 100%; }
     		#game-active-player{width: 10%; visibility: hidden}
-    		#game-active-player-name{width: 5%; visibility: hidden}
-    		#game-text{width: 65%;}
+    		#game-active-player-name{width: 10%; visibility: hidden}
+    		#game-text{width: 60%;}
 			#game-AI-card-container-1,
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
@@ -91,7 +91,7 @@
 			<div class = "user-card" id = "game-user-card">
 				<h2 id="mainPlayerName">Placeholder<span class="badge badge-light" id="mainPlayerHandSize">temp</span></h2>
 				<div class = "container" id = "game-user-card-image">
-					<img src = "/assets/images/Chimera.jpg" alt="missing spaceship">
+					<img src = "" alt="missing spaceship">
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" role="group" aria-label="...">
@@ -134,13 +134,20 @@
 		<script>
 
 			function updateText(textString, buttonString){
+				/*
+					Helper method to update the status bar and "next" button
+				*/
 				$('#game-text').text(textString);
 				$('#next-round-button').text(buttonString);
 			}
 
 			function selectAttributeAsPOST(attrName){
-				//updateText('Player One chose ' + attName + "!", "Confirm");
-			    $.ajax({
+
+				/*
+					Sends the chosen attribute from the player back to the API
+				*/
+				
+				$.ajax({
 			        type: 'POST',
 			        dataType: "json",
 			        url: "http://localhost:7777/toptrumps/game/selectAttribute",
@@ -156,6 +163,10 @@
 
 			function selectAttribute(attrName){
 				
+				/*
+					Sends the chosen attribute from the player back to the API
+					Currently not a real POST request
+				*/
 				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/selectAttribute?attribute=" + attrName); 
 				if (!xhr) {alert("CORS not supported");}
 
@@ -174,16 +185,16 @@
 			}
 
 			function startRoundOne(button){
-				getJSON();
-				unHideBoard();
-				getRoundCount();
-				$(button).attr('onclick', 'advance()');
+				getJSON();			// pulls in JSON, populates cards
+				unHideBoard();		// unhides board elements revealing cards, active player
+				getRoundCount();	// display the round counter
+				$(button).attr('onclick', 'advance()');	// change the button functionality to the advance() function
 			}
 
 			function advance(){
-				getJSON();
 				nextRound();
 				getRoundCount();
+				getJSON();
 				
 			}
 

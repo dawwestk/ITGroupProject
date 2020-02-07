@@ -6,12 +6,15 @@ import game.*;
 
 public class JSONGetter{ 
 	
-	private String output = "[";
+	public JSONGetter(Game g) {
+		
+	}
 	
-	public JSONGetter(ArrayList<ModelPlayer> players, ModelPlayer activePlayer) {
+	public String updateJSON(ArrayList<ModelPlayer> players, ModelPlayer activePlayer) {
 		// processes players/card objects to produce JSON string
 		// only for use in the online application
 		
+		String output = "[";
 		int numAttributes = players.get(0).getActiveCard().getNumberOfAttributes();
 		
 		for(ModelPlayer p : players) {
@@ -35,9 +38,6 @@ public class JSONGetter{
 		output += "]";
 		output = output.replace(", ]", "]").replace(", }", "}");		// removes trailing comma
 		
-	}
-	
-	public String getJSON() {
 		return output;
 	}
 	
