@@ -297,6 +297,11 @@
 						}
 					}
 
+					$.ajaxSetup ({
+					    // Disable caching of AJAX responses
+					    cache: false
+					});
+
 					if((players[0].name.localeCompare('Player One')) === 0){
 						$('#mainPlayerName').text(players[0].name);
 						$('#game-user-name').text(players[0].cardName);
