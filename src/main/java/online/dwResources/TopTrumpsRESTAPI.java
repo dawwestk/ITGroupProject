@@ -49,7 +49,6 @@ public class TopTrumpsRESTAPI {
 	private int numPlayers = 0;
 	private Game game = null;
 	private ModelDeck deck;
-	private File JSONfile = new File("resources/assets", "JSONtest.json");
 	private String JSONoutput = "";
 	private JSONGetter j = null;
 	private String lastChosenAttribute;
@@ -129,7 +128,8 @@ public class TopTrumpsRESTAPI {
 			game.giveWinnerCards(winner);
 		}
 		
-		JSONoutput = j.updateJSON(game.getPlayers(), game.getActivePlayer());
+		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), game.getActivePlayer());
+		writeJSONtoFile(JSONoutput);
 	}
 	
 	@GET
@@ -154,19 +154,23 @@ public class TopTrumpsRESTAPI {
 		System.out.println("Game created with " + numPlayers + " players");
 		ModelPlayer activePlayer = game.getActivePlayer();
 		j = new JSONGetter(game);
-		JSONoutput = j.updateJSON(game.getPlayers(), activePlayer);
+		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
 		
-		/* is writing the JSON to a file necessary?
+		writeJSONtoFile(JSONoutput);
+		
+	}
+	
+	public void writeJSONtoFile(String s) {
+		// is writing the JSON to a file necessary?
+		File JSONfile = new File("resources/assets", "JSONtest.json");
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
-			fw.write(JSONoutput);
+			fw.write(s);
 			fw.flush();
 			fw.close();
 		} catch(Exception e) {
 			System.out.println("Couldn't write to file");
 		}
-		*/
-		
 	}
 	
 	@GET
