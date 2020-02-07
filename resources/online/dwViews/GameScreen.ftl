@@ -135,6 +135,7 @@
 			}
 
 			function selectAttributeAsPOST(attrName){
+				//updateText('Player One chose ' + attName + "!", "Confirm");
 			    $.ajax({
 			        type: 'POST',
 			        dataType: "json",
@@ -299,6 +300,7 @@
 					if((players[0].name.localeCompare('Player One')) === 0){
 						$('#mainPlayerName').text(players[0].name);
 						$('#game-user-name').text(players[0].cardName);
+						$('#game-user-card-image').find('img').attr('src', '/assets/images/' + players[0].cardName + '.jpg');
 						$('#playerSizeBadge').text(players[0].Size);
 						$('#playerSpeedBadge').text(players[0].Speed);
 						$('#playerRangeBadge').text(players[0].Range);
@@ -318,12 +320,13 @@
 							$(cardID).css('border-style', 'solid');
 							$(cardID).css('border-color', 'blue');
 						} else {
-							$(cardID).css('border-stle', 'none');
+							$(cardID).css('border-style', 'none');
 						}
 
 
 						$(cardID).find("h3").text(players[i].cardName);
 						$(cardID).find('h2').text(players[i].name);
+						$(cardID).find('img').attr('src', '/assets/images/' + players[i].cardName + '.jpg');
 						$(cardID).find('#aiHandSize').text(players[i].handSize);
 						$(cardID).find('#aiSizeBadge').text(players[i].Size);
 						$(cardID).find('#aiSpeedBadge').text(players[i].Speed);
