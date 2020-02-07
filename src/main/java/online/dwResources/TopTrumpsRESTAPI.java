@@ -98,7 +98,6 @@ public class TopTrumpsRESTAPI {
 		// needs active player to be chosen by this point
 		String choice = attribute;
 		System.out.println("Attribute " + choice);
-		game.setActivePlayerToUserForGUITest();
 		ModelCard activeCard = game.getActivePlayer().getActiveCard();
 		Integer attributeName = activeCard.getValue(choice);
 		System.out.println("User chose " + choice + " => " + attributeName);
@@ -142,7 +141,8 @@ public class TopTrumpsRESTAPI {
 		game = new Game(deck);
 		game.setNumberOfPlayersAndDeal(numPlayers);
 		System.out.println("Game created with " + numPlayers + " players");
-		j = new JSONGetter(game.getPlayers(), game.getActivePlayer());
+		ModelPlayer activePlayer = game.getActivePlayer();
+		j = new JSONGetter(game.getPlayers(), activePlayer);
 		JSONoutput = j.getJSON();
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
@@ -152,7 +152,24 @@ public class TopTrumpsRESTAPI {
 		} catch(Exception e) {
 			System.out.println("Couldn't write to file");
 		}
-		System.out.println("Saved JSON of player names and cards");
+		
+	}
+	
+	@GET
+	@Path("/game/getCPUChoice")
+	public String getCPUChoice() {
+		ModelPlayer activePlayer = game.getActivePlayer();
+		if(!activePlayer.equals(game.getUser())) {
+			// CPU player is active player
+			ModelCard activeCard = activePlayer.getActiveCard();
+			String choice = activeCard.getHighestAttribute();
+			Integer attributeName = activeCard.getValue(choice);
+			System.out.println("CPU chose " + choice + " => " + attributeName);
+
+			return choice;
+		} else {
+			return "Awaiting CPU choice";
+		}
 	}
 	
 	@POST

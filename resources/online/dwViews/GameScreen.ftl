@@ -24,7 +24,9 @@
     		#game-AI-card4 h3{border: solid;}
     		img {max-width:100%;}
     		#text-box-and-button{width: 100%; }
-    		#game-text{width: 80%;}
+    		#game-active-player{width: 10%; visibility: hidden}
+    		#game-active-player-name{width: 5%; visibility: hidden}
+    		#game-text{width: 65%;}
 			#game-AI-card-container-1,
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
@@ -76,8 +78,10 @@
 		</div>
 
 		<div class = "container" id="text-box-and-button">
-			<h4><span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
-			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne()">Next Round</button><button onclick="advance()">Advance</button></h4>
+			<span class="badge badge-light" id="game-active-player">Active Player:</span>
+			<span class="badge badge-dark" id="game-active-player-name">{player}</span>
+			<span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
+			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne(this)">Next Round</button>
 		</div>
 
 
@@ -96,7 +100,7 @@
 					<button type="button" class="btn btn-outline-primary" id="Range" onclick="clickedAttribute(this)">Range:<span class="badge badge-light" id="playerRangeBadge">temp</span></button>
   					<button type="button" class="btn btn-outline-primary" id="Firepower" onclick="clickedAttribute(this)">Firepower:<span class="badge badge-light" id="playerFirepowerBadge">temp</span></button>
   					<button type="button" class="btn btn-outline-primary" id="Cargo" onclick="clickedAttribute(this)">Cargo:<span class="badge badge-light" id="playerCargoBadge">temp</span></button>
-					<button type="button" class="btn btn-outline-primary" id="HandSize">No. Cards in Hand:<span class="badge badge-info" id="playerHandSize">New</span></button>
+					<button type="button" class="btn btn-outline-secondary" id="HandSize" disabled>No. Cards in Hand:<span class="badge badge-info" id="playerHandSize">New</span></button>
 
 				</div>
 			</div>
@@ -151,24 +155,16 @@
 			}
 
 			function selectAttribute(attrName){
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/selectAttribute?attribute=" + attrName); // Request type and URL+parameters
 				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
+				var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/selectAttribute?attribute=" + attrName); 
+				if (!xhr) {alert("CORS not supported");}
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert("User chose " + int);
 					updateText("Player One chose " + attrName, "Next round");
 
 				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();
 			}
 
@@ -177,81 +173,84 @@
 				updateText("Welcome to Top Trumps - hit this button to begin...", "Begin round 1");
 			}
 
-			function startRoundOne(){
+			function startRoundOne(button){
 				getJSON();
 				unHideBoard();
+				getRoundCount();
+				$(button).attr('onclick', 'advance()');
 			}
 
 			function advance(){
-				nextRound();
 				getJSON();
+				nextRound();
 				getRoundCount();
+				
 			}
 
 			function getRoundCount(){
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				
+				/*
+					Retrieves the roundCounter variable from the API
+				*/
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getRoundCount/"); // Request type and URL
 				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
+				if (!xhr) {alert("CORS not supported");}
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//return responseText; // lets produce an alert
 					updateText("Starting round " + responseText, "Next")
 				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();
 			}
 
 			function nextRound(){
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				
+				/*
+					Utilises the game.advanceRound() function in the API
+					Increases the round counter variable
+				*/
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/nextRound/"); // Request type and URL
 				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
+				if (!xhr) {alert("CORS not supported");}
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
 				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();
 			}
 
 			function unHideBoard(){
+
+				/*
+					Unhides the game-board and the Active Player sections
+					Can also re-hide between rounds if desired(?)
+				*/
 				var x = document.getElementById("game-board");
 				if (x.style.visibility === "visible") {
 				  x.style.visibility = "hidden";
 				} else {
 				  	x.style.visibility = "visible";
 				}
+				var y = document.getElementById("game-active-player");
+				var z = document.getElementById("game-active-player-name");
+				y.style.visibility = "visible";
+				z.style.visibility = "visible";
 			}
 
 			function getPlayers(){
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getPlayers"); // Request type and URL+parameters
 				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
+				/*
+					Receives the number of AI players from the API and populates the game-board
+					section with the correct number of AI cards (from the AIcard html file)
+				*/
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getPlayers"); 
+				if (!xhr) {alert("CORS not supported");}
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
-					//alert("Number of players = " + responseText); // lets produce an alert
+
 					$.ajaxSetup ({
 					    // Disable caching of AJAX responses
 					    cache: false
@@ -265,23 +264,22 @@
 					
 					return responseText;
 				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();	
 			}
 
 
 			function getJSON(){
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
+
+				/*
+					Retrieves the JSON file which houses the current player and active
+					card info. Then populates the correct elements on the page with all
+					attributes and active player info as needed
+				*/
+				
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
 
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
+				if (!xhr) {alert("CORS not supported");}
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
@@ -316,12 +314,17 @@
 						$('#game-user-card').empty();
 					}
 
+					var activePlayerSet = false;
 					var i;
 					for(i = 1; i < players.length; i++){
 						//alert("finding i " + i);
 						var cardID = '#game-AI-card-container-' + i;
 
 						if(players[i].activePlayer){
+							if(!activePlayerSet){	
+								$('#game-active-player-name').text(players[i].name);
+								activePlayerSet = true;
+							}
 							$(cardID).css('border-style', 'solid');
 							$(cardID).css('border-color', 'blue');
 						} else {
@@ -341,29 +344,24 @@
 
 					}
 
-					// $("#Size").text( "Size: " + players[0].Size);
-					// $('#Speed').text( "Speed: " + players[0].Speed);
-					// $('#Range').text( "Range: " + players[0].Range);
-					// $('#Firepower').text( "Firepower: " + players[0].Firepower);
-					// $('#Cargo').text( "Cargo: " + players[0].Cargo);
-
+					if(!activePlayerSet){
+						$('#game-active-player-name').text(players[0].name);
+								activePlayerSet = true;
+					}
 				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();
 			}
 
 			function removeContainers(containerID){
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
+
+				/*
+					Empties a specified container?
+				*/
+				
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
 
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-					alert("CORS not supported");
-				}
+				if (!xhr) {alert("CORS not supported");}
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives
 				xhr.onload = function(e) {
 					$(containerID).empty();
 				};
@@ -372,11 +370,6 @@
 				xhr.send();
 
 			}
-
-			function myFunction(a, b){
-				return a * b;
-			}
-			document.getElementById("demo").innerHTML = myFunction(10, 2);
 
 			// Method that is called on page load
 			function initalize() {
@@ -431,44 +424,29 @@
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloJSONList() {
 			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
+				
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloJSONList"); // Request type and URL
 				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
+				if (!xhr) {alert("CORS not supported");}
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					alert(responseText); // lets produce an alert
 				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();		
 			}
 			
 			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
 			function helloWord(word) {
 			
-				// First create a CORS request, this is the message we are going to send (a get request in this case)
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloWord?Word="+word); // Request type and URL+parameters
 				
-				// Message is not sent yet, but we can check that the browser supports CORS
-				if (!xhr) {
-  					alert("CORS not supported");
-				}
+				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloWord?Word="+word); 
+				if (!xhr) {alert("CORS not supported");}
 
-				// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					alert(responseText); // lets produce an alert
 				};
-				
-				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();		
 			}
 
