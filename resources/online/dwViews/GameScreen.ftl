@@ -78,6 +78,7 @@
 		</div>
 
 		<div class = "container" id="text-box-and-button">
+			<span class="badge badge-light" id="round-count-badge">Round Count:</span>
 			<span class="badge badge-light" id="game-active-player">Active Player:</span>
 			<span class="badge badge-dark" id="game-active-player-name">{player}</span>
 			<span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
@@ -199,7 +200,6 @@
 			}
 
 			function getRoundCount(){
-				
 				/*
 					Retrieves the roundCounter variable from the API
 				*/
@@ -209,8 +209,7 @@
 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
-					//return responseText; // lets produce an alert
-					updateText("Starting round " + responseText, "Next")
+					$('#round-count-badge').text("Round:" + responseText);
 				};
 				xhr.send();
 			}
@@ -247,8 +246,10 @@
 				}
 				var y = document.getElementById("game-active-player");
 				var z = document.getElementById("game-active-player-name");
+				var roundCount = document.getElementById("round-count-badge");
 				y.style.visibility = "visible";
 				z.style.visibility = "visible";
+				roundCount.style.visibility = "visible";
 			}
 
 			function getPlayers(){
