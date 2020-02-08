@@ -62,7 +62,7 @@ public class Game {
 		this.deck = deck;
 		this.roundsWon = new HashMap<String,Integer>();		
 		this.numRoundsDrawn = 0;
-		
+		this.deck.shuffle(); // moved from ModelDeck
 		this.cp = this.deck.getCP();
 		
 		this.winningPlayer = null;
