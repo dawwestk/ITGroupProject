@@ -22,7 +22,7 @@
     		#game-AI-card2 h3, 
     		#game-AI-card3 h3, 
     		#game-AI-card4 h3{border: solid;}
-    		img {max-width:100%;}
+    		img {max-width:100%; height:100px}
     		#text-box-and-button{width: 100%; }
     		#game-active-player{width: 10%; visibility: hidden}
     		#game-active-player-name{width: 10%; visibility: hidden}
