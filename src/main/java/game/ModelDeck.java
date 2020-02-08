@@ -24,6 +24,14 @@ public class ModelDeck {
 //        for()
 //    }
 
+    public int initialDeckSize(){
+        return this.initialArrayOfCards.size();
+    }
+
+    public int shuffledDeckSize(){
+        return this.shuffled.size();
+    }
+
     public void shuffle() {
         shuffled = new ArrayList<ModelCard>();
         shuffledIndex = new ArrayList<Integer>();
