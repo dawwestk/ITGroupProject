@@ -150,30 +150,15 @@ public class TopTrumpsRESTAPI {
 		return game.getActivePlayer().getName();
 	}
 	
-	@GET
-	@Path("game/newGame")
-	public void newGame() throws IOException{
-		// Create new Game with only deck - need to set players before playing
-		// this logic will be handled by the GUI
-		game = new Game(deck);
-		game.setNumberOfPlayersAndDeal(numPlayers);
-		System.out.println("Game created with " + numPlayers + " players");
-		ModelPlayer activePlayer = game.getActivePlayer();
-		j = new JSONGetter(game);
-		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
-		
-		writeJSONtoFile(JSONoutput);
-		
-	}
-	
 	public void writeJSONtoFile(String s) {
 		// is writing the JSON to a file necessary?
-		File JSONfile = new File("resources/assets", "JSONtest.json");
+		File JSONfile = new File("resources/assets/", "JSONtest.json");
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
 			fw.write(s);
 			fw.flush();
 			fw.close();
+			System.out.println("Wrote to file successfully");
 		} catch(Exception e) {
 			System.out.println("Couldn't write to file");
 		}
@@ -206,6 +191,13 @@ public class TopTrumpsRESTAPI {
 	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
 		System.out.println("Setting number of players to " + players);
 		numPlayers = players;
+		game = new Game(deck);
+		game.setNumberOfPlayersAndDeal(numPlayers);
+		System.out.println("Game created with " + numPlayers + " players");
+		ModelPlayer activePlayer = game.getActivePlayer();
+		j = new JSONGetter(game);
+		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
+		writeJSONtoFile(JSONoutput);
 	}
 	
 	@GET

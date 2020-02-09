@@ -85,7 +85,7 @@
 			
 			function newGameAndSetPlayers(){
 				selectPlayers();
-				newGame();
+				//newGame();
 			}
 
 			function selectPlayers() {
