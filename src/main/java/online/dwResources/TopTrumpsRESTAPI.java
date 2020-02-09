@@ -52,6 +52,8 @@ public class TopTrumpsRESTAPI {
 	private String JSONoutput = "";
 	private JSONGetter j = null;
 	private String lastChosenAttribute;
+	private StatsJSONGetter statsJSON;
+	private String statsOutput = "";
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -66,6 +68,8 @@ public class TopTrumpsRESTAPI {
 		
 		try {
 			dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+			statsJSON = new StatsJSONGetter(dbq.toString());
+			statsOutput = statsJSON.getJSON();
 		} catch (Exception e) {
 			System.out.println(dbq.getNoConnection());
 		}
@@ -198,6 +202,7 @@ public class TopTrumpsRESTAPI {
 		j = new JSONGetter(game);
 		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
 		writeJSONtoFile(JSONoutput);
+		System.out.println(statsOutput);
 	}
 	
 	@GET
@@ -220,6 +225,8 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/getStats/")
 	public String getStats() throws IOException {
+		
+		/*
 		String stats = dbq.toString();
 		Scanner s = new Scanner(stats);
 		
@@ -233,5 +240,7 @@ public class TopTrumpsRESTAPI {
 		String statsAsJSONString = oWriter.writeValueAsString(list);
 		
 		return statsAsJSONString;
+		*/
+		return statsOutput;
 	}
 }

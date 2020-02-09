@@ -5,7 +5,9 @@
     	<title>Top Trumps Statistics</title>
 
     	<!-- This is the link to the OUR CSS file -->
-    	<link rel="stylesheet" type="text/css" href="/assets/css/statistics.css"/>
+    	<!--
+    		<link rel="stylesheet" type="text/css" href="/assets/css/statistics.css"/>
+    	-->
 
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
@@ -21,6 +23,20 @@
     	<script src="http://dcs.gla.ac.uk/~richardm/vex.combined.min.js"></script>
     	<script>vex.defaultOptions.className = 'vex-theme-os';</script>
     	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+		<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
+    	<style>
+    		table {
+			  border: 1px solid #666;   
+			    width: 100%;
+			}
+			th {
+			  background: #f8f8f8; 
+			  font-weight: bold;    
+			    padding: 2px;
+			}
+		</style>
 		
 	</head>
 
@@ -33,14 +49,17 @@
 			</div>
 		</div>
 
-		<div>
-			<p id = 'tablePlaceholder'>
-				Some text here.
-			</p>
+		<div class = "container" id = 'stats'>
+			<table id = 'statsTable'>
+				<tr>
+		        	<th>Statistic</th>
+		        	<th>Value</th>
+		    	</tr>
+			</table>
 		</div>
 
-		<div id = 'statsTable'>
-
+		<div class = "container" id="piechart">
+			
 		</div>
 
 		<script>
@@ -49,6 +68,31 @@
 			}
 
 		</script>
+
+		<script>
+			function makeChart(JSONData) {
+				var data = JSONData;
+				var options = {
+					animationEnabled: true,
+					title: {
+						text: "Human vs AI wins"
+					},
+					data: [{
+						type: "doughnut",
+						innerRadius: "40%",
+						showInLegend: true,
+						legendText: "{label}",
+						indexLabel: "{label}: #percent%",
+						dataPoints: [
+							{ label: data["Human-wins"][0], y: data["Human-wins"][1] },
+							{ label: data["AI-wins"][1], y: data["AI-wins"][1] },
+						]
+					}]
+				};
+				$("#piechart").CanvasJSChart(options);
+
+			}
+			</script>
 
 		<script type="text/javascript">
 			// -----------------------------------------
@@ -68,19 +112,31 @@
 				// to do when the response arrives 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
- 					//alert("1 - " + responseText);
- 					var r = responseText;
- 					var string = r.replace('[', '').replace(']', '');
- 					var array = string.split(",");
- 					var i;
- 					var output = "<ul>";
- 					for(i = 0; i < array.length; i++){
- 						output += "<li>" + array[i] + "</li>";
- 					}
- 					output += "</ul>";
-					document.getElementById('tablePlaceholder').innerHTML = output// Changing element innerHTML from function - works
-					//putStatsInTable(responseText);
-					//return responseText;
+ 					
+ 					var stats = JSON.parse(responseText);
+
+ 					for (var key of Object.keys(stats)) {
+					    //alert(key + " -> " + stats[key][0] + ": " + stats[key][1]);
+					    var row = $("<tr />")
+					    $("#statsTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+					    for(var i = 0; i < 2; i++){
+					    	row.append($("<td>" + stats[key][i] + "</td>"));
+					    }
+					}
+
+					makeChart(stats);
+
+					/*
+
+					{
+						"Human-wins": ["Human wins", 0], 
+						"Average-Draws": ["Average Draws", 4], 
+						"AI-wins": ["AI wins", 7], 
+						"Highest-Round-Count": ["Highest Round Count", 125], 
+						"Total-games": ["Total games", 7]
+					}
+
+				      */
 				};
 				
 				// We have done everything we need to prepare the CORS request, so send it
@@ -113,8 +169,5 @@
 			}
 		
 		</script>
-		<div id='footer'>
-			<button onclick="alert('no linked function, just alert')">Press here</button>
-		</div>
 	</body>
 </html>
