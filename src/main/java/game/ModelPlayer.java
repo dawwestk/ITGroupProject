@@ -1,14 +1,12 @@
 package game;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ModelPlayer {
 
-    @Expose  private String name;
+    private String name;
     private ArrayList<ModelCard> hand;
     private boolean isWinner;
 
@@ -68,10 +66,6 @@ public class ModelPlayer {
         return name + ":\t" + hand.size() + " cards in hand.";
     }
 
-    public void writeToJSON(){
-        Gson gson = new Gson();
-
-    }
     
     public String toString() {
     	String playerString = this.getName();    	

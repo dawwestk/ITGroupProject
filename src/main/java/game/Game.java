@@ -1,8 +1,5 @@
 package game;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -237,7 +234,7 @@ public class Game {
 		int max = this.players.size();
 		
 		//return r.nextInt((max - min) + 1) + min	<-- format for random between 2 ints (min = 0, max = players.size())
-		int r = random.nextInt(max + 1);
+		int r = random.nextInt(max);
 		return r;
 	}
 

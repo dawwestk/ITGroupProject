@@ -150,30 +150,15 @@ public class TopTrumpsRESTAPI {
 		return game.getActivePlayer().getName();
 	}
 	
-	@GET
-	@Path("game/newGame")
-	public void newGame() throws IOException{
-		// Create new Game with only deck - need to set players before playing
-		// this logic will be handled by the GUI
-		game = new Game(deck);
-		game.setNumberOfPlayersAndDeal(numPlayers);
-		System.out.println("Game created with " + numPlayers + " players");
-		ModelPlayer activePlayer = game.getActivePlayer();
-		j = new JSONGetter(game);
-		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
-		
-		writeJSONtoFile(JSONoutput);
-		
-	}
-	
 	public void writeJSONtoFile(String s) {
 		// is writing the JSON to a file necessary?
-		File JSONfile = new File("resources/assets", "JSONtest.json");
+		File JSONfile = new File("resources/assets/", "JSONtest.json");
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
 			fw.write(s);
 			fw.flush();
 			fw.close();
+			System.out.println("Wrote to file successfully");
 		} catch(Exception e) {
 			System.out.println("Couldn't write to file");
 		}
@@ -206,6 +191,13 @@ public class TopTrumpsRESTAPI {
 	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
 		System.out.println("Setting number of players to " + players);
 		numPlayers = players;
+		game = new Game(deck);
+		game.setNumberOfPlayersAndDeal(numPlayers);
+		System.out.println("Game created with " + numPlayers + " players");
+		ModelPlayer activePlayer = game.getActivePlayer();
+		j = new JSONGetter(game);
+		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
+		writeJSONtoFile(JSONoutput);
 	}
 	
 	@GET
@@ -242,40 +234,4 @@ public class TopTrumpsRESTAPI {
 		
 		return statsAsJSONString;
 	}
-	
-	@GET
-	@Path("/helloJSONList")
-	/**
-	 * Here is an example of a simple REST get request that returns a String.
-	 * We also illustrate here how we can convert Java objects to JSON strings.
-	 * @return - List of words as JSON
-	 * @throws IOException
-	 */
-	public String helloJSONList() throws IOException {
-		
-		List<String> listOfWords = new ArrayList<String>();
-		listOfWords.add("Hello");
-		listOfWords.add("World!");
-		
-		// We can turn arbitrary Java objects directly into JSON strings using
-		// Jackson seralization, assuming that the Java objects are not too complex.
-		String listAsJSONString = oWriter.writeValueAsString(listOfWords);
-		listAsJSONString = listAsJSONString.replace("[", "");
-		listAsJSONString = listAsJSONString.replace("]", "");
-		
-		return listAsJSONString;
-	}
-	
-	@GET
-	@Path("/helloWord")
-	/**
-	 * Here is an example of how to read parameters provided in an HTML Get request.
-	 * @param Word - A word
-	 * @return - A String
-	 * @throws IOException
-	 */
-	public String helloWord(@QueryParam("Word") String Word) throws IOException {
-		return "Hello "+Word;
-	}
-	
 }

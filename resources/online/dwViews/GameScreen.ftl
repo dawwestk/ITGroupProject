@@ -22,11 +22,13 @@
     		#game-AI-card2 h3, 
     		#game-AI-card3 h3, 
     		#game-AI-card4 h3{border: solid;}
-    		img {max-width:100%;}
+    		img {max-width:100%; height:100px}
     		#text-box-and-button{width: 100%; }
+    		#round-count-badge{width:10%; visibility: hidden}
     		#game-active-player{width: 10%; visibility: hidden}
     		#game-active-player-name{width: 10%; visibility: hidden}
-    		#game-text{width: 60%;}
+    		#next-round-button{width:20%;}
+    		#game-text{width: 40%;}
 			#game-AI-card-container-1,
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
@@ -77,7 +79,8 @@
 			<h1>Top Trumps Game!</h1>
 		</div>
 
-		<div class = "container" id="text-box-and-button">
+		<div id="text-box-and-button">
+			<span class="badge badge-light" id="round-count-badge">Round Count:</span>
 			<span class="badge badge-light" id="game-active-player">Active Player:</span>
 			<span class="badge badge-dark" id="game-active-player-name">{player}</span>
 			<span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
@@ -94,7 +97,8 @@
 					<img src = "/assets/spaceship-test.jpg" alt="missing spaceship">
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
-				<div class="btn-group-vertical" role="group" aria-label="...">
+				<div class="btn-group-vertical" id="game-user-button-group" role="group" aria-label="...">
+
 					<button type="button" class="btn btn-outline-primary" id="Size" onclick="clickedAttribute(this)">Size:<span class="badge badge-light" id="playerSizeBadge">temp</span></button>
   					<button type="button" class="btn btn-outline-primary" id="Speed" onclick="clickedAttribute(this)">Speed:<span class="badge badge-light" id="playerSpeedBadge">temp</span></button>
 					<button type="button" class="btn btn-outline-primary" id="Range" onclick="clickedAttribute(this)">Range:<span class="badge badge-light" id="playerRangeBadge">temp</span></button>
@@ -126,7 +130,9 @@
 		<script type="text/javascript">
 		   function clickedAttribute(item) {
 		    var choice = $(item).attr("id"); 
-		    //alert(choice);
+		    $('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
+		    $(item).attr("class", "btn btn-primary");
+
 		    selectAttributeAsPOST(choice);
 		   }
 		</script>
@@ -192,14 +198,13 @@
 			}
 
 			function advance(){
+		    	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
 				nextRound();
 				getRoundCount();
 				getJSON();
-				
 			}
 
 			function getRoundCount(){
-				
 				/*
 					Retrieves the roundCounter variable from the API
 				*/
@@ -209,8 +214,7 @@
 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
-					//return responseText; // lets produce an alert
-					updateText("Starting round " + responseText, "Next")
+					$('#round-count-badge').text("Round:" + responseText);
 				};
 				xhr.send();
 			}
@@ -247,8 +251,10 @@
 				}
 				var y = document.getElementById("game-active-player");
 				var z = document.getElementById("game-active-player-name");
+				var roundCount = document.getElementById("round-count-badge");
 				y.style.visibility = "visible";
 				z.style.visibility = "visible";
+				roundCount.style.visibility = "visible";
 			}
 
 			function getPlayers(){
@@ -345,13 +351,14 @@
 								if(!activePlayerSet){	
 									$('#game-active-player-name').text(players[i].name);
 									activePlayerSet = true;
+									$('#game-user-button-group').children().attr("disabled", true);
+									selectAttributeAsPOST(players[i].highestAttribute);
 								}
 								$(cardID).css('border-style', 'solid');
 								$(cardID).css('border-color', 'blue');
 							} else {
 								$(cardID).css('border-style', 'none');
 							}
-
 
 							$(cardID).find("h3").text(players[i].cardName);
 							$(cardID).find('h2').text(players[i].name);
@@ -365,9 +372,11 @@
 						}
 					}
 
+					// if the active player is not CPU, it is Player One
 					if(!activePlayerSet){
 						$('#game-active-player-name').text(players[0].name);
 								activePlayerSet = true;
+						$('#game-user-button-group').children().removeAttr("disabled");
 					}
 				};
 				xhr.send();
@@ -404,21 +413,6 @@
 
 			}
 
-			// Method that is called on page load
-			function initalize() {
-			
-				// --------------------------------------------------------------------------
-				// You can call other methods you want to run when the page first loads here
-				// --------------------------------------------------------------------------
-				
-				// For example, lets call our sample methods
-				helloWord("Student");
-				
-			}
-			
-			// -----------------------------------------
-			// Add your other Javascript methods Here
-			// -----------------------------------------
 		
 			// This is a reusable method for creating a CORS request. Do not edit this.
 			function createCORSRequest(method, url) {
@@ -450,40 +444,5 @@
 		<script>
 			$(window).load(getJSON());	// execute once window has loaded
 		</script>
-		
-		<!-- Here are examples of how to call REST API Methods -->
-		<script type="text/javascript">
-		
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloJSONList() {
-			
-				
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloJSONList"); // Request type and URL
-				
-				if (!xhr) {alert("CORS not supported");}
-
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				xhr.send();		
-			}
-			
-			// This calls the helloJSONList REST method from TopTrumpsRESTAPI
-			function helloWord(word) {
-			
-				
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/helloWord?Word="+word); 
-				if (!xhr) {alert("CORS not supported");}
-
-				xhr.onload = function(e) {
- 					var responseText = xhr.response; // the text of the response
-					alert(responseText); // lets produce an alert
-				};
-				xhr.send();		
-			}
-
-		</script>
-		
 		</body>
 </html>
