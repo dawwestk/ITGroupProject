@@ -29,11 +29,14 @@
     		#game-active-player-name{width: 10%; visibility: hidden}
     		#next-round-button{width:20%;}
     		#game-text{width: 40%;}
+    		#modal-button{display: none}
 			#game-AI-card-container-1,
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
     		#game-AI-card-container-4{}
     		#separator{background-color: rgb(211, 211, 211)}
+    		.vertical-center {margin: 0; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);}
+}
     		
 
     	</style>
@@ -225,12 +228,18 @@
 			        contentType: "application/json; charset=UTF-8", 
 			        data: winnerName,
 			        /*		SUCCESS function not required - but can be used
-			        success: function (attrName) {
-			            alert(attrName + " written to API");
+			        success: function (winnerName) {
+			            $('#model-text-field').text(winnerName + " is the winner!");
+			            $('#modal-button').click();
 			        }
 			        */
+			        
 			    });
 			}
+		</script>
+
+		<script>
+			
 		</script>
 
 		<!--
@@ -429,9 +438,12 @@
 
 					for(i = 0; i < playersLength; i++){
 						if(parseInt(players[i].handSize) >= 40){
-							alert("Winner is " + players[i].name);
-							//var str = weHaveAWinner(players[i].name);
-							//alert(str);
+							/* 
+
+								Need some winner notification/image/animation
+
+							*/
+							weHaveAWinner(players[i].name);
 						}
 					}
 
@@ -493,13 +505,13 @@
 
 			function playerEliminated(){
 				$('#game-user-card').empty();
-				$('#game-user-card').append("<h1>&#9760</h1>");
+				$('#game-user-card').append("<h1 class='vertical-center'>&#9760</h1>");
 				//$('#game-user-card').append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='Player Eliminated'>");
 			}
 
 			function AIeliminated(cardID){
 				$(cardID).empty();
-				$(cardID).append("<h1>&#9760</h1>");
+				$(cardID).append("<h1 class='vertical-center'>&#9760</h1>");
 				//$(cardID).append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='AI Eliminated'>");
 			}
 

@@ -52,7 +52,7 @@
 		  </div>
 		</div>
 
-		<div class = "row" id = "dropdown-select">
+		<div class = "container" id = "dropdown-select">
 			<div class = "col">
 				<h3>How many opponents would you like to face?</h3>
 			</div>

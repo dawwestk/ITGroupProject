@@ -66,13 +66,7 @@ public class TopTrumpsRESTAPI {
 		// Add relevant initalization here
 		// ----------------------------------------------------
 		
-		try {
-			dbq = new DatabaseQuery("localhost", "postgres", "postgres");
-			statsJSON = new StatsJSONGetter(dbq.toString());
-			statsOutput = statsJSON.getJSON();
-		} catch (Exception e) {
-			System.out.println(dbq.getNoConnection());
-		}
+		resetDatabaseQuery();
 		
 		deckFile = conf.getDeckFile();
 		
@@ -86,20 +80,28 @@ public class TopTrumpsRESTAPI {
 
 		
 		
-		
-		
-		
 	}
 	
 	// ----------------------------------------------------
 	// Add relevant API methods here
 	// ----------------------------------------------------
 	
+	public void resetDatabaseQuery() {
+		try {
+			dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+			statsJSON = new StatsJSONGetter(dbq.toString());
+			statsOutput = statsJSON.getJSON();
+		} catch (Exception e) {
+			System.out.println(dbq.getNoConnection());
+		}
+	}
+	
 	@POST
 	@Path("/game/weHaveAWinner/")
 	public String weHaveAWinner(String winnerName) throws IOException {
 		try {
 			dbq.addGameToDB(game);
+			resetDatabaseQuery();
 		} catch (Exception e) {
 			// no need to print explanation, handled on creation of dbq
 		}
