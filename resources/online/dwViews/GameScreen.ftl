@@ -28,7 +28,7 @@
     		#game-active-player{width: 10%; visibility: hidden}
     		#game-active-player-name{width: 10%; visibility: hidden}
     		#next-round-button{width:20%;}
-    		#game-text{}
+    		#game-text{width: 40%;}
 			#game-AI-card-container-1,
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
@@ -191,6 +191,7 @@
 			}
 
 			function startRoundOne(button){
+		    	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
 				getJSON();			// pulls in JSON, populates cards
 				unHideBoard();		// unhides board elements revealing cards, active player
 				getRoundCount();	// display the round counter
@@ -198,6 +199,7 @@
 			}
 
 			function advance(){
+		    	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
 				nextRound();
 				getRoundCount();
 				getJSON();
