@@ -24,9 +24,11 @@
     		#game-AI-card4 h3{border: solid;}
     		img {max-width:100%; height:100px}
     		#text-box-and-button{width: 100%; }
+    		#round-count-badge{width:10%; visibility: hidden}
     		#game-active-player{width: 10%; visibility: hidden}
     		#game-active-player-name{width: 10%; visibility: hidden}
-    		#game-text{width: 60%;}
+    		#next-round-button{width:20%;}
+    		#game-text{}
 			#game-AI-card-container-1,
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
@@ -77,7 +79,7 @@
 			<h1>Top Trumps Game!</h1>
 		</div>
 
-		<div class = "container" id="text-box-and-button">
+		<div id="text-box-and-button">
 			<span class="badge badge-light" id="round-count-badge">Round Count:</span>
 			<span class="badge badge-light" id="game-active-player">Active Player:</span>
 			<span class="badge badge-dark" id="game-active-player-name">{player}</span>
@@ -95,7 +97,8 @@
 					<img src = "/assets/spaceship-test.jpg" alt="missing spaceship">
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
-				<div class="btn-group-vertical" role="group" aria-label="...">
+				<div class="btn-group-vertical" id="game-user-button-group" role="group" aria-label="...">
+
 					<button type="button" class="btn btn-outline-primary" id="Size" onclick="clickedAttribute(this)">Size:<span class="badge badge-light" id="playerSizeBadge">temp</span></button>
   					<button type="button" class="btn btn-outline-primary" id="Speed" onclick="clickedAttribute(this)">Speed:<span class="badge badge-light" id="playerSpeedBadge">temp</span></button>
 					<button type="button" class="btn btn-outline-primary" id="Range" onclick="clickedAttribute(this)">Range:<span class="badge badge-light" id="playerRangeBadge">temp</span></button>
@@ -127,7 +130,9 @@
 		<script type="text/javascript">
 		   function clickedAttribute(item) {
 		    var choice = $(item).attr("id"); 
-		    //alert(choice);
+		    $('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
+		    $(item).attr("class", "btn btn-primary");
+
 		    selectAttributeAsPOST(choice);
 		   }
 		</script>
