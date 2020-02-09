@@ -93,9 +93,10 @@ public class ModelCard {
     public String toString() {
     	String cardString = "";
     	cardString += this.name;
-    	for(String attribute: this.attributeDefinitions) {
+    	// for(String attribute: this.attributeDefinitions) {
+            for(int i = 1 ; i < this.attributeDefinitions.length; ++i){
         	cardString += " ";
-    		cardString += this.getValue(attribute);    		
+    		cardString += this.getValue(attributeDefinitions[i]);    		
     	}
     	return cardString;
     }
