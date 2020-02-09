@@ -212,6 +212,27 @@
 			}
 		</script>
 
+		<script>
+			function weHaveAWinner(winnerName){
+
+				/*
+					Sends the winners name to allow the database to log the win
+				*/
+				$.ajax({
+			        type: 'POST',
+			        dataType: "json",
+			        url: "http://localhost:7777/toptrumps/game/weHaveAWinner",
+			        contentType: "application/json; charset=UTF-8", 
+			        data: winnerName,
+			        /*		SUCCESS function not required - but can be used
+			        success: function (attrName) {
+			            alert(attrName + " written to API");
+			        }
+			        */
+			    });
+			}
+		</script>
+
 		<!--
 			function selectAttribute(attrName){
 				
@@ -405,6 +426,15 @@
 
 					var activePlayerSet = false;
 					var i;
+
+					for(i = 0; i < playersLength; i++){
+						if(parseInt(players[i].handSize) >= 40){
+							alert("Winner is " + players[i].name);
+							//var str = weHaveAWinner(players[i].name);
+							//alert(str);
+						}
+					}
+
 					for(i = 1; i < players.length; i++){
 						//alert("finding i " + i);
 						var cardID = '#game-AI-card-container-' + i;

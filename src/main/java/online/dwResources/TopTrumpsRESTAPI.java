@@ -96,6 +96,24 @@ public class TopTrumpsRESTAPI {
 	// ----------------------------------------------------
 	
 	@POST
+	@Path("/game/weHaveAWinner/")
+	public String weHaveAWinner(String winnerName) throws IOException {
+		try {
+			dbq.addGameToDB(game);
+		} catch (Exception e) {
+			// no need to print explanation, handled on creation of dbq
+		}
+		String output = winnerName + " is the winner!";
+		if(winnerName.equals(game.getUser().getName())) {
+			output += " Congratulations!";
+		} else {
+			output += " Better luck next time...";
+		}
+		System.out.println(output);
+		return output;
+	}
+	
+	@POST
 	@Path("/game/selectAttribute/")
 	public void selectAttribute(String attribute) throws IOException{
 		// reads which attribute was chosen and compares etc
