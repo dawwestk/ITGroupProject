@@ -232,11 +232,9 @@ public class Game {
 	private int whoFirst() {
 		Random random = new Random();
 		int max = this.players.size();
-		System.out.println(max + " = max player size");
 		
 		//return r.nextInt((max - min) + 1) + min	<-- format for random between 2 ints (min = 0, max = players.size())
-		int r = random.nextInt(max) + 1;
-		System.out.println(r + " is the random number");
+		int r = random.nextInt(max);
 		return r;
 	}
 
@@ -301,7 +299,7 @@ public class Game {
 	}
 
 	public ModelPlayer getPlayer(int i) {
-		return players.get(i-1);
+		return players.get(i);
 	}
 
 	public String getPlayerName(int i) {
