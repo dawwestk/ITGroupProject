@@ -191,7 +191,6 @@
 			}
 
 			function startRoundOne(button){
-		    	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
 				getJSON();			// pulls in JSON, populates cards
 				unHideBoard();		// unhides board elements revealing cards, active player
 				getRoundCount();	// display the round counter
@@ -203,7 +202,6 @@
 				nextRound();
 				getRoundCount();
 				getJSON();
-				
 			}
 
 			function getRoundCount(){
@@ -353,13 +351,14 @@
 								if(!activePlayerSet){	
 									$('#game-active-player-name').text(players[i].name);
 									activePlayerSet = true;
+									$('#game-user-button-group').children().attr("disabled", true);
+									selectAttributeAsPOST(players[i].highestAttribute);
 								}
 								$(cardID).css('border-style', 'solid');
 								$(cardID).css('border-color', 'blue');
 							} else {
 								$(cardID).css('border-style', 'none');
 							}
-
 
 							$(cardID).find("h3").text(players[i].cardName);
 							$(cardID).find('h2').text(players[i].name);
@@ -373,9 +372,11 @@
 						}
 					}
 
+					// if the active player is not CPU, it is Player One
 					if(!activePlayerSet){
 						$('#game-active-player-name').text(players[0].name);
 								activePlayerSet = true;
+						$('#game-user-button-group').children().removeAttr("disabled");
 					}
 				};
 				xhr.send();
