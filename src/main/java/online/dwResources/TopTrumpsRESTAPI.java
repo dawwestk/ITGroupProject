@@ -117,34 +117,52 @@ public class TopTrumpsRESTAPI {
 	}
 	
 	@GET
-	@Path("/game/nextRound/")
-	public String nextRound() throws IOException {
-		game.advanceRound();
+	@Path("/game/compare/")
+	public String compare() throws IOException {
+		String output = "";
+		if(lastChosenAttribute != null) {
+			ModelPlayer winner = null;
+			if(game.hasWinner(lastChosenAttribute)) {
+				winner = game.getRoundWinner();
+				game.giveWinnerCards(winner);
+				output = winner.getName() + " has won!";
+			} else {
+				output = "This round was a draw!";
+			}
+		} else {
+			output = "You must choose an Attribute first!";
+		}
 		
+		lastChosenAttribute = null;
+		return output;
+	}
+	
+	@GET
+	@Path("/game/nextRound/")
+	public boolean nextRound() throws IOException {
 		/*
 		// this logic is just for testing purposes
 		ModelPlayer activePlayer = game.getActivePlayer();
 		game.giveWinnerCards(activePlayer);
 		*/
-		ModelPlayer winner = null;
-		String output = "";
-		if(game.hasWinner(lastChosenAttribute)) {
-			winner = game.getRoundWinner();
-			game.giveWinnerCards(winner);
-			output = winner.getName() + " has won!";
-		} else {
-			output = "This round was a draw!";
-		}
-		
+		int prev = game.getRoundCount();
+		game.advanceRound();
+		int current = game.getRoundCount();
 		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), game.getActivePlayer());
 		writeJSONtoFile(JSONoutput);
 		
-		return output;
+		if(prev != current) {
+			return true; 	//round has advanced with no issue
+		} else {
+			return false;
+		}
+		
 	}
 	
 	@GET
 	@Path("/game/getJSON/")
 	public String getJSON() throws IOException{
+		//System.out.println("Returning JSON");
 		return JSONoutput;
 	}
 
@@ -162,7 +180,7 @@ public class TopTrumpsRESTAPI {
 			fw.write(s);
 			fw.flush();
 			fw.close();
-			System.out.println("Wrote to file successfully");
+			//System.out.println("Wrote to file successfully");
 		} catch(Exception e) {
 			System.out.println("Couldn't write to file");
 		}
@@ -202,7 +220,8 @@ public class TopTrumpsRESTAPI {
 		j = new JSONGetter(game);
 		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
 		writeJSONtoFile(JSONoutput);
-		System.out.println(statsOutput);
+		//System.out.println(statsOutput);
+		lastChosenAttribute = null;
 	}
 	
 	@GET
