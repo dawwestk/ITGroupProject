@@ -84,7 +84,6 @@ function compare(){
 		Checks user input/CPU input function in the API
 		Increases the round counter variable
 	*/
-	
 	var userSelection = false;
 	var userActive = false;
 	var activePlayer = $('#game-active-player-name').text();
@@ -167,10 +166,13 @@ function unHideBoard(){
 		Can also re-hide between rounds if desired(?)
 	*/
 	var x = document.getElementById("game-board");
+	var communal = document.getElementById("communal-pile-text");
 	if (x.style.visibility === "visible") {
 	  	x.style.visibility = "hidden";
+	  	communal.style.visibility = "hidden";
 	} else {
 	  	x.style.visibility = "visible";
+	  	communal.style.visibility = "visible";
 	}
 	var y = document.getElementById("game-active-player");
 	var z = document.getElementById("game-active-player-name");
@@ -226,18 +228,16 @@ function getJSON(boolean){
 		var players = JSON.parse(responseText);
 		var playersLength = players.length;
 
-		if(playersLength < 5 && playersLength > 1){
-			var i = playersLength;
-			var cardID = '#game-AI-card-container-' + i;
-			for(i; i<5; i++){
-				removeContainers(cardID)
-			}
-		}
-
 		$.ajaxSetup ({
 		    // Disable caching of AJAX responses
 		    cache: false
 		});
+
+		if(parseInt(players[0].communalPile) > 0){
+			$('#communal-pile-value').text(players[0].communalPile);
+		} else {
+			$('#communal-pile-value').text(0);
+		}
 
 		if(players[0].eliminated){
 			//alert("Player One eliminated");

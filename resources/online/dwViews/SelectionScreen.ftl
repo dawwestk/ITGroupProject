@@ -46,21 +46,26 @@
 			<div class = "col">
 				<h3>How many opponents would you like to face?</h3>
 			</div>
-			<div class = "col">
-				<div class="form-group">
-				    <label for="exampleFormControlSelect1">Select number of opponents...</label>
-				    <select class="form-control" id="numberOfOpponents">
-				      <option id="1">1</option>
-				      <option id="2">2</option>
-				      <option id="3">3</option>
-				      <option id="4">4</option>
-				    </select>  	
+			<div class = "row">
+				<div class="col">
+					<label for="exampleFormControlSelect1">Select number of opponents...</label>
+				</div>
+				<div class="col">
+					<div class="form-group">
+					    <select class="form-control" id="numberOfOpponents">
+					      <option id="1">1</option>
+					      <option id="2">2</option>
+					      <option id="3">3</option>
+					      <option id="4">4</option>
+					    </select>  	
+					</div>
+				</div>
+				<div class = "col">
+					<button class="btn btn-outline-light" onclick="newGameAndSetPlayers()">Start Game</button>
+					<!-- add number of players as URL variable? -->
 				</div>
 			</div>
-			<div class = "col p-1">
-				<button class="btn btn-outline-light" onclick="newGameAndSetPlayers()">Start Game</button>
-				<!-- add number of players as URL variable? -->
-			</div>
+			
 		</div>
 
 		<script> 

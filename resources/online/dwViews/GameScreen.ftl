@@ -57,8 +57,8 @@
 				</div>
 			</div>
 
-			<div class = "container" id="separator">
-				
+			<div class="container" id="separator">
+
 			</div>
 
 			<div id = "game-AI-card-container-1">
@@ -78,6 +78,7 @@
 		<hr>
 
 		<div class="container-fluid" id="quit-footer">
+			<span id="communal-pile-text"><span class="badge badge-light">Communal Pile cards: </span><span class="badge badge-light" id="communal-pile-value">0</span></span>
 			<button type="button" class="btn btn-secondary" id="quitButton" onclick="quitGame()">
 			  Quit Game
 			</button>

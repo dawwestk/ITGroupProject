@@ -8,8 +8,10 @@ import game.*;
 public class JSONGetter{ 
 	
 	private String[] originalPlayerNames;
+	private Game game;
 	
 	public JSONGetter(Game g) {
+		game = g;
 		int numPlayers = g.getNumPlayers();
 		originalPlayerNames = new String[numPlayers];
 		for(int i = 0; i < originalPlayerNames.length; i++) {
@@ -39,6 +41,7 @@ public class JSONGetter{
 				boolean active = false;
 				active = p.equals(activePlayer) ? true: false;
 				ModelCard activeCard = p.getActiveCard();
+				output += "\"communalPile\":" + game.communalDeckSize() + ", ";
 				output += "\"eliminated\":" + false + ", ";
 				output += "\"name\":\"" + p.getName() + "\", ";
 				int handSize = p.getHand().size();
