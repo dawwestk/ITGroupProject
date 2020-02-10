@@ -292,11 +292,19 @@ function getJSON(boolean){
 				$(cardID).find('h2').text(players[i].name);
 				$(cardID).find('img').attr('src', '/assets/images/' + players[i].cardName + '.jpg');
 				$(cardID).find('#aiHandSize').text(players[i].handSize);
+				
+				/*
 				$(cardID).find('#aiSizeBadge').text(players[i].Size);
 				$(cardID).find('#aiSpeedBadge').text(players[i].Speed);
 				$(cardID).find('#aiRangeBadge').text(players[i].Range);
 				$(cardID).find('#aiFirepowerBadge').text(players[i].Firepower);
 				$(cardID).find('#aiCargoBadge').text(players[i].Cargo);
+				*/
+				$(cardID).find('#aiSizeBadge').text("?");
+				$(cardID).find('#aiSpeedBadge').text("?");
+				$(cardID).find('#aiRangeBadge').text("?");
+				$(cardID).find('#aiFirepowerBadge').text("?");
+				$(cardID).find('#aiCargoBadge').text("?");
 			}
 		}
 

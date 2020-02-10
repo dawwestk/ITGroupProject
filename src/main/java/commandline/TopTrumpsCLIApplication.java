@@ -145,7 +145,7 @@ public class TopTrumpsCLIApplication {
 					logger.appendln(player.toString());
 				}
 				
-				System.err.print(game.printRoundsWon());
+				//System.err.print(game.printRoundsWon());
 				
 				// While the game isn't finished
 				while (game.activePlayers() && !userWantsToQuit) {	
