@@ -150,7 +150,6 @@
 		<script>
 			function showResults(){
 				compare();
-				$('#next-round-button').attr('onclick', 'advance()');
 			}
 		</script>
 
@@ -274,7 +273,11 @@
 				var userSelection = false;
 				var userActive = false;
 				
-				if($('#game-active-player-name').text() === "Player One"){userActive = true;}
+				var activePlayer = $('#game-active-player-name').text();
+
+				if(activePlayer == "Player One"){
+					userActive = true;
+				}
 				
 				if(userActive){
 					$('#game-user-button-group').children().each(function(i) { 
@@ -287,6 +290,7 @@
 				} else {
 					userSelection = true;
 				}
+
 				if(userSelection){
 					$('#game-text').css('color', 'black');
 					var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/compare/"); // Request type and URL
@@ -297,8 +301,8 @@
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
 					updateText(responseText);
+					$('#next-round-button').attr('onclick', 'advance()');
 
-					*/
 				};
 				xhr.send();
 				} else {
