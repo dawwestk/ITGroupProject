@@ -8,7 +8,7 @@ public class ModelPlayer {
 
     private String name;
     private ArrayList<ModelCard> hand;
-    private boolean isWinner;
+    private boolean isWinner; // deprecated? consider removing
 
     public boolean isWinner() {
         return isWinner;
@@ -37,6 +37,7 @@ public class ModelPlayer {
         return name;
     }
     
+    // deprecated? consider removing
     public void setWinner(boolean setWinner) {
     	this.isWinner = setWinner;
     }
