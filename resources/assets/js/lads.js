@@ -11,7 +11,7 @@ function setUpBoard(){
 function startRoundOne(){
 	getJSON(false);			// pulls in JSON, populates cards
 	unHideBoard();		// unhides board elements revealing cards, active player
-	getRoundCount();	// display the round counter
+	$('#round-count-badge').text("Round: " + 1);
 	$('#next-round-button').attr('onclick', 'showResults()');
 }
 
@@ -20,9 +20,9 @@ function showResults(){
 }
 
 function advance(){
+	// Reset all buttons to be outlines - i.e. not selected yet
 	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
 	nextRound();
-	getRoundCount();
 	getJSON(false);	// boolean is used to indicate if this is the first load or not
 }
 
@@ -59,11 +59,6 @@ function selectAttributeAsPOST(attrName){
         url: "http://localhost:7777/toptrumps/game/selectAttribute",
         contentType: "application/json; charset=UTF-8", 
         data: attrName,
-        /*		SUCCESS function not required - but can be used
-        success: function (attrName) {
-            alert(attrName + " written to API");
-        }
-        */
     });
 }
 
@@ -91,62 +86,43 @@ function compare(){
 	*/
 	var userSelection = false;
 	var userActive = false;
-	
 	var activePlayer = $('#game-active-player-name').text();
 
-	if(activePlayer == "Player One"){
-		userActive = true;
-	}
+	// The following check is only needed if Player One is the active player
+	if(activePlayer == "Player One"){userActive = true;}
 	
+	// If Player One is active, we need to check that they have made a choice
 	if(userActive){
-		$('#game-user-button-group').children().each(function(i) { 
-				//alert(i + ": " + $( this ).text());
-				if($(this).attr("class") == "btn btn-primary"){
-					//alert("button " + i + " selected");
-					userSelection = true;
-				}
+		$('#game-user-button-group').children().each(function(i) {
+			if($(this).attr("class") == "btn btn-primary"){
+				userSelection = true;
+			}
 		});
 	} else {
+		// If CPU player is active, we know they have "chosen" already
 		userSelection = true;
 	}
 
 	if(userSelection){
 		$('#game-text').css('color', 'black');
-		var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/compare/"); // Request type and URL
-	
-	if (!xhr) {alert("CORS not supported");}
+		var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/compare/");
+		if (!xhr) {alert("CORS not supported");}
+		xhr.onload = function(e) {
+			var responseText = xhr.response;
+			updateText(responseText);
 
-	xhr.onload = function(e) {
-			var responseText = xhr.response; // the text of the response
-		//alert(responseText); // lets produce an alert
-		updateText(responseText);
-		$('#next-round-button').attr('onclick', 'advance()');
-
-	};
-	xhr.send();
+			// User successfully made a choice, change button to advance function
+			$('#next-round-button').attr('onclick', 'advance()');
+		};
+		xhr.send();
 	} else {
+		// Warn the user that they must make a selection - no change to button function
 		$('#game-text').css('color', 'red');
 		updateText("You must choose an Attribute first!");
 	}
 }
-
-function getRoundCount(){
-	/*
-		Retrieves the roundCounter variable from the API
-	*/
-	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getRoundCount/"); // Request type and URL
-	
-	if (!xhr) {alert("CORS not supported");}
-
-	xhr.onload = function(e) {
-			var responseText = xhr.response; // the text of the response
-		$('#round-count-badge').text("Round: " + responseText);
-	};
-	xhr.send();
-}
 	
 function nextRound(){
-	
 	/*
 		Utilises the game.advanceRound() function in the API
 		Increases the round counter variable
@@ -158,8 +134,9 @@ function nextRound(){
 	xhr.onload = function(e) {
 			var responseText = xhr.response; // the text of the response
 		//alert(responseText); // lets produce an alert
-		if(responseText){
+		if(parseInt(responseText) >= 1){
 			$('#next-round-button').attr('onclick', 'showResults()');
+			$('#round-count-badge').text("Round: " + responseText);
 		} else {
 			// round did not successfully advance
 		}
@@ -240,11 +217,10 @@ function getJSON(boolean){
 	if (!xhr) {alert("CORS not supported");}
 
 	xhr.onload = function(e) {
-			var responseText = xhr.response; // the text of the response
+		var responseText = xhr.response; // the text of the response
 		
 		var players = JSON.parse(responseText);
 		var playersLength = players.length;
-		//alert(players[0].name);
 
 		if(playersLength < 5 && playersLength > 1){
 			var i = playersLength;
@@ -292,7 +268,6 @@ function getJSON(boolean){
 				updateButtonText('End Game');
 				updateText(players[i].name + " is the winner!");
 				$('#next-round-button').attr('onclick', 'quitGame()');
-
 			}
 		}
 
@@ -316,7 +291,6 @@ function getJSON(boolean){
 							updateButtonText('Compare');
 							selectAttributeAsPOST(players[i].highestAttribute);
 						}
-						
 					}
 					$(cardID).css('border-style', 'solid');
 					$(cardID).css('border-color', 'blue');
@@ -355,13 +329,11 @@ function getJSON(boolean){
 function playerEliminated(){
 	$('#game-user-card').empty();
 	$('#game-user-card').append("<h1 class='vertical-center'>&#9760</h1>");
-	//$('#game-user-card').append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='Player Eliminated'>");
 }
 
 function AIeliminated(cardID){
 	$(cardID).empty();
 	$(cardID).append("<h1 class='vertical-center'>&#9760</h1>");
-	//$(cardID).append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='AI Eliminated'>");
 }
 
 function removeContainers(containerID){
@@ -374,36 +346,8 @@ function removeContainers(containerID){
 	xhr.onload = function(e) {
 		$(containerID).empty();
 	};
-	// We have done everything we need to prepare the CORS request, so send it
 	xhr.send();
 }
-
-
-// This is a reusable method for creating a CORS request. Do not edit this.
-function createCORSRequest(method, url) {
-	var xhr = new XMLHttpRequest();
-	if ("withCredentials" in xhr) {
-
-	// Check if the XMLHttpRequest object has a "withCredentials" property.
-	// "withCredentials" only exists on XMLHTTPRequest2 objects.
-	xhr.open(method, url, true);
-
-	} else if (typeof XDomainRequest != "undefined") {
-
-	// Otherwise, check if XDomainRequest.
-	// XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-	xhr = new XDomainRequest();
-	xhr.open(method, url);
-
-	 } else {
-
-	// Otherwise, CORS is not supported by the browser.
-	xhr = null;
-
-	 }
-	 return xhr;
-}
-
 
 /*
 ***************		Scripts pertaining to Selection Screen	*******************
@@ -411,53 +355,35 @@ function createCORSRequest(method, url) {
 
 function newGameAndSetPlayers(){
 	selectPlayers();
-	//newGame();
 }
 
 function selectPlayers() {
   var x = document.getElementById("numberOfOpponents").selectedIndex;
-  //alert(document.getElementsByTagName("option")[x].value);
   setPlayers(document.getElementsByTagName("option")[x].value);
   window.location.href = '/toptrumps/game/';
 }
 
 function newGame(){
-	// First create a CORS request, this is the message we are going to send (a get request in this case)
 	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/newGame"); // Request type and URL+parameters
 	
-	// Message is not sent yet, but we can check that the browser supports CORS
-	if (!xhr) {
-			alert("CORS not supported");
-	}
+	if (!xhr) {alert("CORS not supported");}
 
-	// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-	// to do when the response arrives 
 	xhr.onload = function(e) {
-			var responseText = xhr.response; // the text of the response
-		//alert(responseText + " TEST"); // lets produce an alert
+		var responseText = xhr.response; // the text of the response
 	};
 	
-	// We have done everything we need to prepare the CORS request, so send it
 	xhr.send();
 }
 
 function setPlayers(int){
-	// First create a CORS request, this is the message we are going to send (a get request in this case)
 	var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/setPlayers?players="+int); // Request type and URL+parameters
 	
-	// Message is not sent yet, but we can check that the browser supports CORS
-	if (!xhr) {
-			alert("CORS not supported");
-	}
+	if (!xhr) {alert("CORS not supported");}
 
-	// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-	// to do when the response arrives 
 	xhr.onload = function(e) {
-			var responseText = xhr.response; // the text of the response
-		//alert(responseText + " TEST"); // lets produce an alert
+		var responseText = xhr.response; // the text of the re
 	};
 	
-	// We have done everything we need to prepare the CORS request, so send it
 	xhr.send();
 }
 
@@ -495,33 +421,52 @@ function makeChart(JSONData) {
 }
 
 function getStats(){
-	// First create a CORS request, this is the message we are going to send (a get request in this case)
 	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStats"); // Request type and URL
 	
-	// Message is not sent yet, but we can check that the browser supports CORS
-	if (!xhr) {
-			alert("CORS not supported");
-	}
+	if (!xhr) {alert("CORS not supported");}
 
-	// CORS requests are Asynchronous, i.e. we do not wait for a response, instead we define an action
-	// to do when the response arrives 
 	xhr.onload = function(e) {
-			var responseText = xhr.response; // the text of the response
-			
-			var stats = JSON.parse(responseText);
-
-			for (var key of Object.keys(stats)) {
-		    //alert(key + " -> " + stats[key][0] + ": " + stats[key][1]);
-		    var row = $("<tr />")
-		    $("#statsTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
-		    for(var i = 0; i < 2; i++){
-		    	row.append($("<td>" + stats[key][i] + "</td>"));
-		    }
+		var responseText = xhr.response; // the text of the response
+		var stats = JSON.parse(responseText);
+		for (var key of Object.keys(stats)) {
+	    	var row = $("<tr />")
+	    	$("#statsTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+	    	for(var i = 0; i < 2; i++){
+	    		row.append($("<td>" + stats[key][i] + "</td>"));
+	    	}
 		}
-
 		makeChart(stats);
 	};
 	
-	// We have done everything we need to prepare the CORS request, so send it
 	xhr.send();
+}
+
+
+/*
+***************		Scripts used across many screens	*******************
+*/
+
+// This is a reusable method for creating a CORS request. Do not edit this.
+function createCORSRequest(method, url) {
+	var xhr = new XMLHttpRequest();
+	if ("withCredentials" in xhr) {
+
+	// Check if the XMLHttpRequest object has a "withCredentials" property.
+	// "withCredentials" only exists on XMLHTTPRequest2 objects.
+	xhr.open(method, url, true);
+
+	} else if (typeof XDomainRequest != "undefined") {
+
+	// Otherwise, check if XDomainRequest.
+	// XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+	xhr = new XDomainRequest();
+	xhr.open(method, url);
+
+	 } else {
+
+	// Otherwise, CORS is not supported by the browser.
+	xhr = null;
+
+	 }
+	 return xhr;
 }

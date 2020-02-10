@@ -23,7 +23,7 @@
 		
 	</head>
 
-    <body id="selectionBody"> <!-- onload="initalize()"> Call the initalize method when the page loads -->
+    <body id="spaceBackground"> <!-- onload="initalize()"> Call the initalize method when the page loads -->
     	<div class="container" id = "selection-title">
 
 			<!-- Add your HTML Here -->

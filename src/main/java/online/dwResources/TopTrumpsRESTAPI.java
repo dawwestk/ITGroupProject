@@ -168,7 +168,7 @@ public class TopTrumpsRESTAPI {
 	
 	@GET
 	@Path("/game/nextRound/")
-	public boolean nextRound() throws IOException {
+	public int nextRound() throws IOException {
 		/*
 		// this logic is just for testing purposes
 		ModelPlayer activePlayer = game.getActivePlayer();
@@ -181,9 +181,9 @@ public class TopTrumpsRESTAPI {
 		writeJSONtoFile(JSONoutput);
 		
 		if(prev != current) {
-			return true; 	//round has advanced with no issue
+			return current; 	//round has advanced with no issue
 		} else {
-			return false;
+			return 0;
 		}
 		
 	}
