@@ -36,6 +36,7 @@
 			  font-weight: bold;    
 			    padding: 2px;
 			}
+			.jumbotron-heading{text-align: center}
 		</style>
 		
 	</head>
@@ -43,9 +44,9 @@
     <body onload="loadTable()">  <!-- onload="initalize()"> Call the initalize method when the page loads -->
     	
     	<div class="container">
-    		<div id = 'header'>
+    		<div class="jumbotron p-4" id = 'header'>
 				<!-- Add your HTML Here -->
-				<h1>Top Trumps Game Stats!</h1>
+				<h1 class="jumbotron-heading">Top Trumps Game Stats!</h1>
 			</div>
 		</div>
 
@@ -85,7 +86,7 @@
 						indexLabel: "{label}: #percent%",
 						dataPoints: [
 							{ label: data["Human-wins"][0], y: data["Human-wins"][1] },
-							{ label: data["AI-wins"][1], y: data["AI-wins"][1] },
+							{ label: data["AI-wins"][0], y: data["AI-wins"][1] },
 						]
 					}]
 				};

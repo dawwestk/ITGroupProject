@@ -29,11 +29,14 @@
     		#game-active-player-name{width: 10%; visibility: hidden}
     		#next-round-button{width:20%;}
     		#game-text{width: 40%;}
+    		#modal-button{display: none}
 			#game-AI-card-container-1,
     		#game-AI-card-container-2,
     		#game-AI-card-container-3,
     		#game-AI-card-container-4{}
     		#separator{background-color: rgb(211, 211, 211)}
+    		.vertical-center {margin: 0; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);}
+}
     		
 
     	</style>
@@ -84,7 +87,7 @@
 			<span class="badge badge-light" id="game-active-player">Active Player:</span>
 			<span class="badge badge-dark" id="game-active-player-name">{player}</span>
 			<span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
-			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne(this)">Next Round</button>
+			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne()">Next Round</button>
 		</div>
 
 
@@ -94,7 +97,7 @@
 			<div class = "user-card" id = "game-user-card">
 				<h2 id="mainPlayerName">Placeholder<span class="badge badge-light" id="mainPlayerHandSize">temp</span></h2>
 				<div class = "container" id = "game-user-card-image">
-					<img src = "/assets/spaceship-test.jpg" alt="missing spaceship">
+					<img src = "/assets/images/spaceship-test.jpg" alt="missing spaceship">
 					<h3 id = "game-user-name">Your card name</h3>
 				</div>
 				<div class="btn-group-vertical" id="game-user-button-group" role="group" aria-label="...">
@@ -127,6 +130,39 @@
 			</div>
 		</div>
 
+		<script>
+			function setUpBoard(){
+				getPlayers();
+				$(document).ready(updateText("Welcome to Top Trumps - hit this button to begin..."));
+				$(document).ready(updateButtonText("Begin round 1"));
+			}
+		</script>
+
+		<script>
+			function startRoundOne(){
+				getJSON(false);			// pulls in JSON, populates cards
+				unHideBoard();		// unhides board elements revealing cards, active player
+				getRoundCount();	// display the round counter
+				$('#next-round-button').attr('onclick', 'showResults()');
+			}
+		</script>
+
+		<script>
+			function showResults(){
+				compare();
+			}
+		</script>
+
+		<script>
+			function advance(){
+		    	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
+				nextRound();
+				getRoundCount();
+				getJSON(false);	// boolean is used to indicate if this is the first load or not
+			}
+
+		</script>
+
 		<script type="text/javascript">
 		   function clickedAttribute(item) {
 		    var choice = $(item).attr("id"); 
@@ -139,20 +175,30 @@
 
 		<script>
 
-			function updateText(textString, buttonString){
+			function updateText(textString){
 				/*
 					Helper method to update the status bar and "next" button
 				*/
 				$('#game-text').text(textString);
+			}
+		</script>
+
+		<script>
+			function updateButtonText(buttonString){
+				/*
+					Helper method to update the status bar and "next" button
+				*/
 				$('#next-round-button').text(buttonString);
 			}
+		</script>
 
+		<script>
 			function selectAttributeAsPOST(attrName){
 
 				/*
 					Sends the chosen attribute from the player back to the API
 				*/
-				
+				updateButtonText("Compare");
 				$.ajax({
 			        type: 'POST',
 			        dataType: "json",
@@ -166,7 +212,36 @@
 			        */
 			    });
 			}
+		</script>
 
+		<script>
+			function weHaveAWinner(winnerName){
+
+				/*
+					Sends the winners name to allow the database to log the win
+				*/
+				$.ajax({
+			        type: 'POST',
+			        dataType: "json",
+			        url: "http://localhost:7777/toptrumps/game/weHaveAWinner",
+			        contentType: "application/json; charset=UTF-8", 
+			        data: winnerName,
+			        /*		SUCCESS function not required - but can be used
+			        success: function (winnerName) {
+			            $('#model-text-field').text(winnerName + " is the winner!");
+			            $('#modal-button').click();
+			        }
+			        */
+			        
+			    });
+			}
+		</script>
+
+		<script>
+			
+		</script>
+
+		<!--
 			function selectAttribute(attrName){
 				
 				/*
@@ -179,31 +254,65 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert("User chose " + int);
-					updateText("Player One chose " + attrName, "Next round");
+					updateText("Player One chose " + attrName);
+					updateButtonText("Next round");
 
 				};
 				xhr.send();
 			}
+		
+		-->
 
-			function setUpBoard(){
-				getPlayers();
-				updateText("Welcome to Top Trumps - hit this button to begin...", "Begin round 1");
+		<script>
+			function compare(){
+				
+				/*
+					Checks user input/CPU input function in the API
+					Increases the round counter variable
+				*/
+				var userSelection = false;
+				var userActive = false;
+				
+				var activePlayer = $('#game-active-player-name').text();
+
+				if(activePlayer == "Player One"){
+					userActive = true;
+				}
+				
+				if(userActive){
+					$('#game-user-button-group').children().each(function(i) { 
+							//alert(i + ": " + $( this ).text());
+							if($(this).attr("class") == "btn btn-primary"){
+								//alert("button " + i + " selected");
+								userSelection = true;
+							}
+					});
+				} else {
+					userSelection = true;
+				}
+
+				if(userSelection){
+					$('#game-text').css('color', 'black');
+					var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/compare/"); // Request type and URL
+				
+				if (!xhr) {alert("CORS not supported");}
+
+				xhr.onload = function(e) {
+ 					var responseText = xhr.response; // the text of the response
+					//alert(responseText); // lets produce an alert
+					updateText(responseText);
+					$('#next-round-button').attr('onclick', 'advance()');
+
+				};
+				xhr.send();
+				} else {
+					$('#game-text').css('color', 'red');
+					updateText("You must choose an Attribute first!");
+				}
 			}
+		</script>
 
-			function startRoundOne(button){
-				getJSON();			// pulls in JSON, populates cards
-				unHideBoard();		// unhides board elements revealing cards, active player
-				getRoundCount();	// display the round counter
-				$(button).attr('onclick', 'advance()');	// change the button functionality to the advance() function
-			}
-
-			function advance(){
-		    	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
-				nextRound();
-				getRoundCount();
-				getJSON();
-			}
-
+		<script>
 			function getRoundCount(){
 				/*
 					Retrieves the roundCounter variable from the API
@@ -214,11 +323,13 @@
 
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
-					$('#round-count-badge').text("Round:" + responseText);
+					$('#round-count-badge').text("Round: " + responseText);
 				};
 				xhr.send();
 			}
+		</script>
 
+		<script>		
 			function nextRound(){
 				
 				/*
@@ -232,11 +343,17 @@
 				xhr.onload = function(e) {
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
-					updateText(responseText, 'Next');
+					if(responseText){
+						$('#next-round-button').attr('onclick', 'showResults()');
+					} else {
+						// round did not successfully advance
+					}
 				};
 				xhr.send();
 			}
+		</script>
 
+		<script>
 			function unHideBoard(){
 
 				/*
@@ -245,7 +362,7 @@
 				*/
 				var x = document.getElementById("game-board");
 				if (x.style.visibility === "visible") {
-				  x.style.visibility = "hidden";
+				  	x.style.visibility = "hidden";
 				} else {
 				  	x.style.visibility = "visible";
 				}
@@ -280,13 +397,12 @@
 					}
 					$('#game-board').css('grid-template-columns', '1fr 20px repeat(' + opponents + ', 1fr)');
 					
-					return responseText;
 				};
 				xhr.send();	
 			}
 
 
-			function getJSON(){
+			function getJSON(boolean){
 
 				/*
 					Retrieves the JSON file which houses the current player and active
@@ -339,6 +455,18 @@
 
 					var activePlayerSet = false;
 					var i;
+
+					for(i = 0; i < playersLength; i++){
+						if(parseInt(players[i].handSize) >= 40){
+							/* 
+
+								Need some winner notification/image/animation
+
+							*/
+							weHaveAWinner(players[i].name);
+						}
+					}
+
 					for(i = 1; i < players.length; i++){
 						//alert("finding i " + i);
 						var cardID = '#game-AI-card-container-' + i;
@@ -352,7 +480,14 @@
 									$('#game-active-player-name').text(players[i].name);
 									activePlayerSet = true;
 									$('#game-user-button-group').children().attr("disabled", true);
-									selectAttributeAsPOST(players[i].highestAttribute);
+									if(boolean){
+										// do not update the text bar
+									} else {
+										updateText(players[i].name + ' is the active player... they choose ' + players[i].highestAttribute + '!');
+										updateButtonText('Compare');
+										selectAttributeAsPOST(players[i].highestAttribute);
+									}
+									
 								}
 								$(cardID).css('border-style', 'solid');
 								$(cardID).css('border-color', 'blue');
@@ -375,8 +510,14 @@
 					// if the active player is not CPU, it is Player One
 					if(!activePlayerSet){
 						$('#game-active-player-name').text(players[0].name);
-								activePlayerSet = true;
+						activePlayerSet = true;
 						$('#game-user-button-group').children().removeAttr("disabled");
+						if(boolean){
+							// do not update text bar
+						} else {
+							updateText("You are the active player! Choose an attribute then confirm your selection.");
+							updateButtonText("Compare");
+						}	
 					}
 				};
 				xhr.send();
@@ -384,33 +525,28 @@
 
 			function playerEliminated(){
 				$('#game-user-card').empty();
-				$('#game-user-card').append("<h1>&#9760</h1>");
+				$('#game-user-card').append("<h1 class='vertical-center'>&#9760</h1>");
 				//$('#game-user-card').append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='Player Eliminated'>");
 			}
 
 			function AIeliminated(cardID){
 				$(cardID).empty();
-				$(cardID).append("<h1>&#9760</h1>");
+				$(cardID).append("<h1 class='vertical-center'>&#9760</h1>");
 				//$(cardID).append("<img src = 'assets/SpaceBackgroundSmoothed.jpg' alt='AI Eliminated'>");
 			}
 
 			function removeContainers(containerID){
-
 				/*
 					Empties a specified container?
 				*/
 				
 				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
-
 				if (!xhr) {alert("CORS not supported");}
-
 				xhr.onload = function(e) {
 					$(containerID).empty();
 				};
-
 				// We have done everything we need to prepare the CORS request, so send it
 				xhr.send();
-
 			}
 
 		
@@ -441,8 +577,8 @@
 		
 		</script>
 
-		<script>
-			$(window).load(getJSON());	// execute once window has loaded
-		</script>
 		</body>
+		<script>
+			$(window).load(getJSON(true));	// execute once window has loaded
+		</script>
 </html>

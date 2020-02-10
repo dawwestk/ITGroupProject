@@ -36,7 +36,10 @@ public class DatabaseQuery {
 	private String humanPlayerName = "Player One";
 	private static String noConnection = "Could not connect to database. Stats can not be viewed or recorded.";
 	
-	public DatabaseQuery(String server, String db, String pass) throws Exception {
+	public DatabaseQuery() throws Exception {
+		String server = "localhost"; //"yacata.dcs.gla.ac.uk:5432";
+		String db = "postgres"; //"m_19_1002243w";
+		String pass = "postgres"; //"1002243w"; 
 		connString += server + "/" + db;
 		database = db;
 		password = pass;
