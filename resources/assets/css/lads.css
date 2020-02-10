@@ -1,0 +1,60 @@
+/*
+***************     Styles pertaining to Game Screen  *******************
+*/
+
+.container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
+#game-board{display: grid; visibility: hidden}
+/* change repeat(X, 1fr) to number of opponents somehow */
+#game-user-card h3,
+#game-AI-card1 h3, 
+#game-AI-card2 h3, 
+#game-AI-card3 h3, 
+#game-AI-card4 h3{border: solid;}
+img {max-width:100%; height:100px}
+#text-box-and-button{width: 100%; }
+#round-count-badge{width:10%; visibility: hidden}
+#game-active-player{width: 10%; visibility: hidden}
+#game-active-player-name{width: 10%; visibility: hidden}
+#next-round-button{width:20%;}
+#game-text{width: 40%;}
+#modal-button{display: none}
+#game-AI-card-container-1,
+#game-AI-card-container-2,
+#game-AI-card-container-3,
+#game-AI-card-container-4{}
+#separator{background-color: rgb(211, 211, 211)}
+.vertical-center {margin: 0; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%); text-align: center;}
+#quitButton{float: right;}
+
+
+/*
+***************     Styles pertaining to Stats Screen  *******************
+*/
+
+table {
+  border: 1px solid #666;   
+    width: 100%;
+}
+th {
+  background: #f8f8f8; 
+  font-weight: bold;    
+    padding: 2px;
+}
+.jumbotron-heading{text-align: center}
+
+/*
+***************     Styles pertaining to Selection Screen  *******************
+*/
+
+.container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
+#selection-grid{display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px}
+#dropdown-select{display: none}
+#selectionBody{
+    background-image: url("/assets/images/SpaceBackgroundSmoothed.jpg");
+    background-size: cover;
+}
+#titleHeader{color: white;}
+#selection-text{color: white;}
+#dropdown-select{color: white;}
+
+

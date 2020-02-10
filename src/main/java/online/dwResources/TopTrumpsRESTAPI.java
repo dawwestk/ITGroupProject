@@ -97,6 +97,15 @@ public class TopTrumpsRESTAPI {
 	}
 	
 	@POST
+	@Path("/game/userQuit/")
+	public void userQuit(String s) throws IOException {
+		if(s.toLowerCase().equals("quit")){
+			game = null;
+			System.out.println("User quit.");
+		}
+	}
+	
+	@POST
 	@Path("/game/weHaveAWinner/")
 	public String weHaveAWinner(String winnerName) throws IOException {
 		try {
