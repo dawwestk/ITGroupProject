@@ -33,11 +33,17 @@
 
     <body onload="loadTable()">  <!-- onload="initalize()"> Call the initalize method when the page loads -->
     	
-    	<div class="container">
+    	<div class="container mt-4">
     		<div class="jumbotron p-4" id = 'header'>
 				<!-- Add your HTML Here -->
 				<h1 class="jumbotron-heading">Top Trumps Game Stats!</h1>
 			</div>
+		</div>
+		<hr>
+		<div class="container-fluid">
+			<button type="button" class="btn btn-secondary" id="quitButton" onclick="quitGame()">
+			  Back
+			</button>
 		</div>
 
 		<div class = "container" id = 'stats'>
@@ -52,5 +58,6 @@
 		<div class = "container" id="piechart">
 			
 		</div>
+
 	</body>
 </html>

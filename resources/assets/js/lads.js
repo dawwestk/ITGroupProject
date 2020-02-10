@@ -479,6 +479,7 @@ function makeChart(JSONData) {
 		},
 		data: [{
 			type: "doughnut",
+			height:200,
 			innerRadius: "40%",
 			showInLegend: true,
 			legendText: "{label}",
@@ -519,18 +520,6 @@ function getStats(){
 		}
 
 		makeChart(stats);
-
-		/*
-
-		{
-			"Human-wins": ["Human wins", 0], 
-			"Average-Draws": ["Average Draws", 4], 
-			"AI-wins": ["AI wins", 7], 
-			"Highest-Round-Count": ["Highest Round Count", 125], 
-			"Total-games": ["Total games", 7]
-		}
-
-	      */
 	};
 	
 	// We have done everything we need to prepare the CORS request, so send it

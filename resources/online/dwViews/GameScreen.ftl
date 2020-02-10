@@ -78,9 +78,8 @@
 		</div>
 
 		<hr>
-		
+
 		<div class="container-fluid">
-			<!-- Button trigger modal -->
 			<button type="button" class="btn btn-secondary" id="quitButton" onclick="quitGame()">
 			  Quit Game
 			</button>
