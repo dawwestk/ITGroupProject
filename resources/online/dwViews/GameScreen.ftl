@@ -279,6 +279,15 @@
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
 					updateText(responseText);
+					$('#game-user-button-group').children().each(function(i) { 
+						alert(i + ": " + $( this ).text());
+						/*
+						if($(this).attr("class", "btn btn-primary")){
+							alert("User has chosen an attribute");
+						}
+						*/
+					});
+					/*
 					if(responseText === "You must choose an Attribute first!"){
 						// don't change the button
 						$('#game-text').css('color', 'red');
@@ -287,6 +296,7 @@
 						$('#game-text').css('color', 'black');
 						updateButtonText('Next');
 					}
+					*/
 				};
 				xhr.send();
 			}

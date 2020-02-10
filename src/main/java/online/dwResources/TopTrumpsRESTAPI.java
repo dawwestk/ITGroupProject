@@ -88,7 +88,7 @@ public class TopTrumpsRESTAPI {
 	
 	public void resetDatabaseQuery() {
 		try {
-			dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+			dbq = new DatabaseQuery();
 			statsJSON = new StatsJSONGetter(dbq.toString());
 			statsOutput = statsJSON.getJSON();
 		} catch (Exception e) {

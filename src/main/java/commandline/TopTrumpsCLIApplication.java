@@ -84,7 +84,8 @@ public class TopTrumpsCLIApplication {
 		while (!userWantsToQuit) {
 			// Read stats from the database
 			try {
-				dbq = new DatabaseQuery("localhost", "postgres", "postgres");
+				// "yacata.dcs.gla.ac.uk:5432", "m_19_1002243w", "1002243w"
+				dbq = new DatabaseQuery();
 			} catch (Exception e){
 				ps.println(dbq.getNoConnection());
 			}
