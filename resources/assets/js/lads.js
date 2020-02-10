@@ -132,7 +132,7 @@ function nextRound(){
 	if (!xhr) {alert("CORS not supported");}
 
 	xhr.onload = function(e) {
-			var responseText = xhr.response; // the text of the response
+		var responseText = xhr.response; // the text of the response
 		//alert(responseText); // lets produce an alert
 		if(parseInt(responseText) >= 1){
 			$('#next-round-button').attr('onclick', 'showResults()');
