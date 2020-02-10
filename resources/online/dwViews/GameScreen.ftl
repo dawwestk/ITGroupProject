@@ -23,12 +23,11 @@
 		
 	</head>
 
-    <body onload="setUpBoard()"> <!-- onload="initalize()">  Call the initalize method when the page loads -->
+    <body onload="setUpBoard()" id="game-body"> <!-- onload="initalize()">  Call the initalize method when the page loads -->
     	
     	<div class="container" id = "game-title">
 			<h1>Top Trumps Game!</h1>
 		</div>
-
 		<div id="text-box-and-button">
 			<span class="badge badge-light" id="round-count-badge">Round Count:</span>
 			<span class="badge badge-light" id="game-active-player">Active Player:</span>
@@ -36,7 +35,6 @@
 			<span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
 			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne()">Next Round</button>
 		</div>
-
 
 		<hr>
 
@@ -79,7 +77,7 @@
 
 		<hr>
 
-		<div class="container-fluid">
+		<div class="container-fluid" id="quit-footer">
 			<button type="button" class="btn btn-secondary" id="quitButton" onclick="quitGame()">
 			  Quit Game
 			</button>

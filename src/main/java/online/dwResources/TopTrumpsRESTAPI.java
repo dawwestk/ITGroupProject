@@ -111,6 +111,7 @@ public class TopTrumpsRESTAPI {
 		try {
 			dbq.addGameToDB(game);
 			resetDatabaseQuery();
+			game = null;	// stops the game being written to the database twice		
 		} catch (Exception e) {
 			// no need to print explanation, handled on creation of dbq
 		}

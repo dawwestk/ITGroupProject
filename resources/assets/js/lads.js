@@ -257,20 +257,6 @@ function getJSON(boolean){
 		var activePlayerSet = false;
 		var i;
 
-		for(i = 0; i < playersLength; i++){
-			if(parseInt(players[i].handSize) >= 40){
-				/* 
-
-					Need some winner notification/image/animation
-
-				*/
-				weHaveAWinner(players[i].name);
-				updateButtonText('End Game');
-				updateText(players[i].name + " is the winner!");
-				$('#next-round-button').attr('onclick', 'quitGame()');
-			}
-		}
-
 		for(i = 1; i < players.length; i++){
 			//alert("finding i " + i);
 			var cardID = '#game-AI-card-container-' + i;
@@ -310,6 +296,21 @@ function getJSON(boolean){
 			}
 		}
 
+		for(i = 0; i < playersLength; i++){
+			if(parseInt(players[i].handSize) >= 40){
+				/* 
+
+					Need some winner notification/image/animation
+
+				*/
+				updateButtonText('Game Over');
+				updateText(players[i].name + " is the winner!");
+				$('#next-round-button').attr('disabled', true);
+				weHaveAWinner(players[i].name);
+				return players[i].name;
+			}
+		}
+
 		// if the active player is not CPU, it is Player One
 		if(!activePlayerSet){
 			$('#game-active-player-name').text(players[0].name);
@@ -333,6 +334,7 @@ function playerEliminated(){
 
 function AIeliminated(cardID){
 	$(cardID).empty();
+	$(cardID).css('position', 'relative');
 	$(cardID).append("<h1 class='vertical-center'>&#9760</h1>");
 }
 

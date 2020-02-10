@@ -36,9 +36,9 @@
 
 		<div class="container px-lg-5">
 		  <div class="row mx-lg-n5">
-		    <div class="col py-3 px-lg-5 border bg-light"><button type="button" class="btn btn-primary btn-lg btn-block" id = "new-game-button">Start a New Game</button></div>
+		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-primary btn-lg btn-block" id = "new-game-button">Start a New Game</button></div>
 		    <!-- was inside new game button onclick="window.location.href = '/toptrumps/game/';" -->
-		    <div class="col py-3 px-lg-5 border bg-light"><button type="button" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href = '/toptrumps/stats/';">See Statistics</button></div>
+		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href = '/toptrumps/stats/';">See Statistics</button></div>
 		  </div>
 		</div>
 
@@ -57,7 +57,7 @@
 				    </select>  	
 				</div>
 			</div>
-			<div class = "col">
+			<div class = "col p-1">
 				<button class="btn btn-outline-light" onclick="newGameAndSetPlayers()">Start Game</button>
 				<!-- add number of players as URL variable? -->
 			</div>
