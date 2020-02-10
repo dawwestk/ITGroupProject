@@ -159,6 +159,7 @@ public class TopTrumpsRESTAPI {
 			} else {
 				output = "This round was a draw!";
 			}
+			JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), game.getActivePlayer());
 		} else {
 			output = "You must choose an Attribute first!";
 		}

@@ -84,6 +84,7 @@ function compare(){
 		Checks user input/CPU input function in the API
 		Increases the round counter variable
 	*/
+	unHideBoard();
 	var userSelection = false;
 	var userActive = false;
 	var activePlayer = $('#game-active-player-name').text();
@@ -120,6 +121,7 @@ function compare(){
 		$('#game-text').css('color', 'red');
 		updateText("You must choose an Attribute first!");
 	}
+	updateButtonText('Next');
 }
 	
 function nextRound(){
@@ -137,6 +139,7 @@ function nextRound(){
 		if(parseInt(responseText) >= 1){
 			$('#next-round-button').attr('onclick', 'showResults()');
 			$('#round-count-badge').text("Round: " + responseText);
+			unHideBoard();
 		} else {
 			// round did not successfully advance
 		}
