@@ -271,7 +271,25 @@
 					Checks user input/CPU input function in the API
 					Increases the round counter variable
 				*/
-				var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/compare/"); // Request type and URL
+				var userSelection = false;
+				var userActive = false;
+				
+				if($('#game-active-player-name').text() === "Player One"){userActive = true;}
+				
+				if(userActive){
+					$('#game-user-button-group').children().each(function(i) { 
+							//alert(i + ": " + $( this ).text());
+							if($(this).attr("class") == "btn btn-primary"){
+								//alert("button " + i + " selected");
+								userSelection = true;
+							}
+					});
+				} else {
+					userSelection = true;
+				}
+				if(userSelection){
+					$('#game-text').css('color', 'black');
+					var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/compare/"); // Request type and URL
 				
 				if (!xhr) {alert("CORS not supported");}
 
@@ -279,26 +297,14 @@
  					var responseText = xhr.response; // the text of the response
 					//alert(responseText); // lets produce an alert
 					updateText(responseText);
-					$('#game-user-button-group').children().each(function(i) { 
-						alert(i + ": " + $( this ).text());
-						/*
-						if($(this).attr("class", "btn btn-primary")){
-							alert("User has chosen an attribute");
-						}
-						*/
-					});
-					/*
-					if(responseText === "You must choose an Attribute first!"){
-						// don't change the button
-						$('#game-text').css('color', 'red');
-						updateButtonText('Compare');
-					} else {
-						$('#game-text').css('color', 'black');
-						updateButtonText('Next');
-					}
+
 					*/
 				};
 				xhr.send();
+				} else {
+					$('#game-text').css('color', 'red');
+					updateText("You must choose an Attribute first!");
+				}
 			}
 		</script>
 
