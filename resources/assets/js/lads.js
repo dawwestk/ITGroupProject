@@ -84,7 +84,7 @@ function compare(){
 		Checks user input/CPU input function in the API
 		Increases the round counter variable
 	*/
-	unHideBoard();
+	
 	var userSelection = false;
 	var userActive = false;
 	var activePlayer = $('#game-active-player-name').text();
@@ -113,6 +113,7 @@ function compare(){
 			updateText(responseText);
 
 			// User successfully made a choice, change button to advance function
+			unHideBoard();
 			$('#next-round-button').attr('onclick', 'advance()');
 		};
 		xhr.send();
