@@ -122,7 +122,7 @@ function compare(){
 		$('#game-text').css('color', 'red');
 		updateText("You must choose an Attribute first!");
 	}
-	updateButtonText('Next');
+	updateButtonText('Next Round');
 }
 	
 function nextRound(){
