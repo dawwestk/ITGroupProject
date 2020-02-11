@@ -336,6 +336,7 @@ function getJSON(boolean){
 			$('#game-active-player-name').text(players[0].name);
 			activePlayerSet = true;
 			$('#game-user-button-group').children().removeAttr("disabled");
+			$('#HandSize').attr('disabled', true);
 			if(boolean){
 				// do not update text bar
 			} else {

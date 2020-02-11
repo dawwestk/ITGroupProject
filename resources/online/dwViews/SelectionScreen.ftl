@@ -5,7 +5,6 @@
     	<title>Top Trumps Selection</title>
     
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
-    	<link rel="stylesheet" href="/assets/css/lads.css"/>
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
     	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
     	<link rel="stylesheet" href="/assets/css/bootstrap.css"/>
@@ -20,6 +19,7 @@
     	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     	<script src="/assets/js/lads.js"></script>
+    	<link rel="stylesheet" href="/assets/css/lads.css"/>
 		
 	</head>
 
