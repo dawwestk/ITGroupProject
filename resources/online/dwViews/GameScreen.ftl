@@ -29,11 +29,15 @@
     	<div class="container" id = "game-title">
 			<h1>Top Trumps Game!</h1>
 		</div>
+		<hr>
 		<div id="text-box-and-button">
-			<span class="badge badge-light" id="round-count-badge">Round Count:</span>
-			<span class="badge badge-light" id="game-active-player">Active Player:</span>
-			<span class="badge badge-dark" id="game-active-player-name">{player}</span>
-			<span class="badge badge-light" id="game-text">Welcome to TopTrumps!</span>
+			<span class="badge badge-light p-2" id="game-text">Welcome to TopTrumps!</span>
+		</div>
+		<hr>
+		<div id="round-active-player-and-button">
+			<span class="badge badge-light p-2" id="round-count-badge">Round Count:</span>
+			<span class="badge badge-light p-2" id="game-active-player">Active Player:</span>
+			<span class="badge badge-dark p-2" id="game-active-player-name">{player}</span>
 			<button type="button" class="btn btn-outline-secondary" id="next-round-button" onclick="startRoundOne()">Next Round</button>
 		</div>
 
