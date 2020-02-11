@@ -240,6 +240,12 @@ function getJSON(boolean){
 			$('#communal-pile-value').text(0);
 		}
 
+		if(players[0].activePlayer){
+			setActivePlayerStyle($('#game-user-card'));
+		} else {
+			setInactivePlayerStyle($('#game-user-card'));
+		}
+
 		if(players[0].eliminated){
 			//alert("Player One eliminated");
 			playerEliminated();
@@ -254,6 +260,7 @@ function getJSON(boolean){
 				$('#playerFirepowerBadge').text(players[0].Firepower);
 				$('#playerCargoBadge').text(players[0].Cargo);
 				$('#playerHandSize').text(players[0].handSize);
+				
 			} else {
 				$('#game-user-card').empty();
 			}
@@ -283,10 +290,9 @@ function getJSON(boolean){
 							selectAttributeAsPOST(players[i].highestAttribute);
 						}
 					}
-					$(cardID).css('border-style', 'outset');
-					$(cardID).css('border-color', 'white');
+					setActivePlayerStyle($(cardID));
 				} else {
-					$(cardID).css('border-style', 'none');
+					setInactivePlayerStyle($(cardID));
 				}
 
 
@@ -339,6 +345,18 @@ function getJSON(boolean){
 		}
 	};
 	xhr.send();
+}
+
+function setActivePlayerStyle(element){
+	element.css('border-style', 'outset');
+	element.css('border-color', 'yellow');
+	element.css('border-width', 'thick');
+	element.css('background-color', 'rgba(47, 3, 79, 1)');
+}
+
+function setInactivePlayerStyle(element){
+	element.css('border-style', 'none');
+	element.css('background-color', 'rgba(47, 3, 79, 0.3)');
 }
 
 function playerEliminated(){

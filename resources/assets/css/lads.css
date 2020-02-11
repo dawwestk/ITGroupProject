@@ -4,14 +4,14 @@
 
 .container{color: black; text-align: center; margin-left: auto; margin-right: auto; padding: auto}
 #game-board{display: grid; grid-gap:10px; visibility: hidden;}
-/* change repeat(X, 1fr) to number of opponents somehow */
+#game-title{color: white;}
 #game-AI-card-image h3,
 #game-user-card h3,
 #game-AI-card1 h3,
 #game-AI-card2 h3,
 #game-AI-card3 h3,
-#game-AI-card4 h3{border-style: outset; border-color: rgb(57,6, 99); color: #cbd3da;}
-img {max-width:100%; height:100px}
+#game-AI-card4 h3{border-style: outset; border-color: rgb(57,6, 99); color: #cbd3da; background-color: rgba(47, 3, 79, 1)}
+img {max-width:100%; height:100px; opacity: initial;}
 #text-box-and-button{width: 100%; }
 #round-count-badge{width:10%; visibility: hidden}
 #game-active-player{width: 10%; visibility: hidden}
@@ -22,9 +22,11 @@ img {max-width:100%; height:100px}
 #game-AI-card-container-1,
 #game-AI-card-container-2,
 #game-AI-card-container-3,
-#game-AI-card-container-4{background-color: rgb(47, 3, 79);color: #cbd3da; }
-#separator{background-color: rgb(27, 2, 69); padding: 10px;}
-#game-user-card{position: relative;background-color: rgb(47, 3, 79); color: #cbd3da;}
+#game-AI-card-container-4{background-color: rgba(47, 3, 79, 0.3);color: #cbd3da;} /* rgb(47, 3, 79) */
+#game-AI-card{opacity: 1;}
+.btn-group-vertical{background-color: rgba(47, 3, 79, 1)}
+#separator{background-color: #7f5ca1; padding: 10px;} /* rgb(27, 2, 69) */
+#game-user-card{position: relative;background-color: rgba(47, 3, 79, 0.3); color: #cbd3da;}
 .vertical-center {margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 #quit-footer{text-align: center; display: inline-block;}
 #quitButton{float: right;}
