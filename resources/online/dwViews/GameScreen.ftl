@@ -23,7 +23,7 @@
 		
 	</head>
 
-    <body onload="setUpBoard()" id="game-body"> <!-- onload="initalize()">  Call the initalize method when the page loads -->
+    <body onload="setUpBoard()" id="spaceBackground"> <!-- onload="initalize()">  Call the initalize method when the page loads -->
     	
     	<div class="container" id = "game-title">
 			<h1>Top Trumps Game!</h1>
@@ -37,6 +37,8 @@
 		</div>
 
 		<hr>
+<#--		<div class="panel panel-default">-->
+<#--			<div class="panel-body">-->
 
 		<div class = "container" id = "game-board">
 			<div class = "user-card" id = "game-user-card">
@@ -47,12 +49,12 @@
 				</div>
 				<div class="btn-group-vertical" id="game-user-button-group" role="group" aria-label="...">
 
-					<button type="button" class="btn btn-outline-primary" id="Size" onclick="clickedAttribute(this)">Size:<span class="badge badge-light" id="playerSizeBadge">temp</span></button>
-  					<button type="button" class="btn btn-outline-primary" id="Speed" onclick="clickedAttribute(this)">Speed:<span class="badge badge-light" id="playerSpeedBadge">temp</span></button>
-					<button type="button" class="btn btn-outline-primary" id="Range" onclick="clickedAttribute(this)">Range:<span class="badge badge-light" id="playerRangeBadge">temp</span></button>
-  					<button type="button" class="btn btn-outline-primary" id="Firepower" onclick="clickedAttribute(this)">Firepower:<span class="badge badge-light" id="playerFirepowerBadge">temp</span></button>
-  					<button type="button" class="btn btn-outline-primary" id="Cargo" onclick="clickedAttribute(this)">Cargo:<span class="badge badge-light" id="playerCargoBadge">temp</span></button>
-					<button type="button" class="btn btn-outline-secondary" id="HandSize" disabled>No. Cards in Hand:<span class="badge badge-info" id="playerHandSize">New</span></button>
+					<button type="button" class="btn btn-outline-success" id="Size" onclick="clickedAttribute(this)">Size: <span class="badge badge-light" id="playerSizeBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-success" id="Speed" onclick="clickedAttribute(this)">Speed: <span class="badge badge-light" id="playerSpeedBadge">temp</span></button>
+					<button type="button" class="btn btn-outline-success" id="Range" onclick="clickedAttribute(this)">Range: <span class="badge badge-light" id="playerRangeBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-success" id="Firepower" onclick="clickedAttribute(this)">Firepower: <span class="badge badge-light" id="playerFirepowerBadge">temp</span></button>
+  					<button type="button" class="btn btn-outline-success" id="Cargo" onclick="clickedAttribute(this)">Cargo: <span class="badge badge-light" id="playerCargoBadge">temp</span></button>
+					<button type="button" class="btn btn-outline-secondary" id="HandSize" disabled>No. Cards in Hand: <span class="badge badge-info" id="playerHandSize">New</span></button>
 
 				</div>
 			</div>

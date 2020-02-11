@@ -21,15 +21,15 @@ function showResults(){
 
 function advance(){
 	// Reset all buttons to be outlines - i.e. not selected yet
-	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
+	$('#game-user-button-group').children().attr("class", "btn btn-outline-success");
 	nextRound();
 	getJSON(false);	// boolean is used to indicate if this is the first load or not
 }
 
 function clickedAttribute(item) {
 	var choice = $(item).attr("id"); 
-	$('#game-user-button-group').children().attr("class", "btn btn-outline-primary");
-	$(item).attr("class", "btn btn-primary");
+	$('#game-user-button-group').children().attr("class", "btn btn-outline-success");
+	$(item).attr("class", "btn btn-success");
 	selectAttributeAsPOST(choice);
 }
 
@@ -93,8 +93,9 @@ function compare(){
 	
 	// If Player One is active, we need to check that they have made a choice
 	if(userActive){
+
 		$('#game-user-button-group').children().each(function(i) {
-			if($(this).attr("class") == "btn btn-primary"){
+			if($(this).attr("class") == "btn btn-success"){
 				userSelection = true;
 			}
 		});
@@ -282,11 +283,12 @@ function getJSON(boolean){
 							selectAttributeAsPOST(players[i].highestAttribute);
 						}
 					}
-					$(cardID).css('border-style', 'solid');
-					$(cardID).css('border-color', 'blue');
+					$(cardID).css('border-style', 'outset');
+					$(cardID).css('border-color', 'white');
 				} else {
 					$(cardID).css('border-style', 'none');
 				}
+
 
 				$(cardID).find("h3").text(players[i].cardName);
 				$(cardID).find('h2').text(players[i].name);

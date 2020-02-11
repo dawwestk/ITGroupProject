@@ -26,7 +26,6 @@
     <body id="spaceBackground"> <!-- onload="initalize()"> Call the initalize method when the page loads -->
     	<div class="container" id = "selection-title">
 
-			<!-- Add your HTML Here -->
 			<h1 id=titleHeader>Top Trumps Game!</h1>
 
 		</div>
@@ -36,7 +35,7 @@
 
 		<div class="container px-lg-5">
 		  <div class="row mx-lg-n5">
-		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-primary btn-lg btn-block" id = "new-game-button">Start a New Game</button></div>
+		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-light btn-lg btn-block" id = "new-game-button">Start a New Game</button></div>
 		    <!-- was inside new game button onclick="window.location.href = '/toptrumps/game/';" -->
 		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href = '/toptrumps/stats/';">See Statistics</button></div>
 		  </div>
