@@ -69,15 +69,6 @@ public class TopTrumpsCLIApplication {
 						control.nextRound();
 					}
 					
-					
-					/*
-					// re-initialize players
-					players = new ArrayList<ModelPlayer>(game.getNumPlayers());
-					for(int i = 0 ; i < game.getNumPlayers(); ++i) {
-						players.add(game.getPlayer(i));
-					}
-					*/
-					
 				}
 				
 				//Logging of winner 

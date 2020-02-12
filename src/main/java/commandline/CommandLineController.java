@@ -176,7 +176,6 @@ public class CommandLineController {
 		}
 		
 		stat = game.getStat(choice);
-		
 		if(logging) {
 			logRound(stat);
 		}
@@ -185,10 +184,21 @@ public class CommandLineController {
 		
 		// Check if win or draw
 		boolean hasWinner = game.hasWinner(stat);
+		printRoundSummary(hasWinner, stat);
+		
 		if(logging) {
 			logCommunalPile();
 		}
-		printRoundSummary(hasWinner, stat);
+		
+		if(hasWinner) {
+			game.giveWinnerCards(game.getRoundWinner());
+			
+		}
+		
+		if(logging) {
+			logCards(hasWinner);
+			logFlush();
+		}
 	}
 	
 	public boolean askToContinue(boolean userWantsToQuit) {
@@ -202,14 +212,8 @@ public class CommandLineController {
 		return userWantsToQuit;
 	}
 	
-	public void distributeCardsToWinner() {
-		game.giveWinnerCards(game.getRoundWinner());
+	public void distributeCardsToWinner() {	
 		
-		if(logging) {
-			logCommunalPile();
-			logCards();
-			logFlush();
-		}
 	}
 	
 	public void nextRound() {
@@ -303,22 +307,22 @@ public class CommandLineController {
 	
 	public void logInitialDeck(String s) {
 		// log deck before shuffling
-		logger.appendln("\n" + s);
+		logger.appendln("\n" + s + ":");
 		logger.appendln(game.getDeck().printInitialDeck());
 	}
 	
 	public void logDeck(String s) {
 		// log deck after shuffling
-		logger.appendln("\n" + s);
+		logger.appendln("\n" + s + ":");
 		logger.appendln(game.getDeck().toString());
 	}
 	
 	public void logPlayerHands() {
 		// log hand of each player
 		ArrayList<ModelPlayer> players = game.getPlayers();
-		logger.appendln("Hand of each player");
+		logger.appendln("\nHand of each player:");
 		for(ModelPlayer player: players) {
-			logger.appendln(player.toString());
+			logger.appendln(player.toString() + "\n");
 		}
 	}
 	
@@ -331,40 +335,43 @@ public class CommandLineController {
 	
 	public void logRound(String stat) {
 		// log cards in play
-		logger.appendln("\nCurrent cards in play");
+		logger.appendln("\nCurrent cards in play:");
 		ArrayList<ModelPlayer> players = game.getPlayers();
 		for(ModelPlayer player: players) {
 			ModelCard card = player.getActiveCard();
 			logger.append(player.getName());
-			logger.append(" ");
+			logger.append(": ");
 			logger.appendln(card.toString());
 		}
 		
 		// log category selected and card values
-		logger.appendln("\nCategory selected and card values");
+		logger.appendln("\nCategory selected and card values:");
+		logger.appendln("Attribute chosen: " + stat);
 		for(ModelPlayer player: players) {
 			ModelCard card = player.getActiveCard();
-			logger.appendln("" + card.getValue(stat));
-			logger.appendln("");
+			logger.appendln(player.getName() + ": " + card.getValue(stat));
 		}
 	}
 	
-	public void logCards() {
+	public void logCards(boolean thereWasAWinner) {
 		// log communal pile after cards removed from it
 		ModelDeck deck = game.getDeck();
-		logger.appendln("\nCommunal pile after cards removed");
-		logger.appendln(deck.getCP().toString());
-
-		// log round winner
-		logger.appendln("\nRound Winner");
-		logger.appendln(game.getRoundWinner().getName());
+		if(thereWasAWinner) {
+			// log round winner
+			logger.appendln("\nRound Winner:");
+			logger.appendln(game.getRoundWinner().getName());
+			logger.appendln("\nCommunal pile after cards removed:");
+			logger.appendln(deck.getCP().toString());
+		} else {
+			logger.appendln("Round was a draw.");
+		}
 		
 		// log contents of each deck after a round
-		logger.appendln("Deck");
+		logger.appendln("\nDeck:");
 		logger.appendln(deck.toString());
 		logger.appendln("\nCommunal Pile:");
-		logger.appendln(deck.toString());
-		logger.appendln("\nUsers Decks:");
+		logger.appendln(deck.getCP().toString());
+		logPlayerHands();
 	}
 	
 	public void logPlayers() {
@@ -377,7 +384,7 @@ public class CommandLineController {
 	public void logWinner() {
 		if(logging) {
 			// log game winner
-			logger.appendln("Game winner");
+			logger.appendln("\nGame winner:");
 			logger.appendln(game.getRoundWinner().getName());
 		}
 	}
