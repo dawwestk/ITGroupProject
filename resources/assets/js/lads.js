@@ -485,6 +485,7 @@ function getStats(){
 		    title :{
 			text: "Max Rounds per Game"
 		    },
+		    legendText: "Game ID",
 		    data: [{
 				type: "splineArea",
             	color: "rgba(255,12,32,.3)",
@@ -496,95 +497,6 @@ function getStats(){
 	};
 	xhr.send();
 }
-
-function makeCharts(){
-
-	var data = JSONData;
-	var pieStats = data[0];
-	var chart1 = new CanvasJS.Chart("piechart",{
-		animationEnabled: true,
-	    title :{
-	        text: "Human vs AI wins"
-	    },
-	    data: [{
-			type: "doughnut",
-			height:200,
-			innerRadius: "40%",
-			showInLegend: true,
-			legendText: "{label}",
-			indexLabel: "{label}: #percent%",
-			dataPoints: [
-				{ label: "red", y: 4 },
-				{ label: "blue", y: 6 },
-			]
-		}]
-	});
-
-	var chart2 = new CanvasJS.Chart("linechart",{
-	    title :{
-		text: "Average Draws per Game"
-	    },
-	    data: [{
-			type: "line",
-			dataPoints : [
-			    { x: 1,  y: 10  },
-			    { x: 2, y: 15  },
-			    { x: 3, y: 25  },
-			    { x: 4,  y: 30  },
-			    { x: 5,  y: 28  }
-			]
-	    }]
-	});
-	 
-	chart1.render();
-	chart2.render();
-}
-
-function makePieChart(JSONData) {
-	var data = JSONData;
-	var options = {
-		animationEnabled: true,
-		title: {
-			text: "Human vs AI wins"
-		},
-		data: [{
-			type: "doughnut",
-			height:200,
-			innerRadius: "40%",
-			showInLegend: true,
-			legendText: "{label}",
-			indexLabel: "{label}: #percent%",
-			dataPoints: [
-				{ label: data["Human-wins"][0], y: data["Human-wins"][1] },
-				{ label: data["AI-wins"][0], y: data["AI-wins"][1] },
-			]
-		}]
-	};
-	$("#piechart").CanvasJSChart(options);
-}
-
-function makeLineChart(JSONData) {
-	alert("inside line function");
-	var data = JSONData;
-	var options = {
-		title: {text: "Average Draws per Game"},
-		data: [{
-			type: "line",
-			height:200,
-			dataPoints: {x: 1, y: 5},
-		}]
-	};
-	alert("adding 1, 5");
-	$("#linechart").CanvasJSChart(options);
-	/* 
-	$.each(data, function(key, value){
-		dataPoints.push({x: value[0], y: parseInt(value[1])});
-	});
-	
-	//chart.render();
-	*/
-}
-
 
 /*
 ***************		Scripts used across many screens	*******************
