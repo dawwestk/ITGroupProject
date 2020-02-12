@@ -20,8 +20,7 @@ public class GameTest {
 	 */
 	public void setUp() throws IOException {		
 		String fileName = "StarCitizenDeck.txt";	
-		deck = new ModelDeck();
-		ModelDeckBuilder builder = new ModelDeckBuilder(deck, fileName);				
+		deck = new ModelDeck(fileName);				
 	}
 	
 	@Test

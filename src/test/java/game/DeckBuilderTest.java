@@ -15,7 +15,12 @@ public class DeckBuilderTest {
 	
 	@BeforeEach
 	public void setUp() {
-		new ModelDeck();	
+		String fileName = "";
+		try{
+			new ModelDeck(fileName);	
+		} catch(IOException e) {
+			
+		}
 	}
 	
 	@Test

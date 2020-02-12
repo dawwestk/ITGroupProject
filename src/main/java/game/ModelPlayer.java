@@ -1,8 +1,15 @@
 package game;
 
-
 import java.util.ArrayList;
-import java.util.Collections;
+
+/*
+ * 
+ * 	The ModelPlayer object represents a player in the TopTrumps game
+ * 
+ * 	Each player has a name, a hand (collection of cards) and a flag 
+ * 		which indicates whether they won the last round of play
+ * 
+ */
 
 public class ModelPlayer {
 

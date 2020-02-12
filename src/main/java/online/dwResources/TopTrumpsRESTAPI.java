@@ -70,9 +70,9 @@ public class TopTrumpsRESTAPI {
 		
 		deckFile = conf.getDeckFile();
 		
-		deck = new ModelDeck();
+		deck = null;
 		try {
-			ModelDeckBuilder deckBuilder = new ModelDeckBuilder(deck, deckFile);
+			deck = new ModelDeck(deckFile);
 		} catch(IOException e) {
 			System.out.println("Deck file could not be opened.");
 			System.exit(0);

@@ -38,11 +38,11 @@ public class CommandLineController {
 	 */
 	
 	public void createGame() {
-		ModelDeck modelDeck = new ModelDeck();
+		ModelDeck modelDeck = null;
 		try {
-			ModelDeckBuilder deckBuilder = new ModelDeckBuilder(modelDeck, filename);
+			modelDeck = new ModelDeck(filename);
 		} catch(IOException e) {
-			ps.println("Deck file could not be opened.");
+			ps.println("Deck could not be created.");
 			System.exit(0);
 		}
 		

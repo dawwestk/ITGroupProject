@@ -1,7 +1,21 @@
 package game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+
+/*
+ * 
+ * 	The deck contains all cards in the game of Top Trumps.
+ * 	It is populated using a Deck Builder object.
+ * 
+ * 	It contains a reference to both the initial deck (as built from a text file)
+ * 		and a shuffled deck (used in gameplay)
+ * 
+ * 	The initial deck is kept separate for logging purposes.
+ * 
+ */
+
 
 public class ModelDeck {
 
@@ -12,18 +26,14 @@ public class ModelDeck {
     private ArrayList<Integer> shuffledIndex;
     private ModelCommunalPile communalPile;
 
-    public ModelDeck() {
+    public ModelDeck(String filename) throws IOException{
         totalCards = 40;		// hard coded for now as specified
         createdCards = 0;
         initialArrayOfCards = new ArrayList<ModelCard>();
         communalPile = new ModelCommunalPile();
+        ModelDeckBuilder deckBuilder = new ModelDeckBuilder(this, filename);
     }
     
-//    private void initializeShuffledDeck() {
-//        shuffled = new ArrayList<ModelCard>();
-//        for()
-//    }
-
     public int initialDeckSize(){
         return this.initialArrayOfCards.size();
     }
@@ -44,20 +54,15 @@ public class ModelDeck {
             shuffled.add(initialArrayOfCards.get(rand));
             shuffledIndex.add(rand);
         }
-        //initialArrayOfCards = shuffled; // hack because we use two arrays for the deck, consider using a single array
     }
 
     public void deal(ArrayList<ModelPlayer> players) {
         int handSize = totalCards / players.size();		// can use integer division because we want all hands to be the same size (no partial cards)
         int remainingCards = totalCards % players.size();
 
-        //System.out.println("Expecting hand size of " + handSize + ", with " + remainingCards + " left over.");
         int offset = 0;
         for(int i = 0; i < players.size(); i++) {
-            //System.out.println("\ni = " + i);
-            //System.out.println("shuffled: " + shuffled.size());
             for(int j = 0; j < handSize; j++) {
-                //System.out.print(shuffled.get(j + offset).getName() + " [" + (j + offset) + "], ");
                 players.get(i).addToHand(shuffled.get(j + offset));
             }
             offset += handSize;
@@ -84,11 +89,6 @@ public class ModelDeck {
 	    	createdCards++;
 	        initialArrayOfCards.add(card);
     	}
-
-    	// shuffle() now called in Game
-//        if(createdCards == totalCards) {
-//            shuffle();
-//        }
     }
 
     public int getCreatedCards() {

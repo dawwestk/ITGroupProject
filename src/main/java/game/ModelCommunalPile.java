@@ -2,19 +2,22 @@ package game;
 
 import java.util.ArrayList;
 
+/*
+ * 
+ * 	The communal pile acts as a storage location for cards in the event of a draw. 
+ * 
+ */
+
 public class ModelCommunalPile extends ArrayList<ModelCard>{
 
-    private int numberOfCards;
     private boolean empty;
 
     public ModelCommunalPile() {
-        numberOfCards = 0;
         empty = true;
     }
 
     public void addCard(ModelCard card) {
         this.add(card);
-        numberOfCards++;
         this.empty = false;
     }
 
@@ -23,7 +26,6 @@ public class ModelCommunalPile extends ArrayList<ModelCard>{
             player.addToHand(card);
         }
         this.clear();
-        this.numberOfCards = 0;
         empty = true;
     }
 
