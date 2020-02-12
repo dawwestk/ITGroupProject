@@ -49,6 +49,10 @@ th {
     padding: 2px;
 }
 .jumbotron-heading{text-align: center;}
+#graphs{visibility: hidden}
+#piechart{width: 45%; height: 300px; display: inline-block;}
+#linechart{width: 45%; height: 300px; display: inline-block;}
+#stats{display: inline-block;}
 
 /*
 ***************     Styles pertaining to Selection Screen  *******************

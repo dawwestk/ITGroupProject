@@ -1,10 +1,14 @@
 package game;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.*;
+
+/*
+ * 
+ * 	The Game class houses the logic for a game of Top Trumps.
+ * 
+ * 	
+ * 
+ */
 
 public class Game {
 
@@ -104,14 +108,6 @@ public class Game {
 		this.winningPlayer = this.activePlayer;
 	}
 	
-//	public boolean checkIfWinner(String stat) {	
-//		boolean hasWinner = this.hasWinner(stat);
-//		if (!hasWinner) {
-//		} else {
-//		}
-//		return hasWinner;
-//	}
-
 	// If active player is user, return their choice of Stat. Otherwise have AIPlayer choose their highest card.
 	public String getStat(int choice) {
 		String output = "";

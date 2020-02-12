@@ -41,11 +41,6 @@ public class ModelPlayerTest {
 		assertEquals(this.name, this.player.getName());
 	}
 
-	@Test
-	public void initialHandEmptyTest(){
-		assertTrue(this.player.isHandEmpty());
-	}
-
 	public void getActiveCardTest(){
 		String[] cardValues = newCardValuesArray("0","1","2");
 		ModelCard card = newCard(cardValues);
@@ -66,15 +61,6 @@ public class ModelPlayerTest {
 		ModelCard card2 = newCard(cardValues);
 		this.player.addToHand(card2);
 		assertEquals(card1,this.player.getActiveCard());
-	}
-
-	@Test
-	public void removeOnlyCardTest(){
-		String[] cardValues = newCardValuesArray("0","1","2");		
-		ModelCard card1 = newCard(cardValues);
-		this.player.addToHand(card1);
-		this.player.removeFromHand(card1);
-		assertTrue(this.player.isHandEmpty());
 	}
 
 	@Test

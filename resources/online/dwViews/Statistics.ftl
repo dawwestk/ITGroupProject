@@ -10,13 +10,13 @@
     	-->
 
     	<!-- Import JQuery, as it provides functions you will probably find useful (see https://jquery.com/) -->
-    	<link rel="stylesheet" href="/assets/css/lads.css"/>
     	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
     	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
     	<link rel="stylesheet" href="/assets/css/bootstrap.css"/>
     	<link rel="stylesheet" href="/assets/js/bootstrap.js"/>
     	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    	<link rel="stylesheet" href="/assets/css/lads.css"/>
     	
 
 		<!-- Optional Styling of the Website, for the demo I used Bootstrap (see https://getbootstrap.com/docs/4.0/getting-started/introduction/) -->
@@ -40,23 +40,26 @@
 			</div>
 		</div>
 		<hr>
-		<div class="container-fluid">
-			<button type="button" class="btn btn-secondary" id="quitButton" onclick="quitGame()">
-			  Back
-			</button>
+
+		<div class="container mt-4">
+			<div class = "container" id = 'stats'>
+				<table id = 'statsTable'>
+					<tr>
+			        	<th>Statistic</th>
+			        	<th>Value</th>
+			    	</tr>
+				</table>
+				<button type="button" class="btn btn-secondary" id="quitButton" onclick="quitGame()">
+				  Back
+				</button>
+			</div>
 		</div>
 
-		<div class = "container" id = 'stats'>
-			<table id = 'statsTable'>
-				<tr>
-		        	<th>Statistic</th>
-		        	<th>Value</th>
-		    	</tr>
-			</table>
-		</div>
-
-		<div class = "container" id="piechart">
-			
+		<div class="container" id="graphs">
+			<div class = "container" id="piechart">
+			</div>
+			<div class = "container" id="linechart">
+			</div>
 		</div>
 
 	</body>

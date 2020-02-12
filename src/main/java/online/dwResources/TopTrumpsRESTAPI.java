@@ -70,9 +70,9 @@ public class TopTrumpsRESTAPI {
 		
 		deckFile = conf.getDeckFile();
 		
-		deck = new ModelDeck();
+		deck = null;
 		try {
-			ModelDeckBuilder deckBuilder = new ModelDeckBuilder(deck, deckFile);
+			deck = new ModelDeck(deckFile);
 		} catch(IOException e) {
 			System.out.println("Deck file could not be opened.");
 			System.exit(0);
@@ -89,7 +89,7 @@ public class TopTrumpsRESTAPI {
 	public void resetDatabaseQuery() {
 		try {
 			dbq = new DatabaseQuery();
-			statsJSON = new StatsJSONGetter(dbq.toString());
+			statsJSON = new StatsJSONGetter(dbq);
 			statsOutput = statsJSON.getJSON();
 		} catch (Exception e) {
 			System.out.println(dbq.getNoConnection());
@@ -275,22 +275,6 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/getStats/")
 	public String getStats() throws IOException {
-		
-		/*
-		String stats = dbq.toString();
-		Scanner s = new Scanner(stats);
-		
-		ArrayList<String> list = new ArrayList<String>();
-		while(s.hasNext()) {
-			String nextEntry = s.nextLine();
-			
-			list.add(nextEntry);
-		}
-		
-		String statsAsJSONString = oWriter.writeValueAsString(list);
-		
-		return statsAsJSONString;
-		*/
 		return statsOutput;
 	}
 }

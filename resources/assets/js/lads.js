@@ -429,30 +429,7 @@ function setPlayers(int){
 
 function loadTable(){
 	getStats();
-}
-
-function makeChart(JSONData) {
-	var data = JSONData;
-	var options = {
-		animationEnabled: true,
-		title: {
-			text: "Human vs AI wins"
-		},
-		data: [{
-			type: "doughnut",
-			height:200,
-			innerRadius: "40%",
-			showInLegend: true,
-			legendText: "{label}",
-			indexLabel: "{label}: #percent%",
-			dataPoints: [
-				{ label: data["Human-wins"][0], y: data["Human-wins"][1] },
-				{ label: data["AI-wins"][0], y: data["AI-wins"][1] },
-			]
-		}]
-	};
-	$("#piechart").CanvasJSChart(options);
-
+	$('#graphs').css('visibility', 'visible');
 }
 
 function getStats(){
@@ -463,19 +440,63 @@ function getStats(){
 	xhr.onload = function(e) {
 		var responseText = xhr.response; // the text of the response
 		var stats = JSON.parse(responseText);
-		for (var key of Object.keys(stats)) {
-	    	var row = $("<tr />")
-	    	$("#statsTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
-	    	for(var i = 0; i < 2; i++){
-	    		row.append($("<td>" + stats[key][i] + "</td>"));
-	    	}
+		var tableStats = stats[0];
+		var lineStats = stats[1];
+		var pieData = [];
+		for(var attr = 0; attr < tableStats.length; attr++){
+			for (var key of Object.keys(tableStats[attr])) {
+		    	var row = $("<tr />")
+		    	$("#statsTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+		    	for(var i = 0; i < 2; i++){
+		    		row.append($("<td>" + tableStats[attr][key][i] + "</td>"));
+		    	}
+		    	if(key == "Human-wins" || key == "AI-wins"){
+		    		pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
+		    	}
+		    	//pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
+			}
 		}
-		makeChart(stats);
+
+		var chart1 = new CanvasJS.Chart("piechart",{
+			animationEnabled: true,
+		    title :{
+		        text: "Human vs AI wins"
+		    },
+		    data: [{
+				type: "doughnut",
+				height:200,
+				innerRadius: "40%",
+				showInLegend: true,
+				legendText: "{label}",
+				indexLabel: "{label}: #percent%",
+				dataPoints: pieData,
+			}]
+		});
+		chart1.render();
+
+		var lineData = []
+
+		for(var i = 0; i < lineStats.length; i++){
+			lineData.push({x: lineStats[i]["gameid"], y: lineStats[i]["rounds"]});
+			//pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
+		}
+
+		var chart2 = new CanvasJS.Chart("linechart",{
+		    title :{
+			text: "Max Rounds per Game"
+		    },
+		    legendText: "Game ID",
+		    data: [{
+				type: "splineArea",
+            	color: "rgba(255,12,32,.3)",
+				dataPoints : lineData,
+		    }]
+		});
+		chart2.render();
+
 	};
-	
 	xhr.send();
 }
-
 
 /*
 ***************		Scripts used across many screens	*******************
