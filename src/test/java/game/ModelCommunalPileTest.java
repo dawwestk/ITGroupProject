@@ -7,11 +7,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ModelCommunalPileTest {
-	ModelCommunalPile pile = null;
-	String[] attributeList = null;
-	String[] info = null;
-	ModelCard card = null;
-	ModelPlayer player = null;
+	private ModelCommunalPile pile = null;
+	private String[] attributeList = null;
+	private String[] info = null;
+	private ModelCard card = null;
+	private ModelPlayer player = null;
+
+	public ModelCard newCard(String[] cardValues){
+		ModelCard card = new ModelCard(cardValues, this.attributeList);
+		return card;
+	}
+
+	public String[] newCardValuesArray(String...s){
+		String[] cardValues = new String[s.length];
+		for(int i = 0 ; i < s.length; ++i){
+			cardValues[i] = s[i];
+		}
+		return cardValues;
+	}
 
 	@BeforeEach
 	public void setUp(){
@@ -45,8 +58,15 @@ public class ModelCommunalPileTest {
 	@Test
 	public void giveToPlayerThreeCardsTest(){
 		this.pile.add(this.card);
+		String [] attributes = newCardValuesArray("0","1","10");
+		ModelCard card = newCard(attributes);
+		this.pile.addCard(card);
+		attributes = newCardValuesArray("5","2","2");
+		card = newCard(attributes);
+		this.pile.addCard(card);
 		this.pile.pickedUpByWinner(this.player);
-		assertFalse(true);
+		assertTrue(this.pile.size() == 0);
+		assertEquals(this.card,this.player.getActiveCard());
 	}
 
 	@AfterEach

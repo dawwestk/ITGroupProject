@@ -9,9 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ModelPlayerTest {	
-	ModelPlayer player = null;
-	String name = null;
-	String[] attributeList = null;
+	private ModelPlayer player = null;
+	private String name = null;
+	private String[] attributeList = null;
 
 	public ModelCard newCard(String[] cardValues){
 		ModelCard card = new ModelCard(cardValues, this.attributeList);

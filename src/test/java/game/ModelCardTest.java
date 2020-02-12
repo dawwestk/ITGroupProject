@@ -7,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ModelCardTest {
-	String[] attributeList = null;
-	String[] info = null;
-	ModelCard card = null;
+	private String[] attributeList = null;
+	private String[] info = null;
+	private ModelCard card = null;
 
 	@BeforeEach
 	public void setUp(){
