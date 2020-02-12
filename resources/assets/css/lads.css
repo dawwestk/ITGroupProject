@@ -41,7 +41,7 @@ img {max-width:100%; height:100px; opacity: initial;}
 
 table {
   border: 1px solid #666;   
-    width: 100%;
+    width: 90%;
 }
 th {
   background: #f8f8f8; 
@@ -49,6 +49,9 @@ th {
     padding: 2px;
 }
 .jumbotron-heading{text-align: center;}
+#graphs{visibility: hidden}
+#piechart{width: 45%; height: 300px; display: inline-block;}
+#linechart{width: 45%; height: 300px; display: inline-block;}
 
 /*
 ***************     Styles pertaining to Selection Screen  *******************

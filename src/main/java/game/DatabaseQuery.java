@@ -122,6 +122,21 @@ public class DatabaseQuery {
 		String maxRoundsQuery = "SELECT MAX(rounds) FROM toptrumps.stats";
 		return query(maxRoundsQuery);
 	}
+	
+	public String getAllJSON() {
+		String getAllJSONQuery = "with t as (select * from toptrumps.stats) select json_agg(t) from t";
+		String jsonOutput = "";
+		try {
+			Statement stmt = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = stmt.executeQuery(getAllJSONQuery);
+			while(rs.next()) {
+				jsonOutput += rs.getString(1).toString();
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return jsonOutput;
+	}
 
 	/*
 	 * 

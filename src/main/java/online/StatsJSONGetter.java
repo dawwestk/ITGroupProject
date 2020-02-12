@@ -2,6 +2,8 @@ package online;
 
 import java.util.Scanner;
 
+import game.DatabaseQuery;
+
 public class StatsJSONGetter {
 
 	/*
@@ -16,21 +18,28 @@ public class StatsJSONGetter {
 	
 	private String output;
 	
-	public StatsJSONGetter(String s) {
+	public StatsJSONGetter(DatabaseQuery dbq) {
+		String s = dbq.toString();
+		String full = dbq.getAllJSON();
 		Scanner scanner = new Scanner(s);
-		output = "{";
+		output = "[[";
 		
 		while(scanner.hasNextLine()) {
 			String line = scanner.nextLine();
 			String[] statAndValue = line.split(":");
 			String slug = statAndValue[0].replace(" ", "-");
+			output += "{";
 			output += "\"" + slug + "\": [";
 			output += "\"" + statAndValue[0] + "\",";
 			output += statAndValue[1] + "], ";
+			output += "}, ";
 		}
 		
-		output += "}";
+		output += "]";
+		output = output.replace(", ]", "]");
 		output = output.replace(", }", "}");
+		output += ", ";
+		output += full + "]";
 		
 	}
 	

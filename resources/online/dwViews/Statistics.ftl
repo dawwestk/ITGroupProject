@@ -40,23 +40,24 @@
 			</div>
 		</div>
 		<hr>
-		<div class="container-fluid">
-			<button type="button" class="btn btn-secondary" id="quitButton" onclick="quitGame()">
-			  Back
-			</button>
-		</div>
 
-		<div class = "container" id = 'stats'>
+		<div class = "container-fluid" id = 'stats'>
 			<table id = 'statsTable'>
 				<tr>
 		        	<th>Statistic</th>
 		        	<th>Value</th>
 		    	</tr>
 			</table>
+			<button type="button" class="btn btn-secondary" id="quitButton" onclick="quitGame()">
+			  Back
+			</button>
 		</div>
 
-		<div class = "container" id="piechart">
-			
+		<div class="container" id="graphs">
+			<div class = "container" id="piechart">
+			</div>
+			<div class = "container" id="linechart">
+			</div>
 		</div>
 
 	</body>

@@ -429,9 +429,118 @@ function setPlayers(int){
 
 function loadTable(){
 	getStats();
+	$('#graphs').css('visibility', 'visible');
 }
 
-function makeChart(JSONData) {
+function getStats(){
+	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStats"); // Request type and URL
+	
+	if (!xhr) {alert("CORS not supported");}
+
+	xhr.onload = function(e) {
+		var responseText = xhr.response; // the text of the response
+		var stats = JSON.parse(responseText);
+		var tableStats = stats[0];
+		var lineStats = stats[1];
+		var pieData = [];
+		for(var attr = 0; attr < tableStats.length; attr++){
+			for (var key of Object.keys(tableStats[attr])) {
+		    	var row = $("<tr />")
+		    	$("#statsTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+		    	for(var i = 0; i < 2; i++){
+		    		row.append($("<td>" + tableStats[attr][key][i] + "</td>"));
+		    	}
+		    	if(key == "Human-wins" || key == "AI-wins"){
+		    		pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
+		    	}
+		    	//pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
+			}
+		}
+
+		var chart1 = new CanvasJS.Chart("piechart",{
+			animationEnabled: true,
+		    title :{
+		        text: "Human vs AI wins"
+		    },
+		    data: [{
+				type: "doughnut",
+				height:200,
+				innerRadius: "40%",
+				showInLegend: true,
+				legendText: "{label}",
+				indexLabel: "{label}: #percent%",
+				dataPoints: pieData,
+			}]
+		});
+		chart1.render();
+
+		var lineData = []
+
+		for(var i = 0; i < lineStats.length; i++){
+			lineData.push({x: lineStats[i]["gameid"], y: lineStats[i]["rounds"]});
+			//pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
+		}
+
+		var chart2 = new CanvasJS.Chart("linechart",{
+		    title :{
+			text: "Max Rounds per Game"
+		    },
+		    data: [{
+				type: "splineArea",
+            	color: "rgba(255,12,32,.3)",
+				dataPoints : lineData,
+		    }]
+		});
+		chart2.render();
+
+	};
+	xhr.send();
+}
+
+function makeCharts(){
+
+	var data = JSONData;
+	var pieStats = data[0];
+	var chart1 = new CanvasJS.Chart("piechart",{
+		animationEnabled: true,
+	    title :{
+	        text: "Human vs AI wins"
+	    },
+	    data: [{
+			type: "doughnut",
+			height:200,
+			innerRadius: "40%",
+			showInLegend: true,
+			legendText: "{label}",
+			indexLabel: "{label}: #percent%",
+			dataPoints: [
+				{ label: "red", y: 4 },
+				{ label: "blue", y: 6 },
+			]
+		}]
+	});
+
+	var chart2 = new CanvasJS.Chart("linechart",{
+	    title :{
+		text: "Average Draws per Game"
+	    },
+	    data: [{
+			type: "line",
+			dataPoints : [
+			    { x: 1,  y: 10  },
+			    { x: 2, y: 15  },
+			    { x: 3, y: 25  },
+			    { x: 4,  y: 30  },
+			    { x: 5,  y: 28  }
+			]
+	    }]
+	});
+	 
+	chart1.render();
+	chart2.render();
+}
+
+function makePieChart(JSONData) {
 	var data = JSONData;
 	var options = {
 		animationEnabled: true,
@@ -452,28 +561,28 @@ function makeChart(JSONData) {
 		}]
 	};
 	$("#piechart").CanvasJSChart(options);
-
 }
 
-function getStats(){
-	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStats"); // Request type and URL
-	
-	if (!xhr) {alert("CORS not supported");}
-
-	xhr.onload = function(e) {
-		var responseText = xhr.response; // the text of the response
-		var stats = JSON.parse(responseText);
-		for (var key of Object.keys(stats)) {
-	    	var row = $("<tr />")
-	    	$("#statsTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
-	    	for(var i = 0; i < 2; i++){
-	    		row.append($("<td>" + stats[key][i] + "</td>"));
-	    	}
-		}
-		makeChart(stats);
+function makeLineChart(JSONData) {
+	alert("inside line function");
+	var data = JSONData;
+	var options = {
+		title: {text: "Average Draws per Game"},
+		data: [{
+			type: "line",
+			height:200,
+			dataPoints: {x: 1, y: 5},
+		}]
 	};
+	alert("adding 1, 5");
+	$("#linechart").CanvasJSChart(options);
+	/* 
+	$.each(data, function(key, value){
+		dataPoints.push({x: value[0], y: parseInt(value[1])});
+	});
 	
-	xhr.send();
+	//chart.render();
+	*/
 }
 
 
