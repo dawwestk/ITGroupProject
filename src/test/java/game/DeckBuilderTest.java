@@ -27,7 +27,6 @@ public class DeckBuilderTest {
 	public void createDeckFailsToOpenFileNameWrongTest() {
 		String fileName = "";		
 		assertThrows(IOException.class, () -> new ModelDeckBuilder(deck, fileName));
-//		assertThrows(IOException.class,() -> new AClassThatThrowsIOException());
 	}
 	
 	@AfterEach
