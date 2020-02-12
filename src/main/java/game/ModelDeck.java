@@ -44,7 +44,7 @@ public class ModelDeck {
             shuffled.add(initialArrayOfCards.get(rand));
             shuffledIndex.add(rand);
         }
-        initialArrayOfCards = shuffled; // hack because we use two arrays for the deck, consider using a single array
+        //initialArrayOfCards = shuffled; // hack because we use two arrays for the deck, consider using a single array
     }
 
     public void deal(ArrayList<ModelPlayer> players) {
@@ -96,6 +96,15 @@ public class ModelDeck {
     }
     
     public String toString() {
+    	String deckString = "";
+    	for(ModelCard card: shuffled) {
+    		deckString += card.toString();
+    		deckString += "\n";
+    	}
+    	return deckString;
+    }
+    
+    public String printInitialDeck() {
     	String deckString = "";
     	for(ModelCard card: initialArrayOfCards) {
     		deckString += card.toString();
