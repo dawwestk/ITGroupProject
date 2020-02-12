@@ -10,18 +10,14 @@ import java.util.HashMap;
 
 /*
  * 
- * 		The class below outlines a Database Query object to pull previous
+ * 	The class below outlines a Database Query object to pull previous
  * 	game stats from the postgresql server and allows the user to add a new
  *  game to the database as well.
  * 		
- * 		Some outputs from the Game class have been assumed for now until
- *  this class is fully developed. But the output will be usable by the
- *  DatabaseQuery class as the form will not change.
  *  
- *  	Currently the code is set up for the localhost server 
- *  	This will be changed to link to a yacata server.
+ *  	Currently the code is set up for the AWS server 
  * 
- 
+ *
 */
 
 public class DatabaseQuery {
@@ -48,47 +44,38 @@ public class DatabaseQuery {
 		} catch (Exception e) {
 			throw e;
 		}
+		
+		// HashMaps are created to hold new/current stats
 		statsToAdd = new HashMap<String, Integer>();
 		previousStats = new HashMap<String, String>();
 		pullTableStats(previousStats);
 		statsPopulate(statsToAdd);
+		
+		// The ID of the last game is calculated
 		lastGameID = getTotalGames() + 1;
-		
 	}
 	
-	public String toString() {
-		String output = "";
-		for(String key : previousStats.keySet()) {
-			output += key + previousStats.get(key) + "\n";
-		}
-		return output;
+	/*
+	 * 
+	 * 	Setup Methods
+	 * 
+	 */
+	
+	public static Connection setup(Connection conn, String db, String username, String pass) throws ClassNotFoundException, SQLException {
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {throw e;}
+		try {
+			conn = DriverManager.getConnection(db, username, pass); 
+		} catch (SQLException e) {throw e;}
+		return conn;
 	}
 	
-	public static String getNoConnection() {
-		return noConnection;
-	}
-	
-	private void pullTableStats(HashMap<String, String> map) {
-		map.put("Total games: ", "" + getTotalGames());
-		map.put("Human wins: ", "" + getHumanWins());
-		map.put("AI wins: ", "" + getAIWins());
-		map.put("Average Draws: ", "" + getAverageDraws());
-		map.put("Highest Round Count: ", "" + getHighestRounds());
-	}
-	
-	private void statsPopulate(HashMap<String, Integer> map) {
-		map.put("gameid", 0);
-		map.put("winhuman", 0);
-		map.put("winai", 0);
-		map.put("rounds", 0);
-		map.put("draws", 0);
-		map.put("humanrounds", 0);
-		map.put("cpu1rounds", 0);
-		map.put("cpu2rounds", 0);
-		map.put("cpu3rounds", 0);
-		map.put("cpu4rounds", 0);
-		
-	}
+	/*
+	 * 
+	 * 	SQL Query method
+	 * 
+	 */
 	
 	private int query(String s) {
 		try {
@@ -96,17 +83,20 @@ public class DatabaseQuery {
 			ResultSet rs = stmt.executeQuery(s);
 			
 			if(rs.next()) {
-				//System.out.println("Query executed successfully.");
 				return rs.getInt(1);
 			} else {
-				System.out.println("Unable to execute query.");
 				return -1;
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
 			return -1;
 		}
 	}
+	
+	/*
+	 * 
+	 * 	SQL statement Get methods
+	 * 
+	 */
 	
 	public int getTotalGames() {
 		String totalGameQuery = "SELECT COUNT(*) FROM toptrumps.stats";
@@ -132,8 +122,42 @@ public class DatabaseQuery {
 		String maxRoundsQuery = "SELECT MAX(rounds) FROM toptrumps.stats";
 		return query(maxRoundsQuery);
 	}
+
+	/*
+	 * 
+	 * 	Data manipulation methods
+	 * 
+	 */
 	
-	public void addGameToDB(Game g) {
+	private void pullTableStats(HashMap<String, String> map) {
+		map.put("Total games: ", "" + getTotalGames());
+		map.put("Human wins: ", "" + getHumanWins());
+		map.put("AI wins: ", "" + getAIWins());
+		map.put("Average Draws: ", "" + getAverageDraws());
+		map.put("Highest Round Count: ", "" + getHighestRounds());
+	}
+	
+	private void statsPopulate(HashMap<String, Integer> map) {
+		map.put("gameid", 0);
+		map.put("winhuman", 0);
+		map.put("winai", 0);
+		map.put("rounds", 0);
+		map.put("draws", 0);
+		map.put("humanrounds", 0);
+		map.put("cpu1rounds", 0);
+		map.put("cpu2rounds", 0);
+		map.put("cpu3rounds", 0);
+		map.put("cpu4rounds", 0);
+		
+	}
+	
+	/*
+	 * 
+	 * 	Add game back to database
+	 * 
+	 */
+	
+	public String addGameToDB(Game g) {
 		
 		statsToAdd.put("gameid", lastGameID); // pulled from previous database info
 		
@@ -150,22 +174,7 @@ public class DatabaseQuery {
 		statsToAdd.put("cpu2rounds", g.getRoundsWon("CPU-2"));
 		statsToAdd.put("cpu3rounds", g.getRoundsWon("CPU-3"));
 		statsToAdd.put("cpu4rounds", g.getRoundsWon("CPU-4"));
-		
-		
-		// Test Data
-		/*
-		statsToAdd.put("winai", 1);
-		statsToAdd.put("rounds", 40);
-		statsToAdd.put("draws", 4);
-		statsToAdd.put("humanrounds", 10);
-		statsToAdd.put("cpu1rounds", 20);
-		statsToAdd.put("cpu2rounds", 5);
-		statsToAdd.put("cpu3rounds", 0);
-		statsToAdd.put("cpu4rounds", 5);
-		*/
 
-		// INSERT INTO toptrumps.stats(gameid, winhuman, winai, rounds, draws, humanrounds, cpu1rounds, cpu2rounds, cpu3rounds, cpu4rounds) 
-		// VALUES(2, 0, 1, 50, 4, 5, 10, 10, 5, 10)
 		String insert = "INSERT INTO toptrumps.stats(";
 		String values = "VALUES(";
 		for(String key : statsToAdd.keySet()) {
@@ -178,23 +187,36 @@ public class DatabaseQuery {
 		
 		String insertQuery = insert + " " + values;
 		
-		//String insertQuery = "INSERT INTO toptrumps.stats(gameid, winhuman, winai, rounds, draws, humanrounds, cpu1rounds, cpu2rounds, cpu3rounds, cpu4rounds)"
-		//		+ "VALUES(%d, %d, %d, %d, %d, %d, %d, %d, %d, %d)", stats.get("gameid"),);
-		
 		try {
 			Statement stmt = c.createStatement();
 			int status = stmt.executeUpdate(insertQuery);
-
 			if(status == 1) {
-				System.out.println("Game added successfully.");
+				return("Game added to Database successfully.");
 			} else {
-				System.out.println("Unable to add game to DB.");
+				return("Unable to add game to DB.");
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
+			return("Unable to connect to DB.");
 		}
 	}
-
+	
+	/*
+	 * 
+	 * 	Getter Methods
+	 * 
+	 */
+	
+	public String toString() {
+		String output = "";
+		for(String key : previousStats.keySet()) {
+			output += key + previousStats.get(key) + "\n";
+		}
+		return output;
+	}
+	
+	public static String getNoConnection() {
+		return noConnection;
+	}
 	
 	public String printDB() {
 		try {
@@ -215,37 +237,12 @@ public class DatabaseQuery {
 				output += "draws = " + draws;
 				output += "\n";
 			}
-//			rs.close();
-//			stmt.close();
-//			c.close();
 			return output;
 		} catch (Exception e) {
 			System.out.println("Something went wrong...");
 			return "Unable to print database info";
 		}
-		//System.out.println("Operation done successfully");
 	}
-	
-	public static Connection setup(Connection conn, String db, String username, String pass) throws ClassNotFoundException, SQLException {
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException e) {
-			//System.out.println("Class not found");
-			//e.printStackTrace();
-			throw e;
-		}
-		
-		try {
-			conn = DriverManager.getConnection(db, username, pass); 
-		} catch (SQLException e) {
-			//System.out.println("SQL Exception");
-			//e.printStackTrace();
-			throw e;
-		}
-		
-		return conn;
-	}
-
 }
 
 

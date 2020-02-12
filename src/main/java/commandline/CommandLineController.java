@@ -149,7 +149,7 @@ public class CommandLineController {
 		}
 		if(addGame) {
 			try {
-				dbq.addGameToDB(game);
+				ps.println(dbq.addGameToDB(game));
 			} catch (Exception e) {
 				// no need to print explanation, handled on creation of dbq
 			}

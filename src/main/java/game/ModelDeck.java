@@ -31,17 +31,13 @@ public class ModelDeck {
         createdCards = 0;
         initialArrayOfCards = new ArrayList<ModelCard>();
         communalPile = new ModelCommunalPile();
+        
+        // The deck builder is used to populate the deck from the specified file
         ModelDeckBuilder deckBuilder = new ModelDeckBuilder(this, filename);
     }
-    
-    public int initialDeckSize(){
-        return this.initialArrayOfCards.size();
-    }
 
-    public int shuffledDeckSize(){
-        return this.shuffled.size();
-    }
-
+    // Creates a new ArrayList of cards and randomly allocates cards from
+    // the initial list to it.
     public void shuffle() {
         shuffled = new ArrayList<ModelCard>();
         shuffledIndex = new ArrayList<Integer>();
@@ -55,11 +51,15 @@ public class ModelDeck {
             shuffledIndex.add(rand);
         }
     }
-
+    
+    // Populates each Player object's hand with the same number of cards
     public void deal(ArrayList<ModelPlayer> players) {
-        int handSize = totalCards / players.size();		// can use integer division because we want all hands to be the same size (no partial cards)
+    	// We can use integer division because we want all hands to be the 
+    	// same size (no partial cards allowed - remainder is communal)
+    	int handSize = totalCards / players.size();		
         int remainingCards = totalCards % players.size();
-
+        
+        // A simple counter to keep track of the next set of cards to be allocated
         int offset = 0;
         for(int i = 0; i < players.size(); i++) {
             for(int j = 0; j < handSize; j++) {
@@ -68,6 +68,7 @@ public class ModelDeck {
             offset += handSize;
         }
 
+        // Remaining cards not in a Player's hand are added to the communal pile
         if(remainingCards > 0) {
             for(int i = 0; i < remainingCards; i++) {
                 communalPile.addCard(shuffled.get(totalCards - i - 1));
@@ -76,6 +77,20 @@ public class ModelDeck {
 
     }
 
+    // Used to add a card to the deck (initial arraylist, pre-shuffle)
+    public void addCard(ModelCard card) {
+    	if(this.createdCards < this.totalCards) {
+	    	createdCards++;
+	        initialArrayOfCards.add(card);
+    	}
+    }
+    
+    /*
+     * 
+     * 	Getter Methods
+     * 
+     */
+    
     public ModelCommunalPile getCP() {
         return communalPile;
     }
@@ -84,17 +99,11 @@ public class ModelDeck {
         return shuffled.get(index);
     }
 
-    public void addCard(ModelCard card) {
-    	if(this.createdCards < this.totalCards) {
-	    	createdCards++;
-	        initialArrayOfCards.add(card);
-    	}
-    }
-
     public int getCreatedCards() {
         return createdCards;
     }
     
+    // The "normal" toString is used to return the shuffled deck
     public String toString() {
     	String deckString = "";
     	for(ModelCard card: shuffled) {
@@ -104,6 +113,8 @@ public class ModelDeck {
     	return deckString;
     }
     
+    // While this method is used exclusively by the logger to output
+    // the initial deck as it was before it was shuffled
     public String printInitialDeck() {
     	String deckString = "";
     	for(ModelCard card: initialArrayOfCards) {

@@ -6,7 +6,7 @@ public class ModelCard {
 
 	/*
 	 * 
-	 * ModelCard class with a HashMap (dictionary) rather than an integer array.
+	 * ModelCard class with a HashMap of card Attributes: Values.
 	 * 
 	 * Inputs
 	 * 	- String[] info is a line item in the StarCitizenDeck.txt file representing a ship (card)
@@ -20,9 +20,9 @@ public class ModelCard {
 
     // info is list of integer stats, attributeList is the list of stat descriptions
     public ModelCard(String[] info, String[] attributeList) {
-        // info  and attributeList come from StarCitizenDeck.txt in Game method
     	
-    	// The input from StarCitizenDeck.txt will not change, so we can read the 0th index as the name
+    	// The input from StarCitizenDeck.txt will not change
+    	// so we can read the 0th index as the name
         name = info[0];
         
         // attributeDefinitions are copied from the attributeList array 
@@ -51,10 +51,15 @@ public class ModelCard {
     			output += String.format("\t%d. %s: %d\n", menuOption++, x, attributeMap.get(x));
     		}
     	}
-    	
     	return output;
     }
 
+    /*
+     * 
+     * 	Getter Methods
+     * 
+     */
+    
     // Returns the name of the ship on the card
     public String getName() {
         return name;
