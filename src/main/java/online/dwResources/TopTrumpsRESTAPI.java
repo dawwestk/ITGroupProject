@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -54,6 +55,7 @@ public class TopTrumpsRESTAPI {
 	private String lastChosenAttribute;
 	private StatsJSONGetter statsJSON;
 	private String statsOutput = "";
+	private PrintStream ps = System.out;
 	
 	/**
 	 * Contructor method for the REST API. This is called first. It provides
@@ -62,29 +64,44 @@ public class TopTrumpsRESTAPI {
 	 * @param conf
 	 */
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
-		// ----------------------------------------------------
-		// Add relevant initalization here
-		// ----------------------------------------------------
 		
+		// Connects from the API to the database
 		resetDatabaseQuery();
 		
+		// The deck filename is stored in the conf JSON 
 		deckFile = conf.getDeckFile();
 		
-		deck = null;
+		// Set up the deck
 		try {
 			deck = new ModelDeck(deckFile);
 		} catch(IOException e) {
-			System.out.println("Deck file could not be opened.");
+			ps.println("Deck file could not be opened.");
 			System.exit(0);
 		}
 
-		
-		
 	}
 	
-	// ----------------------------------------------------
-	// Add relevant API methods here
-	// ----------------------------------------------------
+	/*
+	 * 
+	 * 	Setter Methods
+	 * 
+	 */
+	
+	// int is passed back to the API from the selection screen
+	@POST
+	@Path("game/setPlayers")
+	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
+		ps.println("Setting number of players to " + players);
+		numPlayers = players;
+		game = new Game(deck, numPlayers);
+		//game.setNumberOfPlayersAndDeal(numPlayers);
+		ps.println("Game created with " + numPlayers + " players");
+		ModelPlayer activePlayer = game.getActivePlayer();
+		j = new JSONGetter(game);
+		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
+		writeJSONtoFile(JSONoutput);
+		lastChosenAttribute = null;
+	}
 	
 	public void resetDatabaseQuery() {
 		try {
@@ -92,7 +109,7 @@ public class TopTrumpsRESTAPI {
 			statsJSON = new StatsJSONGetter(dbq);
 			statsOutput = statsJSON.getJSON();
 		} catch (Exception e) {
-			System.out.println(dbq.getNoConnection());
+			ps.println(dbq.getNoConnection());
 		}
 	}
 	
@@ -101,7 +118,7 @@ public class TopTrumpsRESTAPI {
 	public void userQuit(String s) throws IOException {
 		if(s.toLowerCase().equals("quit")){
 			game = null;
-			System.out.println("User quit.");
+			ps.println("User quit.");
 		}
 	}
 	
@@ -112,16 +129,15 @@ public class TopTrumpsRESTAPI {
 			dbq.addGameToDB(game);
 			resetDatabaseQuery();
 			game = null;	// stops the game being written to the database twice		
-		} catch (Exception e) {
-			// no need to print explanation, handled on creation of dbq
-		}
+		} catch (Exception e) {}
+		
 		String output = winnerName + " is the winner!";
 		if(winnerName.equals(game.getUser().getName())) {
 			output += " Congratulations!";
 		} else {
 			output += " Better luck next time...";
 		}
-		System.out.println(output);
+		ps.println(output);
 		return output;
 	}
 	
@@ -129,21 +145,12 @@ public class TopTrumpsRESTAPI {
 	@Path("/game/selectAttribute/")
 	public void selectAttribute(String attribute) throws IOException{
 		// reads which attribute was chosen and compares etc
-		// needs active player to be chosen by this point
 		String choice = attribute;
-		System.out.println("Attribute " + choice);
+		ps.println("Attribute " + choice);
 		ModelCard activeCard = game.getActivePlayer().getActiveCard();
 		Integer attributeName = activeCard.getValue(choice);
-		System.out.println("User chose " + choice + " => " + attributeName);
+		ps.println("User chose " + choice + " => " + attributeName);
 		lastChosenAttribute = choice;
-	}
-	
-	@GET
-	@Path("/game/getRoundCount/")
-	public int getRoundCount() throws IOException{
-		int roundCount = game.getRoundCount();
-		System.out.println("Round Count: " + roundCount);
-		return roundCount;
 	}
 	
 	@GET
@@ -171,11 +178,7 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/game/nextRound/")
 	public int nextRound() throws IOException {
-		/*
-		// this logic is just for testing purposes
-		ModelPlayer activePlayer = game.getActivePlayer();
-		game.giveWinnerCards(activePlayer);
-		*/
+
 		int prev = game.getRoundCount();
 		game.advanceRound();
 		int current = game.getRoundCount();
@@ -187,20 +190,12 @@ public class TopTrumpsRESTAPI {
 		} else {
 			return 0;
 		}
-		
 	}
 	
 	@GET
 	@Path("/game/getJSON/")
 	public String getJSON() throws IOException{
-		//System.out.println("Returning JSON");
 		return JSONoutput;
-	}
-
-	@GET
-	@Path("/game/getActivePlayer")
-	public String getActivePlayer(){
-		return game.getActivePlayer().getName();
 	}
 	
 	public void writeJSONtoFile(String s) {
@@ -211,64 +206,15 @@ public class TopTrumpsRESTAPI {
 			fw.write(s);
 			fw.flush();
 			fw.close();
-			//System.out.println("Wrote to file successfully");
 		} catch(Exception e) {
-			System.out.println("Couldn't write to file");
+			ps.println("Couldn't write to file");
 		}
-	}
-	
-	@GET
-	@Path("/game/getCPUChoice")
-	public String getCPUChoice() {
-		ModelPlayer activePlayer = game.getActivePlayer();
-		if(!activePlayer.equals(game.getUser())) {
-			// CPU player is active player
-			ModelCard activeCard = activePlayer.getActiveCard();
-			String choice = activeCard.getHighestAttribute();
-			Integer attributeName = activeCard.getValue(choice);
-			System.out.println("CPU chose " + choice + " => " + attributeName);
-
-			return choice;
-		} else {
-			return "Awaiting CPU choice";
-		}
-	}
-	
-	@POST
-	@Path("game/setPlayers")
-	/*
-	 * 
-	 * See GameScreen.ftl for method called setPlayers(int) which calls this
-	 *
-	 */
-	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
-		System.out.println("Setting number of players to " + players);
-		numPlayers = players;
-		game = new Game(deck);
-		game.setNumberOfPlayersAndDeal(numPlayers);
-		System.out.println("Game created with " + numPlayers + " players");
-		ModelPlayer activePlayer = game.getActivePlayer();
-		j = new JSONGetter(game);
-		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
-		writeJSONtoFile(JSONoutput);
-		//System.out.println(statsOutput);
-		lastChosenAttribute = null;
 	}
 	
 	@GET
 	@Path("game/getPlayers")
-	/*
-	 * 
-	 * See GameScreen.ftl for method called getPlayers which calls this
-	 * 
-	 * This has @GET above as we are requesting info.
-	 * 
-	 * To test this just go to the URL http://localhost:7777/toptrumps/game/getPlayers and 
-	 * 	it should say the number (and nothing else)
-	 * 
-	 */
 	public int getPlayers() throws IOException {
-		System.out.println("Number of players = " + numPlayers);
+		ps.println("Number of players = " + numPlayers);
 		return numPlayers;
 	}
 	
