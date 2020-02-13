@@ -483,11 +483,11 @@ function getStats(){
 
 		var chart2 = new CanvasJS.Chart("linechart",{
 		    title :{
-			text: "Max Rounds per Game"
+			text: "Rounds per Game"
 		    },
 		    legendText: "Game ID",
 		    data: [{
-				type: "splineArea",
+				type: "line",
             	color: "rgba(255,12,32,.3)",
 				dataPoints : lineData,
 		    }]
