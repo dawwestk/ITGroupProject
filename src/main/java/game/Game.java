@@ -30,7 +30,6 @@ public class Game {
 		this.deck = deck;
 		this.roundsWon = new HashMap<String, Integer>();
 		this.numRoundsDrawn = 0;
-		this.deck.shuffle();
 		this.cp = this.deck.getCP();
 
 		// Populate the AI array list with CPU players
