@@ -72,17 +72,7 @@ public class CommandLineController {
 			logInitialDeck("Deck before shuffling");
 			// log deck after shuffling
 			logDeck("Deck after shuffling");
-		}
-	}
-	
-	public void addAllPlayers() {
-		// Get all players
-		ArrayList<ModelPlayer> players = new ArrayList<ModelPlayer>(game.getNumPlayers());
-		for(int i = 0 ; i < game.getNumPlayers(); ++i) {
-			players.add(game.getPlayer(i));
-		}
-		
-		if(logging) {
+			// log all player hands
 			logPlayerHands();
 		}
 	}

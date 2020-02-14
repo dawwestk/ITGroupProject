@@ -29,6 +29,12 @@ public class DeckBuilderTest {
 		assertThrows(IOException.class, () -> new ModelDeckBuilder(deck, fileName));
 	}
 	
+	@Test
+	public void createDeckFailsDueToWrongFileContent() {
+		String fileName = "toptrumps.log";		
+		assertThrows(NullPointerException.class, () -> new ModelDeckBuilder(deck, fileName));
+	}
+	
 	@AfterEach
 	public void tearDown() {
 		
