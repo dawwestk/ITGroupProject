@@ -49,7 +49,6 @@ public class TopTrumpsCLIApplication {
 			case 1:
 				
 				control.createGame();
-				control.addAllPlayers();
 				
 				// While the game isn't finished
 				while (control.getGame().activePlayers() && !userWantsToQuit) {	
