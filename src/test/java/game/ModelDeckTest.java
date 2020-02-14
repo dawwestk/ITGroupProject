@@ -85,11 +85,6 @@ public class ModelDeckTest {
 		assertDoesNotThrow(() -> this.deck.printInitialDeck());
 	}
 
-	@Test
-	public void shuffleDoesNotThrowTest(){
-		assertDoesNotThrow(() -> this.deck.shuffle());
-	}
-
 	@AfterEach
 	public void tearDown(){
 		this.deck = null;
