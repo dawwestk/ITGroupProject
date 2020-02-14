@@ -34,11 +34,13 @@ public class ModelDeck {
         
         // The deck builder is used to populate the deck from the specified file
         ModelDeckBuilder deckBuilder = new ModelDeckBuilder(this, filename);
+        shuffle();
+        
     }
 
     // Creates a new ArrayList of cards and randomly allocates cards from
     // the initial list to it.
-    public void shuffle() {
+    private void shuffle() {
         shuffled = new ArrayList<ModelCard>();
         shuffledIndex = new ArrayList<Integer>();
         Random r = new Random();

@@ -39,7 +39,7 @@ public class ModelDeckTest {
 
 	@Test
 	public void getCardNegativeIndexThrowsTest(){
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> this.deck.getCard(-1));
+		assertThrows(IndexOutOfBoundsException.class, () -> this.deck.getCard(-1));
 	}
 	
 	@Test
@@ -83,11 +83,6 @@ public class ModelDeckTest {
 	@Test
 	public void printInitialDeckDoesNotThrowTest(){
 		assertDoesNotThrow(() -> this.deck.printInitialDeck());
-	}
-
-	@Test
-	public void shuffleDoesNotThrowTest(){
-		assertDoesNotThrow(() -> this.deck.shuffle());
 	}
 
 	@AfterEach

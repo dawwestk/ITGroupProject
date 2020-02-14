@@ -112,14 +112,18 @@ public class GameTest {
 	public void getStatTest(){
 		int numPlayers = 1;
 		Game game = new Game(deck,numPlayers);
-		int choice = 1; // speed
-		String expected = "speed";
-		String[] attributeList = {"name", "speed", "range"};
-		String[] attributeValues = {"Colt", "7", "5"};
-		ModelCard card = new ModelCard(attributeValues, attributeList);
 		ModelPlayer player = game.getActivePlayer();
-		player.addToHand(card);
-		assertEquals(expected, game.getStat(choice));
+		String expected = "";
+		if(player.equals(game.getUser())) {
+			expected = "Size";
+			assertEquals(expected, game.getStat(1));
+		} else {
+			ModelCard card = player.getActiveCard();
+			expected = card.getHighestAttribute();
+			
+			assertEquals(expected, game.getStat(1));
+		}
+		
 	}
 
 	@AfterEach
