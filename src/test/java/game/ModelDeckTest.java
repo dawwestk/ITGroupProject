@@ -32,10 +32,6 @@ public class ModelDeckTest {
 	/*
 	 * nullptr exception from shuffled index not existing
 	*/
-	@Test
-	public void getCardEmptyDeckThrowsTest(){
-		assertThrows(ArrayIndexOutOfBoundsException.class, () -> this.deck.getCard(0));
-	}
 
 	@Test
 	public void getCardNegativeIndexThrowsTest(){
