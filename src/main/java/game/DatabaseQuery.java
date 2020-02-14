@@ -258,6 +258,11 @@ public class DatabaseQuery {
 			return "Unable to print database info";
 		}
 	}
+	
+	public int testDB() {
+		String testQuery = "SELECT 1";
+		return query(testQuery);
+	}
 }
 
 
