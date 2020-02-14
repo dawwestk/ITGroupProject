@@ -16,6 +16,21 @@ import game.*;
  */
 public class TopTrumpsCLIApplication {
 
+		// Combines all integer inputs with optional Strings/boundaries based on requirement
+	// Avoids re-use of code
+	public static int askForMenuChoice(Scanner scanner, String question, String invalidMessage, int lower, int upper, PrintStream ps) {
+		int choice = 0;
+		do {
+			ps.print(question);
+			while(!scanner.hasNextInt()) {	
+				ps.print(invalidMessage);
+				scanner.next();
+			}
+			choice = scanner.nextInt();
+		} while (choice < lower || choice > upper);
+		
+		return choice;
+	}
 
 	/**
 	 * This main method is called by TopTrumps.java when the user specifies that they want to run in
@@ -34,41 +49,38 @@ public class TopTrumpsCLIApplication {
 		// Main boolean to indicate that the user still wants to continue
 		boolean userWantsToQuit = false; // flag to check whether the user wants to quit the application
 		Scanner keyboard = new Scanner(System.in);
+
+				// get number of players from user
+		// int numPlayers = askForMenuChoice(keyboard, "How many opponents would you like to face (max 4)? ", 
+		// 		"Please enter a number (1-4): ", 1, 4, System.out);
+
 		CommandLineController control = new CommandLineController(System.out, writeGameLogsToFile);
 		
 		// Main Game Loop
-		while (!userWantsToQuit) {
+		while (!userWantsToQuit ) {
 			
 			// Read stats from the database
 			// both parameters are false as we just want to connect, not show or add a game
 			control.connectToDB(false, false);
 			
-			int userChoice = control.askForMenuChoice(keyboard, "1. Play Game." + "\n2. Statistics." + "\n3. Quit." + "\nUser Choice: ", 
-					"Please enter a valid menu option (1-3): ", 1, 3);
+			int userChoice = askForMenuChoice(keyboard, "1. Play Game." + "\n2. Statistics." + "\n3. Quit." + "\nUser Choice: ", 
+					"Please enter a valid menu option (1-3): ", 1, 3, System.out);
 			switch (userChoice) {
 			case 1:
-				
-				control.createGame();
+				int numPlayers = askForMenuChoice(keyboard, "How many opponents would you like to face (max 4)? ", 
+				"Please enter a number (1-4): ", 1, 4, System.out);
+
+				control.createGame(numPlayers);
 				control.addAllPlayers();
 				
 				// While the game isn't finished
-				while (control.getGame().activePlayers() && !userWantsToQuit) {	
-					
-					control.printIntro();
-					control.printPlayerInfo();
-					control.printRoundInfo();
-					control.initiateRound();
-					control.printCommunalPile();
-					
-					// Ask if the user wants to continue playing
-					userWantsToQuit = control.askToContinue(userWantsToQuit);
+				while (!control.isFinished() && !userWantsToQuit) {	
+					userWantsToQuit = control.start(userWantsToQuit);
 					if(userWantsToQuit) {
 						break;
 					} else {
-						control.distributeCardsToWinner();
-						control.nextRound();
+						control.advanceRoundAndDistributeCards();
 					}
-					
 				}
 				
 				//Logging of winner 

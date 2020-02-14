@@ -20,32 +20,48 @@ public class CommandLineController {
 	private DatabaseQuery dbq = null;
 	private Scanner keyboard = new Scanner(System.in);
 	private boolean userJustChoseAttribute = false;
-	private String filename = "StarCitizenDeck.txt";
 	private Game game;
 	private Logger logger;
 	private boolean logging;
+	private View view;
 	
 	public CommandLineController(PrintStream printer, boolean writeGameLogsToFile) {
 		ps = printer;
 		logging = writeGameLogsToFile;
-		
+		this.game = null;
+		this.view = null;
 	}
-	
+
+	// game is over when no players are left active
+	public boolean isFinished(){
+		if(!game.activePlayers()) return true;
+		return false;
+	}
+
+	 // hack inserted here
+	public void printWinner(){
+		this.view.printWinner();
+	}
+
 	/*
 	 * 
 	 * 		Game Setup Function Below
 	 * 
 	 */
 	
-	public void createGame() {
+	public void createGame(int numPlayers) {
+		String filename = "StarCitizenDeck.txt";
 		ModelDeck modelDeck = null;
 		try {
 			modelDeck = new ModelDeck(filename);
 		} catch(IOException e) {
-			ps.println("Deck could not be created.");
+			System.out.println("Deck could not be created.");
 			System.exit(0);
 		}
-		
+
+		// Create new game
+		this.game = new Game(modelDeck, numPlayers);
+		this.view = new View(this,this.game,System.out);
 		// create a new file to output logs to
 		PrintStream fileStream = null;
 		if(logging) {
@@ -59,13 +75,6 @@ public class CommandLineController {
 		
 		// log files if -t passed through command line
 		logger = new Logger(fileStream, logging);					
-		
-		// get number of players from user
-		int numPlayers = askForMenuChoice(keyboard, "How many opponents would you like to face (max 4)? ", 
-				"Please enter a number (1-4): ", 1, 4);
-
-		// Create new game
-		game = new Game(modelDeck, numPlayers);
 		
 		if(logging) {
 			// log deck before shuffling
@@ -87,75 +96,22 @@ public class CommandLineController {
 		}
 	}
 	
-	/*
-	 * 
-	 * 		User Input Functions Below
-	 * 
-	 */
-	
-	// Combines all integer inputs with optional Strings/boundaries based on requirement
-	// Avoids re-use of code
-	public int askForMenuChoice(Scanner scanner, String question, String invalidMessage, int lower, int upper) {
-		int choice = 0;
-		do {
-			ps.print(question);
-			while(!scanner.hasNextInt()) {	
-				ps.print(invalidMessage);
-				scanner.next();
-			}
-			choice = scanner.nextInt();
-		} while (choice < lower || choice > upper);
+	public boolean start(boolean userWantsToQuit){				
+		this.view.printIntro();
+		this.view.printPlayerInfo();
+		this.view.printRoundInfo();
+		this.initiateRound();
+		this.view.printCommunalPile();
 		
-		return choice;
+		// Ask if the user wants to continue playing
+		userWantsToQuit = this.askToContinue(userWantsToQuit);
+		return userWantsToQuit;
 	}
-
-	// User is asked whether to move to the next round - String input, so differing logic from above
-	public static boolean askForNextRound() {
-		Scanner scanner = new Scanner(System.in);
-		String choice = "";
-		do {
-			ps.print("Move to next round? (Y/N) ");
-			choice = scanner.next();
-		} while (!choice.toLowerCase().equals("y") && !choice.toLowerCase().equals("n"));
-		
-		boolean answer = false;
-		if(choice.toLowerCase().contains("y")) {
-			answer = true; 
-		}
-		return answer;
+	 
+	public void advanceRoundAndDistributeCards(){
+		this.distributeCardsToWinner();
+		this.nextRound();
 	}
-	
-	/*
-	 * 
-	 * 		Database Function Below
-	 * 
-	 */
-	
-	public void connectToDB(boolean showStats, boolean addGame) {
-		try {
-			// "yacata.dcs.gla.ac.uk:5432", "m_19_1002243w", "1002243w"
-			// "52.24.215.108:5432"; "CompuGlobalHyperMegaNet"; "CompuGlobalHyperMegaNet";
-			dbq = new DatabaseQuery();
-		} catch (Exception e){
-			ps.println(dbq.getNoConnection());
-		}
-		
-		if(showStats) {
-			try {
-				ps.println("\n-------- Stats --------\n" + dbq.toString());
-			} catch(Exception e) {
-				ps.println(dbq.getNoConnection());
-			}
-		}
-		if(addGame) {
-			try {
-				ps.println(dbq.addGameToDB(game));
-			} catch (Exception e) {
-				// no need to print explanation, handled on creation of dbq
-			}
-		}
-	}
-	
 	/*
 	 * 
 	 * 		Game/Round Functions Below
@@ -168,8 +124,8 @@ public class CommandLineController {
 		// user goes first
 		if(game.usersTurn()) {	                    
 			// ask user for the stat they want to play                        
-			choice = askForMenuChoice(keyboard, "Which category do you want to select?: ", 
-					"Please enter a number (1-5): ", 1, 5);
+			choice = this.view.askForMenuChoice(keyboard, "Which category do you want to select?: ", 
+					"Please enter a number (1-5): ", 1, 5, System.out);
 			userJustChoseAttribute = true;
 		} else {
 			userJustChoseAttribute = false;
@@ -180,11 +136,11 @@ public class CommandLineController {
 			logRound(stat);
 		}
 		
-		printRoundChoice(stat);
+		this.view.printRoundChoice(stat);
 		
 		// Check if win or draw
 		boolean hasWinner = game.hasWinner(stat);
-		printRoundSummary(hasWinner, stat);
+		this.view.printRoundSummary(hasWinner, stat);
 		
 		if(logging) {
 			logCommunalPile();
@@ -203,7 +159,7 @@ public class CommandLineController {
 	
 	public boolean askToContinue(boolean userWantsToQuit) {
 		if(game.userActive() && !userJustChoseAttribute) {
-			boolean nextRound = askForNextRound();
+			boolean nextRound = this.view.askForNextRound();
 
 			if(!nextRound) {
 				userWantsToQuit = true;
@@ -218,85 +174,6 @@ public class CommandLineController {
 	
 	public void nextRound() {
 		game.advanceRound();
-	}
-	
-	/*
-	 * 
-	 * 		Printing Functions Below
-	 * 
-	 */
-	
-	
-	public static String roundIntro(int x) {
-		String output = "\n";
-		String line = "-----------------------------------------------------";
-		output +=  line + "\n";
-		output += "------------------- ROUND " + String.format("%3s", x) + " -----------------------\n";
-		output += line + "\n";
-		return output;
-	}
-	
-	public void printIntro() {
-		ps.println(roundIntro(game.getRoundCount()));
-	}
-	
-	public void printPlayerInfo() {
-		for (int i = 0; i < game.getNumPlayers(); i++) {
-			ps.println(game.getPlayer(i).getInfo());
-		}
-	}
-	
-	public void printRoundInfo() {
-		// Get and display human players information
-		if(game.userActive()) {
-			ps.println("You drew " + game.getUser().getActiveCard().printCardInfo());
-		}
-
-		/* "Cheat mode" - prints all CPU cards
-		ps.println("");
-		for (int i = 1; i < game.getNumPlayers(); i++) {
-			ps.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCard().printCardInfo());
-		}  
-		*/
-		
-		// display all player's card names
-		for (int i = 1; i < game.getNumPlayers(); i++) {
-			ps.println(game.getPlayerName(i) + " has drawn " + game.getPlayer(i).getActiveCardName());
-		}    
-	}
-	
-	public void printRoundChoice(String stat) {
-		ps.println("It is " + game.getActivePlayer().getName() + "'s turn.");
-		ps.println(game.getActivePlayer().getName() + " picked attribute " + stat +"\n");    // note this is array index, not numbered attribute
-		ps.println("Score to beat is: " + game.getActivePlayer().getActiveCard().getValue(stat) + "\n");
-		ps.println("\t" + game.getActivePlayer().getActiveCard().printCardInfo());
-	}
-	
-	public void printRoundSummary(boolean hasWinner, String stat) {
-		ps.println("------------------Round Summary----------------------");
-		if(hasWinner) {
-			ps.println(game.getRoundWinner().getName() + " has won!  Their card was: " + 
-			game.getRoundWinner().getActiveCard().getName() + " and it's " + stat + " attribute was " + 
-			game.getRoundWinner().getActiveCard().getValue(stat)+"\n");
-			
-		} else {
-			ps.println("There has been a draw.\n");
-		}
-		ps.println("-----------------------------------------------------");
-	}
-	
-	public void printWinner() {
-		// Display winning player's information, winner is the last player left
-		ps.println(game.getPlayers().get(0).getName() + " is the winner!");
-	}
-	
-	public void printCommunalPile() {
-		// Check size of communal pile
-		if (game.communalDeckSize() == 0) {
-			ps.println("\nCommunalPile is empty.\n");
-		} else {
-			ps.println("\nCommunalPile has: " + game.communalDeckSize() + " cards in it.\n");
-		}
 	}
 	
 	/*
@@ -399,6 +276,35 @@ public class CommandLineController {
 		return game;
 	}
 	
+		/*
+	 * 
+	 * 		Database Function Below
+	 * 
+	 */
 	
+	public void connectToDB(boolean showStats, boolean addGame) {
+		try {
+			// "yacata.dcs.gla.ac.uk:5432", "m_19_1002243w", "1002243w"
+			// "52.24.215.108:5432"; "CompuGlobalHyperMegaNet"; "CompuGlobalHyperMegaNet";
+			dbq = new DatabaseQuery();
+		} catch (Exception e){
+			ps.println(dbq.getNoConnection());
+		}
+		
+		if(showStats) {
+			try {
+				ps.println("\n-------- Stats --------\n" + dbq.toString());
+			} catch(Exception e) {
+				ps.println(dbq.getNoConnection());
+			}
+		}
+		if(addGame) {
+			try {
+				ps.println(dbq.addGameToDB(game));
+			} catch (Exception e) {
+				// no need to print explanation, handled on creation of dbq
+			}
+		}
+	}
 	
 }
