@@ -98,6 +98,7 @@ public class ModelDeck {
     }
 
     public ModelCard getCard(int index) {
+        if(index < 0 || index >= shuffled.size()) throw new IndexOutOfBoundsException();
         return shuffled.get(index);
     }
 
