@@ -254,7 +254,6 @@ public class DatabaseQuery {
 			}
 			return output;
 		} catch (Exception e) {
-			System.out.println("Something went wrong...");
 			return "Unable to print database info";
 		}
 	}
