@@ -36,23 +36,10 @@
 		<div class="container px-lg-5">
 		  <div class="row mx-lg-n5">
 		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-light btn-lg btn-block" id = "new-game-button">Start a New Game</button></div>
-		    <div class="col py-3 px-lg-5"><a class="btn btn-info btn-lg btn-block" id = "show-rules-button" data-toggle="collapse" href="#show-rules">Rules</a></div>
 		    <!-- was inside new game button onclick="window.location.href = '/toptrumps/game/';" -->
 		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href = '/toptrumps/stats/';">See Statistics</button></div>
 		  </div>
 		</div>
-
-		<!--
-			<p>
-			  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-			    Link with href
-			  </a>
-			  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-			    Button with data-target
-			  </button>
-			</p>
-			
-		-->
 
 		<div class = "container" id = "dropdown-select">
 			<div class = "col">
@@ -79,12 +66,6 @@
 			</div>
 			
 		</div>
-
-		<div class="collapse" id="show-rules">
-			  <div class="card card-body">
-			    <h3>Rules of Top Trumps!</h3>
-			  </div>
-			</div>
 
 		<script> 
 			$(document).ready(function(){
