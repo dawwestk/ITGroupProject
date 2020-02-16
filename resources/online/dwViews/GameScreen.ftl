@@ -42,8 +42,19 @@
 		</div>
 
 		<hr>
-<#--		<div class="panel panel-default">-->
-<#--			<div class="panel-body">-->
+		
+		<div class="container mt-4" id="round-results">
+			<div class="container mt-4">
+			<div class = "container" id = 'results'>
+				<table id = 'resultsTable'>
+					<tr>
+			        	<th>Player</th>
+			        	<th>Score</th>
+			    	</tr>
+				</table>
+			</div>
+		</div>
+		</div>
 
 		<div class = "container" id = "game-board">
 			<div class = "user-card" id = "game-user-card">

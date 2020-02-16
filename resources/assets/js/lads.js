@@ -2,6 +2,9 @@
 /*
 ***************		Scripts pertaining to Game Screen	*******************
 */
+
+var chosenAttribute = null;
+
 function setUpBoard(){
 	getPlayers();
 	$(document).ready(updateText("Welcome to Top Trumps - hit this button to begin..."));
@@ -23,6 +26,7 @@ function advance(){
 	// Reset all buttons to be outlines - i.e. not selected yet
 	$('#game-user-button-group').children().attr("class", "btn btn-outline-success");
 	nextRound();
+	unHideResults();
 	getJSON(false);	// boolean is used to indicate if this is the first load or not
 }
 
@@ -31,6 +35,7 @@ function clickedAttribute(item) {
 	$('#game-user-button-group').children().attr("class", "btn btn-outline-success");
 	$(item).attr("class", "btn btn-success");
 	selectAttributeAsPOST(choice);
+	chosenAttribute = choice;
 }
 
 function updateText(textString){
@@ -112,9 +117,7 @@ function compare(){
 			var responseText = xhr.response;
 			updateText(responseText);
 
-			// User successfully made a choice, change button to advance function
-			unHideBoard();
-			$('#next-round-button').attr('onclick', 'advance()');
+			showAllAttributes();
 		};
 		xhr.send();
 	} else {
@@ -123,6 +126,43 @@ function compare(){
 		updateText("You must choose an Attribute first!");
 	}
 	updateButtonText('Next Round');
+}
+
+function showAllAttributes(){
+	unHideBoard();
+	var idOfHiddenAttribute = '#ai' + chosenAttribute + 'Hidden';
+	var idOfAttributeBadge = '#ai' + chosenAttribute + 'Badge';
+	var idOfPlayerAttribute = '#player' + chosenAttribute + 'Badge';
+	var playerAttribute = $(idOfPlayerAttribute).text();
+
+	var resultTable = $('#resultsTable');
+	resultsTable.innerHTML = "<tr><th>Player</th><th>Score</th></tr>";
+
+	if((idOfHiddenAttribute.length)){
+		var row = $('<tr />');
+		resultTable.append(row)
+		row.append($('<td>Player One</td>'));
+		row.append($('<td>' + playerAttribute + '</td>'));
+	}
+	var i;
+	for(i = 1; i <= 4; i++){
+		var cardID = '#game-AI-card-container-' + i;
+		var hiddenLabel = $(cardID).find(idOfHiddenAttribute);
+		var hiddenAttr = hiddenLabel.text();
+		// Only add the player attribute if they exist
+		if((hiddenLabel).length){
+			//alert("CPU-" + i + " exists");
+			//output += "CPU-" + i + " scored " + hiddenAttr + "\n";
+			var row = $("<tr />")
+		    	$("#resultsTable").append(row);
+		    	row.append($("<td>CPU-" + i + "</td>"));
+		    	row.append($("<td>" + hiddenAttr + "</td>"));
+		}else{
+			//alert("No player " + i);
+		}
+	}
+	$('#next-round-button').attr('onclick', 'advance()');
+	unHideResults();
 }
 	
 function nextRound(){
@@ -181,6 +221,21 @@ function unHideBoard(){
 	y.style.visibility = "visible";
 	z.style.visibility = "visible";
 	roundCount.style.visibility = "visible";
+}
+
+function unHideResults(){
+
+	/*
+		Unhides the results table
+	*/
+	var x = document.getElementById("round-results");
+	if (x.style.visibility === "visible") {
+	  	x.style.visibility = "hidden";
+	  	x.style.display = 'none';
+	} else {
+	  	x.style.visibility = "visible";
+	  	x.style.display = 'block';
+	}
 }
 
 function getPlayers(){
@@ -286,6 +341,7 @@ function getJSON(boolean){
 							// do not update the text bar
 						} else {
 							updateText(players[i].name + ' is the active player... they choose ' + players[i].highestAttribute + '!');
+							chosenAttribute = players[i].highestAttribute;
 							updateButtonText('Compare');
 							selectAttributeAsPOST(players[i].highestAttribute);
 						}
@@ -301,13 +357,12 @@ function getJSON(boolean){
 				$(cardID).find('img').attr('src', '/assets/images/' + players[i].cardName + '.jpg');
 				$(cardID).find('#aiHandSize').text(players[i].handSize);
 				
-				/*
-				$(cardID).find('#aiSizeBadge').text(players[i].Size);
-				$(cardID).find('#aiSpeedBadge').text(players[i].Speed);
-				$(cardID).find('#aiRangeBadge').text(players[i].Range);
-				$(cardID).find('#aiFirepowerBadge').text(players[i].Firepower);
-				$(cardID).find('#aiCargoBadge').text(players[i].Cargo);
-				*/
+				$(cardID).find('#aiSizeHidden').text(players[i].Size);
+				$(cardID).find('#aiSpeedHidden').text(players[i].Speed);
+				$(cardID).find('#aiRangeHidden').text(players[i].Range);
+				$(cardID).find('#aiFirepowerHidden').text(players[i].Firepower);
+				$(cardID).find('#aiCargoHidden').text(players[i].Cargo);
+
 				$(cardID).find('#aiSizeBadge').text("?");
 				$(cardID).find('#aiSpeedBadge').text("?");
 				$(cardID).find('#aiRangeBadge').text("?");
@@ -387,6 +442,12 @@ function removeContainers(containerID){
 /*
 ***************		Scripts pertaining to Selection Screen	*******************
 */
+ 
+$(document).ready(function(){
+  $("#new-game-button").click(function(){
+    $("#dropdown-select").slideDown("slow");
+  });
+});
 
 function newGameAndSetPlayers(){
 	selectPlayers();
