@@ -2,10 +2,15 @@
 /*
 ***************		Scripts pertaining to Game Screen	*******************
 */
+
+var chosenAttribute = null;
+
 function setUpBoard(){
 	getPlayers();
-	$(document).ready(updateText("Welcome to Top Trumps - hit this button to begin..."));
-	$(document).ready(updateButtonText("Begin round 1"));
+	$(document).ready(function(){
+		updateText("Welcome to Top Trumps - hit this button to begin...");
+		updateButtonText("Begin round 1");
+	})
 }
 
 function startRoundOne(){
@@ -23,14 +28,18 @@ function advance(){
 	// Reset all buttons to be outlines - i.e. not selected yet
 	$('#game-user-button-group').children().attr("class", "btn btn-outline-success");
 	nextRound();
+	unHideResults();
 	getJSON(false);	// boolean is used to indicate if this is the first load or not
 }
 
 function clickedAttribute(item) {
+	// Selection of an attribute by the user
+	// The user can change their mind, and each change will be recorded
 	var choice = $(item).attr("id"); 
 	$('#game-user-button-group').children().attr("class", "btn btn-outline-success");
 	$(item).attr("class", "btn btn-success");
 	selectAttributeAsPOST(choice);
+	chosenAttribute = choice;
 }
 
 function updateText(textString){
@@ -112,9 +121,9 @@ function compare(){
 			var responseText = xhr.response;
 			updateText(responseText);
 
-			// User successfully made a choice, change button to advance function
-			unHideBoard();
-			$('#next-round-button').attr('onclick', 'advance()');
+			// Round winner has been decided - message is posted to text bar
+			// Also, we want to show all player attributes in results table
+			showAllAttributes();
 		};
 		xhr.send();
 	} else {
@@ -124,19 +133,56 @@ function compare(){
 	}
 	updateButtonText('Next Round');
 }
+
+function showAllAttributes(){
+	unHideBoard();
+	var idOfHiddenAttribute = '#ai' + chosenAttribute + 'Hidden';
+	var idOfPlayerAttribute = '#player' + chosenAttribute + 'Badge';
+	var playerAttribute = $(idOfPlayerAttribute).text();
+
+	var resultTable = $('#resultsTable');
+	resultsTable.innerHTML = "<tr><th>Player</th><th>Score</th></tr>";
+
+	// If the user is still an active player in the game
+	// add their attribute data to the table
+	if($(idOfPlayerAttribute).length){
+		var row = $('<tr />');
+		resultTable.append(row)
+		row.append($('<td>Player One</td>'));
+		row.append($('<td>' + playerAttribute + '</td>'));
+	}
+
+	var i;
+	for(i = 1; i <= 4; i++){
+		var cardID = '#game-AI-card-container-' + i;
+		var hiddenLabel = $(cardID).find(idOfHiddenAttribute);
+		var hiddenAttr = hiddenLabel.text();
+
+		// Only add the player attribute if they exist
+		if((hiddenLabel).length){
+			var row = $("<tr />")
+		    	$("#resultsTable").append(row);
+		    	row.append($("<td>CPU-" + i + "</td>"));
+		    	row.append($("<td>" + hiddenAttr + "</td>"));
+		}else{
+			// The player has been eliminated - no data to add to the table
+		}
+	}
+	$('#next-round-button').attr('onclick', 'advance()');
+	unHideResults();
+}
 	
 function nextRound(){
 	/*
 		Utilises the game.advanceRound() function in the API
 		Increases the round counter variable
 	*/
-	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/nextRound/"); // Request type and URL
-	
+	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/nextRound/"); 
+
 	if (!xhr) {alert("CORS not supported");}
 
 	xhr.onload = function(e) {
-		var responseText = xhr.response; // the text of the response
-		//alert(responseText); // lets produce an alert
+		var responseText = xhr.response;
 		if(parseInt(responseText) >= 1){
 			$('#next-round-button').attr('onclick', 'showResults()');
 			$('#round-count-badge').text("Round: " + responseText);
@@ -183,6 +229,21 @@ function unHideBoard(){
 	roundCount.style.visibility = "visible";
 }
 
+function unHideResults(){
+
+	/*
+		Unhides the results table
+	*/
+	var x = document.getElementById("round-results");
+	if (x.style.visibility === "visible") {
+	  	x.style.visibility = "hidden";
+	  	x.style.display = 'none';
+	} else {
+	  	x.style.visibility = "visible";
+	  	x.style.display = 'block';
+	}
+}
+
 function getPlayers(){
 	
 	/*
@@ -219,12 +280,12 @@ function getJSON(boolean){
 		attributes and active player info as needed
 	*/
 	
-	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
+	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); 
 
 	if (!xhr) {alert("CORS not supported");}
 
 	xhr.onload = function(e) {
-		var responseText = xhr.response; // the text of the response
+		var responseText = xhr.response;
 		
 		var players = JSON.parse(responseText);
 		var playersLength = players.length;
@@ -247,7 +308,6 @@ function getJSON(boolean){
 		}
 
 		if(players[0].eliminated){
-			//alert("Player One eliminated");
 			playerEliminated();
 		} else {
 			if((players[0].name.localeCompare('Player One')) === 0){
@@ -270,11 +330,9 @@ function getJSON(boolean){
 		var i;
 
 		for(i = 1; i < players.length; i++){
-			//alert("finding i " + i);
 			var cardID = '#game-AI-card-container-' + i;
 
 			if(players[i].eliminated){
-				//alert(players[i].name + " is eliminated");
 				AIeliminated(cardID);
 			} else {
 				if(players[i].activePlayer){
@@ -286,6 +344,7 @@ function getJSON(boolean){
 							// do not update the text bar
 						} else {
 							updateText(players[i].name + ' is the active player... they choose ' + players[i].highestAttribute + '!');
+							chosenAttribute = players[i].highestAttribute;
 							updateButtonText('Compare');
 							selectAttributeAsPOST(players[i].highestAttribute);
 						}
@@ -296,18 +355,19 @@ function getJSON(boolean){
 				}
 
 
+				// Populate the AI card with name, card name and hand size information
 				$(cardID).find("h3").text(players[i].cardName);
 				$(cardID).find('h2').text(players[i].name);
 				$(cardID).find('img').attr('src', '/assets/images/' + players[i].cardName + '.jpg');
 				$(cardID).find('#aiHandSize').text(players[i].handSize);
 				
-				/*
-				$(cardID).find('#aiSizeBadge').text(players[i].Size);
-				$(cardID).find('#aiSpeedBadge').text(players[i].Speed);
-				$(cardID).find('#aiRangeBadge').text(players[i].Range);
-				$(cardID).find('#aiFirepowerBadge').text(players[i].Firepower);
-				$(cardID).find('#aiCargoBadge').text(players[i].Cargo);
-				*/
+				// Populate each attribute with it's value from the JSON information
+				$(cardID).find('#aiSizeHidden').text(players[i].Size);
+				$(cardID).find('#aiSpeedHidden').text(players[i].Speed);
+				$(cardID).find('#aiRangeHidden').text(players[i].Range);
+				$(cardID).find('#aiFirepowerHidden').text(players[i].Firepower);
+				$(cardID).find('#aiCargoHidden').text(players[i].Cargo);
+
 				$(cardID).find('#aiSizeBadge').text("?");
 				$(cardID).find('#aiSpeedBadge').text("?");
 				$(cardID).find('#aiRangeBadge').text("?");
@@ -318,11 +378,6 @@ function getJSON(boolean){
 
 		for(i = 0; i < playersLength; i++){
 			if(parseInt(players[i].handSize) >= 40){
-				/* 
-
-					Need some winner notification/image/animation
-
-				*/
 				updateButtonText('Game Over');
 				updateText(players[i].name + " is the winner!");
 				$('#next-round-button').attr('disabled', true);
@@ -371,22 +426,19 @@ function AIeliminated(cardID){
 	$(cardID).append("<h1 class='vertical-center'>&#9760</h1>");
 }
 
-function removeContainers(containerID){
-	/*
-		Empties a specified container?
-	*/
-	
-	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/getJSON"); // Request type and URL+parameters
-	if (!xhr) {alert("CORS not supported");}
-	xhr.onload = function(e) {
-		$(containerID).empty();
-	};
-	xhr.send();
-}
-
 /*
 ***************		Scripts pertaining to Selection Screen	*******************
 */
+ 
+$(document).ready(function(){
+  $("#new-game-button").click(function(){
+    $("#dropdown-select").slideDown("slow");
+  });
+});
+
+function goToStatsPage(){
+	window.location.href = '/toptrumps/stats/';
+}
 
 function newGameAndSetPlayers(){
 	selectPlayers();
@@ -399,7 +451,7 @@ function selectPlayers() {
 }
 
 function newGame(){
-	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/newGame"); // Request type and URL+parameters
+	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/game/newGame"); 
 	
 	if (!xhr) {alert("CORS not supported");}
 
@@ -411,12 +463,12 @@ function newGame(){
 }
 
 function setPlayers(int){
-	var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/setPlayers?players="+int); // Request type and URL+parameters
-	
+	var xhr = createCORSRequest('POST', "http://localhost:7777/toptrumps/game/setPlayers?players="+int); 
+
 	if (!xhr) {alert("CORS not supported");}
 
 	xhr.onload = function(e) {
-		var responseText = xhr.response; // the text of the re
+		var responseText = xhr.response;
 	};
 	
 	xhr.send();
@@ -433,12 +485,12 @@ function loadTable(){
 }
 
 function getStats(){
-	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStats"); // Request type and URL
-	
+	var xhr = createCORSRequest('GET', "http://localhost:7777/toptrumps/getStats"); 
+
 	if (!xhr) {alert("CORS not supported");}
 
 	xhr.onload = function(e) {
-		var responseText = xhr.response; // the text of the response
+		var responseText = xhr.response;
 		var stats = JSON.parse(responseText);
 		var tableStats = stats[0];
 		var lineStats = stats[1];
@@ -446,14 +498,13 @@ function getStats(){
 		for(var attr = 0; attr < tableStats.length; attr++){
 			for (var key of Object.keys(tableStats[attr])) {
 		    	var row = $("<tr />")
-		    	$("#statsTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+		    	$("#statsTable").append(row);
 		    	for(var i = 0; i < 2; i++){
 		    		row.append($("<td>" + tableStats[attr][key][i] + "</td>"));
 		    	}
 		    	if(key == "Human-wins" || key == "AI-wins"){
 		    		pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
 		    	}
-		    	//pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
 			}
 		}
 
@@ -478,7 +529,6 @@ function getStats(){
 
 		for(var i = 0; i < lineStats.length; i++){
 			lineData.push({x: lineStats[i]["gameid"], y: lineStats[i]["rounds"]});
-			//pieData.push({label: tableStats[attr][key][0], y: tableStats[attr][key][1]});
 		}
 
 		var chart2 = new CanvasJS.Chart("linechart",{
