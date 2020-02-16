@@ -138,7 +138,7 @@ function showAllAttributes(){
 	var resultTable = $('#resultsTable');
 	resultsTable.innerHTML = "<tr><th>Player</th><th>Score</th></tr>";
 
-	if((idOfHiddenAttribute.length)){
+	if($(idOfPlayerAttribute).length){
 		var row = $('<tr />');
 		resultTable.append(row)
 		row.append($('<td>Player One</td>'));
