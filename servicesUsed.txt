@@ -1,0 +1,5 @@
+For version control we used GitHub at the following URL:
+https://github.com/dawwestk/ITGroupProject
+
+To hold our documentation we used:
+https://github.com/Caimpson/ITTeamProject_Documentation
