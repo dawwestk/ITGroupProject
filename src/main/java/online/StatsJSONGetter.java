@@ -7,13 +7,9 @@ import game.DatabaseQuery;
 public class StatsJSONGetter {
 
 	/*
-	 * Printout from DatabaseQuery
 	 * 
-	 * 	Human wins: 0
-		Average Draws: 4
-		AI wins: 7
-		Highest Round Count: 125
-		Total games: 7
+	 * 	Translates the DatabaseQuery output to JSON format
+	 * 
 	 */
 	
 	private String output;

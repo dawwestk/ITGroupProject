@@ -93,16 +93,23 @@ public class TopTrumpsRESTAPI {
 	public void setNumberOfPlayers(@QueryParam("players") int players) throws IOException {
 		ps.println("Setting number of players to " + players);
 		numPlayers = players;
+		
+		// A new game is created
 		game = new Game(deck, numPlayers);
-		//game.setNumberOfPlayersAndDeal(numPlayers);
 		ps.println("Game created with " + numPlayers + " players");
 		ModelPlayer activePlayer = game.getActivePlayer();
+		
+		// Game data is exported to JSON format
 		j = new JSONGetter(game);
 		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), activePlayer);
 		writeJSONtoFile(JSONoutput);
+		
+		// Initially, the lastChosenAttribute should be null
+		// No player has chosen an attribute yet
 		lastChosenAttribute = null;
 	}
 	
+	// Establishes/resets the database query
 	public void resetDatabaseQuery() {
 		try {
 			dbq = new DatabaseQuery();
@@ -116,6 +123,7 @@ public class TopTrumpsRESTAPI {
 	@POST
 	@Path("/game/userQuit/")
 	public void userQuit(String s) throws IOException {
+		// Quits the game and sets the Game object to null
 		if(s.toLowerCase().equals("quit")){
 			game = null;
 			ps.println("User quit.");
@@ -125,6 +133,7 @@ public class TopTrumpsRESTAPI {
 	@POST
 	@Path("/game/weHaveAWinner/")
 	public String weHaveAWinner(String winnerName) throws IOException {
+		// If Game finishes completely, add to the database
 		try {
 			dbq.addGameToDB(game);
 			resetDatabaseQuery();
@@ -156,6 +165,7 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/game/compare/")
 	public String compare() throws IOException {
+		// Compares the chosen attribute from each card
 		String output = "";
 		if(lastChosenAttribute != null) {
 			ModelPlayer winner = null;
@@ -178,13 +188,14 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/game/nextRound/")
 	public int nextRound() throws IOException {
-
+		// Advances the game round counter
 		int prev = game.getRoundCount();
 		game.advanceRound();
 		int current = game.getRoundCount();
 		JSONoutput = j.updateJSONwithNameCheck(game.getPlayers(), game.getActivePlayer());
 		writeJSONtoFile(JSONoutput);
 		
+		// Returns an integer to indicate status
 		if(prev != current) {
 			return current; 	//round has advanced with no issue
 		} else {
@@ -195,11 +206,12 @@ public class TopTrumpsRESTAPI {
 	@GET
 	@Path("/game/getJSON/")
 	public String getJSON() throws IOException{
+		// Read the JSON file into Javascript
 		return JSONoutput;
 	}
 	
 	public void writeJSONtoFile(String s) {
-		// is writing the JSON to a file necessary?
+		// Writing JSON to a file for testing/debugging
 		File JSONfile = new File("resources/assets/", "JSONtest.json");
 		try {
 			FileWriter fw = new FileWriter(JSONfile);
