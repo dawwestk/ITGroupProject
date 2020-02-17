@@ -25,9 +25,10 @@ public class JSONGetter{
 		}
 	}
 	
+	// Processes players/card objects to produce JSON string
+	// Only for use in the online application
 	public String updateJSONwithNameCheck(ArrayList<ModelPlayer> players, ModelPlayer activePlayer) {
-		// processes players/card objects to produce JSON string
-		// only for use in the online application
+		
 		HashMap<String, ModelPlayer> map = new HashMap<String, ModelPlayer>();
 		ArrayList<String> activeNames = new ArrayList<String>();
 		for(ModelPlayer p : players) {

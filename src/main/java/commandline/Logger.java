@@ -20,7 +20,6 @@ public class Logger {
 		if(!logMode) return;
 		if(source == null) throw new NullPointerException("Attempted to add Null String to Logger.");
 		out.print(source);
-//		this.flush();
 	}
 	
 	// add characters to buffer with a newline

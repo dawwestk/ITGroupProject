@@ -18,7 +18,8 @@ public class ModelCard {
     private HashMap<String, Integer> attributeMap;
     private String[] attributeDefinitions;
 
-    // info is list of integer stats, attributeList is the list of stat descriptions
+    // Info is list of stats representing integers, but passed as Strings
+    // attributeList is the list of stat descriptions
     public ModelCard(String[] info, String[] attributeList) {
     	
     	// The input from StarCitizenDeck.txt will not change
@@ -99,7 +100,7 @@ public class ModelCard {
     	String cardString = "";
     	cardString += this.name;
     	// for(String attribute: this.attributeDefinitions) {
-            for(int i = 1 ; i < this.attributeDefinitions.length; ++i){
+        for(int i = 1 ; i < this.attributeDefinitions.length; ++i){
         	cardString += " ";
     		cardString += this.getValue(attributeDefinitions[i]);    		
     	}
