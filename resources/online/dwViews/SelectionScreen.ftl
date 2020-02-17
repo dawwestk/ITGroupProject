@@ -28,7 +28,12 @@
 		<div class="container px-lg-5">
 		  <div class="row mx-lg-n5">
 		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-light btn-lg btn-block" id = "new-game-button">Start a New Game</button></div>
+<<<<<<< HEAD
 		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-secondary btn-lg btn-block" onclick="goToStatsPage()">See Statistics</button></div>
+=======
+		    <!-- was inside new game button onclick="window.location.href = '/toptrumps/game/';" -->
+		    <div class="col py-3 px-lg-5"><button type="button" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href = '/toptrumps/stats/';">See Statistics</button></div>
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 		  </div>
 		</div>
 

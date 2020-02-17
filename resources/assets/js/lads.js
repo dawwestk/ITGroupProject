@@ -121,8 +121,11 @@ function compare(){
 			var responseText = xhr.response;
 			updateText(responseText);
 
+<<<<<<< HEAD
 			// Round winner has been decided - message is posted to text bar
 			// Also, we want to show all player attributes in results table
+=======
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 			showAllAttributes();
 		};
 		xhr.send();
@@ -137,35 +140,56 @@ function compare(){
 function showAllAttributes(){
 	unHideBoard();
 	var idOfHiddenAttribute = '#ai' + chosenAttribute + 'Hidden';
+<<<<<<< HEAD
+=======
+	var idOfAttributeBadge = '#ai' + chosenAttribute + 'Badge';
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 	var idOfPlayerAttribute = '#player' + chosenAttribute + 'Badge';
 	var playerAttribute = $(idOfPlayerAttribute).text();
 
 	var resultTable = $('#resultsTable');
 	resultsTable.innerHTML = "<tr><th>Player</th><th>Score</th></tr>";
 
+<<<<<<< HEAD
 	// If the user is still an active player in the game
 	// add their attribute data to the table
+=======
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 	if($(idOfPlayerAttribute).length){
 		var row = $('<tr />');
 		resultTable.append(row)
 		row.append($('<td>Player One</td>'));
 		row.append($('<td>' + playerAttribute + '</td>'));
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 	var i;
 	for(i = 1; i <= 4; i++){
 		var cardID = '#game-AI-card-container-' + i;
 		var hiddenLabel = $(cardID).find(idOfHiddenAttribute);
 		var hiddenAttr = hiddenLabel.text();
+<<<<<<< HEAD
 
 		// Only add the player attribute if they exist
 		if((hiddenLabel).length){
+=======
+		// Only add the player attribute if they exist
+		if((hiddenLabel).length){
+			//alert("CPU-" + i + " exists");
+			//output += "CPU-" + i + " scored " + hiddenAttr + "\n";
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 			var row = $("<tr />")
 		    	$("#resultsTable").append(row);
 		    	row.append($("<td>CPU-" + i + "</td>"));
 		    	row.append($("<td>" + hiddenAttr + "</td>"));
 		}else{
+<<<<<<< HEAD
 			// The player has been eliminated - no data to add to the table
+=======
+			//alert("No player " + i);
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 		}
 	}
 	$('#next-round-button').attr('onclick', 'advance()');
@@ -361,7 +385,10 @@ function getJSON(boolean){
 				$(cardID).find('img').attr('src', '/assets/images/' + players[i].cardName + '.jpg');
 				$(cardID).find('#aiHandSize').text(players[i].handSize);
 				
+<<<<<<< HEAD
 				// Populate each attribute with it's value from the JSON information
+=======
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 				$(cardID).find('#aiSizeHidden').text(players[i].Size);
 				$(cardID).find('#aiSpeedHidden').text(players[i].Speed);
 				$(cardID).find('#aiRangeHidden').text(players[i].Range);
@@ -435,10 +462,13 @@ $(document).ready(function(){
     $("#dropdown-select").slideDown("slow");
   });
 });
+<<<<<<< HEAD
 
 function goToStatsPage(){
 	window.location.href = '/toptrumps/stats/';
 }
+=======
+>>>>>>> f3eb081771eb8c30c6b9f737d1acfc6d74e5378c
 
 function newGameAndSetPlayers(){
 	selectPlayers();
