@@ -94,7 +94,6 @@ public class TopTrumpsRESTAPI {
 		ps.println("Setting number of players to " + players);
 		numPlayers = players;
 		game = new Game(deck, numPlayers);
-		//game.setNumberOfPlayersAndDeal(numPlayers);
 		ps.println("Game created with " + numPlayers + " players");
 		ModelPlayer activePlayer = game.getActivePlayer();
 		j = new JSONGetter(game);
@@ -149,7 +148,7 @@ public class TopTrumpsRESTAPI {
 		ps.println("Attribute " + choice);
 		ModelCard activeCard = game.getActivePlayer().getActiveCard();
 		Integer attributeName = activeCard.getValue(choice);
-		ps.println("User chose " + choice + " => " + attributeName);
+		ps.println("Player chose " + choice + " => " + attributeName);
 		lastChosenAttribute = choice;
 	}
 	
@@ -199,7 +198,6 @@ public class TopTrumpsRESTAPI {
 	}
 	
 	public void writeJSONtoFile(String s) {
-		// is writing the JSON to a file necessary?
 		File JSONfile = new File("resources/assets/", "JSONtest.json");
 		try {
 			FileWriter fw = new FileWriter(JSONfile);

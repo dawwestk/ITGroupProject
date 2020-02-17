@@ -10,13 +10,18 @@ public class JSONGetter{
 	private String[] originalPlayerNames;
 	private Game game;
 	
+	/*
+	 *
+	 * Translates the database output to JSON format for use in online stats
+	 * 
+	 */
+	
 	public JSONGetter(Game g) {
 		game = g;
 		int numPlayers = g.getNumPlayers();
 		originalPlayerNames = new String[numPlayers];
 		for(int i = 0; i < originalPlayerNames.length; i++) {
 			originalPlayerNames[i] = g.getPlayerName(i);
-			//System.out.println("Added " + g.getPlayerName(i) + " to original list");
 		}
 	}
 	
@@ -28,7 +33,6 @@ public class JSONGetter{
 		for(ModelPlayer p : players) {
 			map.put(p.getName(), p);
 			activeNames.add(p.getName());
-			//System.out.println(p.getName() + " is still active");
 		}
 		String output = "[";
 		int numAttributes = players.get(0).getActiveCard().getNumberOfAttributes();
@@ -68,51 +72,5 @@ public class JSONGetter{
 		
 		return output;
 	}
-	
-	public String updateJSON(ArrayList<ModelPlayer> players, ModelPlayer activePlayer) {
-		// processes players/card objects to produce JSON string
-		// only for use in the online application
-		
-		String output = "[";
-		int numAttributes = players.get(0).getActiveCard().getNumberOfAttributes();
-		
-		for(ModelPlayer p : players) {
-			boolean active = false;
-			active = p.equals(activePlayer) ? true: false;
-			output += "{";
-			ModelCard activeCard = p.getActiveCard();
-			output += "\"name\":\"" + p.getName() + "\", ";
-			int handSize = p.getHand().size();
-			output += "\"handSize\":" + handSize + ", ";
-			output += "\"activePlayer\":" + active + ", ";
-			output += "\"cardName\":\"" + activeCard.getName() + "\", ";
-			output += "\"highestAttribute\":\"" + p.getActiveCard().getHighestAttribute() + "\", ";
-			for(int i = 0; i <= numAttributes; i++) {
-				String currentAttribute = activeCard.getAttribute(i);
-				output += "\"" + currentAttribute + "\":" + activeCard.getValue(currentAttribute) + ", ";
-			}
-			output += "}, ";
-		}
-		
-		output += "]";
-		output = output.replace(", ]", "]").replace(", }", "}");		// removes trailing comma
-		
-		return output;
-	}
-	
-	/*
-	   public static void main(String[] args) { 
-	      String jsonString = "{\"name\":\"Mahesh\", \"age\":21}"; 
-	      
-	      GsonBuilder builder = new GsonBuilder(); 
-	      builder.setPrettyPrinting(); 
-	      
-	      Gson gson = builder.create(); 
-	      Student student = gson.fromJson(jsonString, Student.class); 
-	      System.out.println(student);    
-	      
-	      jsonString = gson.toJson(student); 
-	      System.out.println(jsonString);  
-	   } 
-	 */
+
 	} 
