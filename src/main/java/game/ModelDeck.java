@@ -56,6 +56,7 @@ public class ModelDeck {
     
     // Populates each Player object's hand with the same number of cards
     public void deal(ArrayList<ModelPlayer> players) {
+        if (players.size() < 1) throw new IllegalArgumentException("No players to deal cards to");
     	// We can use integer division because we want all hands to be the 
     	// same size (no partial cards allowed - remainder is communal)
     	int handSize = totalCards / players.size();		

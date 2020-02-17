@@ -68,7 +68,7 @@ public class ModelDeckTest {
 	@Test
 	public void dealNoPlayersTest(){
 		ArrayList<ModelPlayer> players = new ArrayList<ModelPlayer>();
-		assertThrows(Exception.class, () -> this.deck.deal(players));
+		assertThrows(IllegalArgumentException.class, () -> this.deck.deal(players));
 	}
 
 	@Test
