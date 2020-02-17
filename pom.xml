@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>uk.ac.gla</groupId>
-  <artifactId>MScIT2020Project</artifactId>
+  <artifactId>TopTrumps</artifactId>
   <version>1.0</version>
   <name>Top Trumps Application Project</name>
   <description>This is the template java project for the Top Trumps Assessed Excercise for IT Software Development at Glasgow 2019. </description>
@@ -68,7 +68,8 @@
   </dependencies>
   
   <build>
-  
+ 	<!-- Strip version number from jar name -->
+	<finalName>${project.artifactId}</finalName>
   	<!-- Where do our Java sources come from? -->
     <sourceDirectory>src/main/java</sourceDirectory>
     <testSourceDirectory>src/test/java</testSourceDirectory>
